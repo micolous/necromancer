@@ -1,4 +1,7 @@
-use std::io::{Seek, SeekFrom, Write};
+use std::{
+    io::{Seek, SeekFrom, Write},
+    marker::PhantomData,
+};
 
 /// Wrapper for [Write] streams which records the range of bytes written,
 /// including any seeks.
@@ -51,3 +54,35 @@ impl<T: Seek> Seek for OffsetCounter<T> {
         Ok(p)
     }
 }
+
+/// Reads a file as an iterator of integer values.
+pub struct IntReader<T, S> {
+    f: T,
+    m: PhantomData<S>,
+}
+
+impl<T, S> IntReader<T, S> {
+    pub fn new(f: T) -> Self {
+        Self { f, m: PhantomData }
+    }
+}
+
+macro_rules! intreader_iterator {
+    (
+        $($type:ty)*
+    ) => {
+        $(
+            impl<T: std::io::Read> Iterator for IntReader<T, $type> {
+                type Item = $type;
+
+                fn next(&mut self) -> Option<Self::Item> {
+                    let mut b = [0; std::mem::size_of::<$type>()];
+                    self.f.read_exact(&mut b).ok()?;
+                    Some(<$type>::from_be_bytes(b))
+                }
+            }
+        )*
+    };
+}
+
+intreader_iterator!(u64);

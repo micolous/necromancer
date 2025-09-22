@@ -12,6 +12,9 @@ pub enum Error {
     #[error(transparent)]
     Utf8(#[from] Utf8Error),
 
+    #[error("internal error")]
+    Internal,
+
     #[error("unexpected state")]
     UnexpectedState,
 

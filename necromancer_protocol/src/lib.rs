@@ -7,9 +7,10 @@ extern crate num_derive;
 extern crate tracing;
 
 pub mod atom;
+pub mod ay10;
 mod error;
 mod packet;
-mod rle;
+pub mod rle;
 pub mod structs;
 mod util;
 
@@ -17,7 +18,7 @@ pub use crate::{
     atom::Atom,
     error::Error,
     packet::{AtemControl, AtemPacket, AtemPacketFlags},
-    rle::{rle_size_elements, RleCompressor, RleDecompressor, RLE_MARKER},
+    util::IntReader,
 };
 
 /// Result type.

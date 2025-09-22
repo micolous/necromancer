@@ -1,4 +1,4 @@
-use crate::protocol::RleDecompressor;
+use crate::protocol::rle::RleDecompressor;
 
 /// Computes the MD5 of the uncompressed frame, and its size (in bytes).
 ///
