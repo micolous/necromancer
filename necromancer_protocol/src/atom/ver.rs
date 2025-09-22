@@ -132,7 +132,7 @@ mod test {
         };
         assert_eq!(expected, version);
 
-        let o = Atom::new(expected.into());
+        let o = Atom::new(expected);
         let mut out = Cursor::new(Vec::with_capacity(cmd.len()));
         o.write(&mut out)?;
         assert_eq!(cmd, out.into_inner());
@@ -159,7 +159,7 @@ mod test {
         assert!(!name.supports_rtmp_streaming());
         assert!(!name.supports_recording());
 
-        let o = Atom::new(expected.into());
+        let o = Atom::new(expected);
         let mut out = Cursor::new(Vec::with_capacity(cmd.len()));
         o.write(&mut out)?;
         assert_eq!(cmd, out.into_inner());

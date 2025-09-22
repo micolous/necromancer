@@ -244,7 +244,7 @@ mod test {
             0x2559,
             0x0,
             0x3a4c,
-            vec![Atom::new(expected.into())],
+            vec![Atom::new(expected)],
         );
         let mut out = Cursor::new(Vec::with_capacity(cmd.len()));
         o.write(&mut out)?;
@@ -263,7 +263,7 @@ mod test {
 
         assert_eq!(TimeMode::FreeRun, mode.0);
 
-        let o = Atom::new(TimecodeConfig(TimeMode::FreeRun).into());
+        let o = Atom::new(TimecodeConfig(TimeMode::FreeRun));
         let mut out = Cursor::new(Vec::with_capacity(cmd.len()));
         o.write(&mut out)?;
         assert_eq!(cmd, out.into_inner());
@@ -276,7 +276,7 @@ mod test {
 
         assert_eq!(TimeMode::TimeOfDay, mode.0);
 
-        let o = Atom::new(TimecodeConfig(TimeMode::TimeOfDay).into());
+        let o = Atom::new(TimecodeConfig(TimeMode::TimeOfDay));
         let mut out = Cursor::new(Vec::with_capacity(cmd.len()));
         o.write(&mut out)?;
         assert_eq!(cmd, out.into_inner());
@@ -295,7 +295,7 @@ mod test {
 
         assert_eq!(TimeMode::FreeRun, mode.0);
 
-        let o = Atom::new(SetTimecodeConfig(TimeMode::FreeRun).into());
+        let o = Atom::new(SetTimecodeConfig(TimeMode::FreeRun));
         let mut out = Cursor::new(Vec::with_capacity(cmd.len()));
         o.write(&mut out)?;
         assert_eq!(cmd, out.into_inner());
@@ -308,7 +308,7 @@ mod test {
 
         assert_eq!(TimeMode::TimeOfDay, mode.0);
 
-        let o = Atom::new(SetTimecodeConfig(TimeMode::TimeOfDay).into());
+        let o = Atom::new(SetTimecodeConfig(TimeMode::TimeOfDay));
         let mut out = Cursor::new(Vec::with_capacity(cmd.len()));
         o.write(&mut out)?;
         assert_eq!(cmd, out.into_inner());
@@ -324,7 +324,7 @@ mod test {
 
         assert!(matches!(ct.payload, Payload::TimecodeRequest(_)));
 
-        let o = Atom::new(TimecodeRequest {}.into());
+        let o = Atom::new(TimecodeRequest {});
         let mut out = Cursor::new(Vec::with_capacity(cmd.len()));
         o.write(&mut out)?;
         assert_eq!(cmd, out.into_inner());
@@ -359,7 +359,7 @@ mod test {
         );
 
         // Check serialisation
-        let o = Atom::new(expected.into());
+        let o = Atom::new(expected);
         let mut out = Cursor::new(Vec::with_capacity(cmd.len()));
         o.write(&mut out)?;
         assert_eq!(cmd, out.into_inner());

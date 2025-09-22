@@ -179,7 +179,7 @@ mod test {
         assert_eq!(Some(TallyFlags::new()), tlsr.get(VideoSource::Input2));
         assert_eq!(None, tlsr.get(VideoSource::Auxilary2));
 
-        let o = Atom::new(expected.into());
+        let o = Atom::new(expected);
         let mut out = Cursor::new(Vec::with_capacity(cmd.len()));
         o.write(&mut out)?;
         assert_eq!(cmd, out.into_inner());

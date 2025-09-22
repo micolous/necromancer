@@ -311,37 +311,37 @@ impl AtemController {
 
     /// Sets the current program input for a given media encoder.
     pub async fn set_program_input(&self, me: u8, video_source: VideoSource) -> Result<(), Error> {
-        let cmd = Atom::new(SetProgramInput { me, video_source }.into());
+        let cmd = Atom::new(SetProgramInput { me, video_source });
         self.send(vec![cmd]).await
     }
 
     /// Sets the current program input for a given media encoder.
     pub async fn set_preview_input(&self, me: u8, video_source: VideoSource) -> Result<(), Error> {
-        let cmd = Atom::new(SetPreviewInput { me, video_source }.into());
+        let cmd = Atom::new(SetPreviewInput { me, video_source });
         self.send(vec![cmd]).await
     }
 
     /// Swaps the current preview and program inputs for a given media encoder
     /// immediately with no transition.
     pub async fn cut(&self, me: u8) -> Result<(), Error> {
-        let cmd = Atom::new(Cut { me }.into());
+        let cmd = Atom::new(Cut { me });
         self.send(vec![cmd]).await
     }
 
     /// Swaps the current preview and program inputs for a given media encoder
     /// with the currently-selected transition.
     pub async fn auto(&self, me: u8) -> Result<(), Error> {
-        let cmd = Atom::new(Auto { me }.into());
+        let cmd = Atom::new(Auto { me });
         self.send(vec![cmd]).await
     }
 
     pub async fn cut_black(&self, me: u8, black: bool) -> Result<(), Error> {
-        let cmd = Atom::new(CutToBlack { me, black }.into());
+        let cmd = Atom::new(CutToBlack { me, black });
         self.send(vec![cmd]).await
     }
 
     pub async fn toggle_auto_black(&self, me: u8) -> Result<(), Error> {
-        let cmd = Atom::new(FadeToBlackAuto { me }.into());
+        let cmd = Atom::new(FadeToBlackAuto { me });
         self.send(vec![cmd]).await
     }
 
@@ -352,7 +352,7 @@ impl AtemController {
             error!("switcher does not support still image capture");
             return Err(Error::FeatureUnavailable);
         }
-        let cmd = Atom::new(CAPTURE_STILL.into());
+        let cmd = Atom::new(CAPTURE_STILL);
         self.send(vec![cmd]).await
     }
 
@@ -413,26 +413,23 @@ impl AtemController {
         }
         drop(state);
 
-        let cmd = Atom::new(
-            SetMediaPlayerSource {
-                enable: true,
-                id: media_player,
-                source,
-            }
-            .into(),
-        );
+        let cmd = Atom::new(SetMediaPlayerSource {
+            enable: true,
+            id: media_player,
+            source,
+        });
         self.send(vec![cmd]).await
     }
 
     /// Saves the current settings to the start-up configuration.
     pub async fn save_startup_settings(&self) -> Result<(), Error> {
-        let cmd = Atom::new(SAVE_STARTUP_SETTINGS.into());
+        let cmd = Atom::new(SAVE_STARTUP_SETTINGS);
         self.send(vec![cmd]).await
     }
 
     /// Clears the start-up configuration.
     pub async fn clear_startup_settings(&self) -> Result<(), Error> {
-        let cmd = Atom::new(CLEAR_STARTUP_SETTINGS.into());
+        let cmd = Atom::new(CLEAR_STARTUP_SETTINGS);
         self.send(vec![cmd]).await
     }
 
@@ -440,7 +437,7 @@ impl AtemController {
     ///
     /// **Warning:** this method is never used by the SDK
     pub async fn restore_startup_settings(&self) -> Result<(), Error> {
-        let cmd = Atom::new(RESTORE_STARTUP_SETTINGS.into());
+        let cmd = Atom::new(RESTORE_STARTUP_SETTINGS);
         self.send(vec![cmd]).await
     }
 
@@ -449,7 +446,7 @@ impl AtemController {
         &self,
         params: SetColourGeneratorParams,
     ) -> Result<(), Error> {
-        let cmd = Atom::new(params.into());
+        let cmd = Atom::new(params);
         self.send(vec![cmd]).await
     }
 
@@ -981,15 +978,12 @@ impl AtemReceiver {
             AsyncCommand::Commands { cmds, responder } => (cmds, responder),
             AsyncCommand::FileDownload { req } => {
                 let id = rand::random();
-                let cmd = Atom::new(
-                    DownloadRequest {
-                        id,
-                        store_id: req.store_id,
-                        index: req.index.into(),
-                        typ: req.typ,
-                    }
-                    .into(),
-                );
+                let cmd = Atom::new(DownloadRequest {
+                    id,
+                    store_id: req.store_id,
+                    index: req.index.into(),
+                    typ: req.typ,
+                });
 
                 // Now also register a handler
                 self.downloads.insert(id, req);
@@ -999,17 +993,14 @@ impl AtemReceiver {
             }
             AsyncCommand::FileUpload { req } => {
                 let id = rand::random();
-                let cmd = Atom::new(
-                    SetupFileUpload {
-                        id,
-                        store_id: req.store_id,
-                        index: req.index.into(),
-                        size: req.size,
-                        typ: req.typ,
-                        is_rle: req.is_rle,
-                    }
-                    .into(),
-                );
+                let cmd = Atom::new(SetupFileUpload {
+                    id,
+                    store_id: req.store_id,
+                    index: req.index.into(),
+                    size: req.size,
+                    typ: req.typ,
+                    is_rle: req.is_rle,
+                });
                 self.uploads.insert(id, req);
                 // TODO: handle leakage on errors
                 (vec![cmd], None)
@@ -1057,7 +1048,7 @@ impl AtemReceiver {
                         *owned_storage_lock = Arc::downgrade(&storage_lock);
 
                         // Now try to lock it
-                        let cmd = Atom::new(MediaPoolLock::lock(store_id).into());
+                        let cmd = Atom::new(MediaPoolLock::lock(store_id));
 
                         let _ = responder.send(Ok(storage_lock));
                         (vec![cmd], None)
@@ -1727,7 +1718,7 @@ impl AtemReceiver {
             // outbound packet queue
             // TODO: this stuff could propagate the error back to the uploader
             // properly
-            chunks.push(Atom::new(chunk.into()));
+            chunks.push(Atom::new(chunk));
             upload.chunks_remaining -= 1;
         }
 
@@ -1739,15 +1730,12 @@ impl AtemReceiver {
                 return Err(Error::UnexpectedState);
             };
 
-            chunks.push(Atom::new(
-                FinishFileUpload {
-                    id: params.id,
-                    name: upload.name,
-                    description: upload.description,
-                    md5: upload.md5,
-                }
-                .into(),
-            ));
+            chunks.push(Atom::new(FinishFileUpload {
+                id: params.id,
+                name: upload.name,
+                description: upload.description,
+                md5: upload.md5,
+            }));
             if self
                 .finished_uploads
                 .insert(params.id, (upload.responder, upload.storage_lock))
@@ -1915,7 +1903,7 @@ impl StorageLock {
 impl Drop for StorageLock {
     fn drop(&mut self) {
         self.make_unavailable();
-        let cmd = Atom::new(MediaPoolLock::unlock(self.store_id).into());
+        let cmd = Atom::new(MediaPoolLock::unlock(self.store_id));
 
         let cmd_tx = self.cmd_tx.clone();
         tokio::task::spawn(async move {

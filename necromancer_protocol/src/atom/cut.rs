@@ -98,7 +98,7 @@ mod test {
             0,
             0x1,
             0xf,
-            vec![Atom::new(Cut { me: 0 }.into())],
+            vec![Atom::new(Cut { me: 0 })],
         );
         let mut out = Cursor::new(Vec::with_capacity(cmd.len()));
         o.write(&mut out)?;

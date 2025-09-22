@@ -140,7 +140,7 @@ mod test {
         };
         assert_eq!(CAPTURE_STILL, capture);
 
-        let o = Atom::new(CAPTURE_STILL.into());
+        let o = Atom::new(CAPTURE_STILL);
         let mut out = Cursor::new(Vec::with_capacity(cmd.len()));
         o.write(&mut out)?;
         assert_eq!(cmd, out.into_inner());
@@ -160,7 +160,7 @@ mod test {
         };
         assert_eq!(expected, mpce);
 
-        let o = Atom::new(expected.into());
+        let o = Atom::new(expected);
         let mut out = Cursor::new(Vec::with_capacity(cmd.len()));
         o.write(&mut out)?;
         assert_eq!(cmd, out.into_inner());
@@ -181,7 +181,7 @@ mod test {
         };
         assert_eq!(expected, mpss);
 
-        let o = Atom::new(expected.into());
+        let o = Atom::new(expected);
         let mut out = Cursor::new(Vec::with_capacity(cmd.len()));
         o.write(&mut out)?;
         assert_eq!(cmd, out.into_inner());
@@ -202,7 +202,7 @@ mod test {
         };
         assert_eq!(expected, mpl);
 
-        let o = Atom::new(expected.into());
+        let o = Atom::new(expected);
         let mut out = Cursor::new(Vec::with_capacity(cmd.len()));
         o.write(&mut out)?;
         assert_eq!(cmd, out.into_inner());

@@ -419,8 +419,10 @@ impl Atom {
     /// Maximum command payload size (minus [Atom] headers).
     const MAX_PAYLOAD_LENGTH: u16 = Self::MAX_COMMAND_LENGTH - Self::HEADERS_LENGTH;
 
-    pub fn new(payload: Payload) -> Self {
-        Self { payload }
+    pub fn new(payload: impl Into<Payload>) -> Self {
+        Self {
+            payload: payload.into(),
+        }
     }
 }
 

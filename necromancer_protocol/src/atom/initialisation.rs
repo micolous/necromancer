@@ -38,7 +38,7 @@ mod test {
 
         assert_eq!(expected, incm);
 
-        let o = Atom::new(expected.into());
+        let o = Atom::new(expected);
         let mut out = Cursor::new(Vec::with_capacity(cmd.len()));
         o.write(&mut out)?;
         assert_eq!(cmd, out.into_inner());

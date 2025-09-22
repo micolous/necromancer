@@ -322,7 +322,7 @@ impl AtemPacket {
                         continue;
                     };
 
-                    let cmd = Atom::new(TransferAck { id: chunk.id }.into());
+                    let cmd = Atom::new(TransferAck { id: chunk.id });
                     let _ = p.push_atom(cmd);
                     p.flags.set_ack(true);
                 }

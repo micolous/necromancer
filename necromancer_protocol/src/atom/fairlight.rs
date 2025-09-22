@@ -120,96 +120,84 @@ mod test {
         let cmd = hex::decode("003c0000464153500001000000000001ffffffffffff010001000000000000000002000006010004000000000000000000000bc2000003e807010027")?;
         let cmd = Atom::read(&mut Cursor::new(&cmd))?;
 
-        let expected = Atom::new(
-            FairlightAudioMixerInputSourceProperties {
-                source_id: 0x1,
-                unknown_10: 0xffffffffffff0100,
-                unknown_18: 0x100,
-                unknown_1c: 0,
-                unknown_20: 0,
-                unknown_22: 0,
-                unknown_24: 0x601,
-                unknown_28: 0,
-                unknown_2c: 0,
-                pan: 0,
-                level: 1000,
-                unknown_38: 0x7,
-                state: FairlightAudioInputSourceState::Off,
-            }
-            .into(),
-        );
+        let expected = Atom::new(FairlightAudioMixerInputSourceProperties {
+            source_id: 0x1,
+            unknown_10: 0xffffffffffff0100,
+            unknown_18: 0x100,
+            unknown_1c: 0,
+            unknown_20: 0,
+            unknown_22: 0,
+            unknown_24: 0x601,
+            unknown_28: 0,
+            unknown_2c: 0,
+            pan: 0,
+            level: 1000,
+            unknown_38: 0x7,
+            state: FairlightAudioInputSourceState::Off,
+        });
         assert_eq!(expected, cmd);
 
         // Off, Input 2, pan left -10dB, level -5dB
         let cmd = hex::decode("003c0000464153500002000000000001ffffffffffff0100010000000000000000020000060100040000000000000000fc180bc2fffffe0c07010027")?;
         let cmd = Atom::read(&mut Cursor::new(&cmd))?;
 
-        let expected = Atom::new(
-            FairlightAudioMixerInputSourceProperties {
-                source_id: 0x2,
-                unknown_10: 0xffffffffffff0100,
-                unknown_18: 0x100,
-                unknown_1c: 0,
-                unknown_20: 0,
-                unknown_22: 0,
-                unknown_24: 0x601,
-                unknown_28: 0,
-                unknown_2c: 0,
-                pan: -1000,
-                level: -500,
-                unknown_38: 0x7,
-                state: FairlightAudioInputSourceState::Off,
-            }
-            .into(),
-        );
+        let expected = Atom::new(FairlightAudioMixerInputSourceProperties {
+            source_id: 0x2,
+            unknown_10: 0xffffffffffff0100,
+            unknown_18: 0x100,
+            unknown_1c: 0,
+            unknown_20: 0,
+            unknown_22: 0,
+            unknown_24: 0x601,
+            unknown_28: 0,
+            unknown_2c: 0,
+            pan: -1000,
+            level: -500,
+            unknown_38: 0x7,
+            state: FairlightAudioInputSourceState::Off,
+        });
         assert_eq!(expected, cmd);
 
         // On, Input 1, 0dB, centred
         let cmd = hex::decode("003c0000464153500001000000000001ffffffffffff010001000000000000000002000006010004000000000000000000000bc20000000007020027")?;
         let cmd = Atom::read(&mut Cursor::new(&cmd))?;
 
-        let expected = Atom::new(
-            FairlightAudioMixerInputSourceProperties {
-                source_id: 0x1,
-                unknown_10: 0xffffffffffff0100,
-                unknown_18: 0x100,
-                unknown_1c: 0,
-                unknown_20: 0,
-                unknown_22: 0,
-                unknown_24: 0x601,
-                unknown_28: 0,
-                unknown_2c: 0,
-                pan: 0,
-                level: 0,
-                unknown_38: 0x7,
-                state: FairlightAudioInputSourceState::On,
-            }
-            .into(),
-        );
+        let expected = Atom::new(FairlightAudioMixerInputSourceProperties {
+            source_id: 0x1,
+            unknown_10: 0xffffffffffff0100,
+            unknown_18: 0x100,
+            unknown_1c: 0,
+            unknown_20: 0,
+            unknown_22: 0,
+            unknown_24: 0x601,
+            unknown_28: 0,
+            unknown_2c: 0,
+            pan: 0,
+            level: 0,
+            unknown_38: 0x7,
+            state: FairlightAudioInputSourceState::On,
+        });
         assert_eq!(expected, cmd);
 
         // Off, Input 1, 0dB, centred
         let cmd = hex::decode("003c0000464153500001000000000001ffffffffffff010001000000000000000002000006010004000000000000000000000bc20000000007010027")?;
         let cmd = Atom::read(&mut Cursor::new(&cmd))?;
 
-        let expected = Atom::new(
-            FairlightAudioMixerInputSourceProperties {
-                source_id: 0x1,
-                unknown_10: 0xffffffffffff0100,
-                unknown_18: 0x100,
-                unknown_1c: 0,
-                unknown_20: 0,
-                unknown_22: 0,
-                unknown_24: 0x601,
-                unknown_28: 0,
-                unknown_2c: 0,
-                pan: 0,
-                level: 0,
-                unknown_38: 0x7,
-                state: FairlightAudioInputSourceState::Off,
-            }
-            .into(),
-        );
+        let expected = Atom::new(FairlightAudioMixerInputSourceProperties {
+            source_id: 0x1,
+            unknown_10: 0xffffffffffff0100,
+            unknown_18: 0x100,
+            unknown_1c: 0,
+            unknown_20: 0,
+            unknown_22: 0,
+            unknown_24: 0x601,
+            unknown_28: 0,
+            unknown_2c: 0,
+            pan: 0,
+            level: 0,
+            unknown_38: 0x7,
+            state: FairlightAudioInputSourceState::Off,
+        });
 
         assert_eq!(expected, cmd);
 
@@ -217,24 +205,21 @@ mod test {
         let cmd = hex::decode("003c0000464153500001000000000001ffffffffffff010001000000000000000002000006010004000000000000000000000bc20000000007040027")?;
         let cmd = Atom::read(&mut Cursor::new(&cmd))?;
 
-        let expected = Atom::new(
-            FairlightAudioMixerInputSourceProperties {
-                source_id: 0x1,
-                unknown_10: 0xffffffffffff0100,
-                unknown_18: 0x100,
-                unknown_1c: 0,
-                unknown_20: 0,
-                unknown_22: 0,
-                unknown_24: 0x601,
-                unknown_28: 0,
-                unknown_2c: 0,
-                pan: 0,
-                level: 0,
-                unknown_38: 0x7,
-                state: FairlightAudioInputSourceState::AudioFollowsVideo,
-            }
-            .into(),
-        );
+        let expected = Atom::new(FairlightAudioMixerInputSourceProperties {
+            source_id: 0x1,
+            unknown_10: 0xffffffffffff0100,
+            unknown_18: 0x100,
+            unknown_1c: 0,
+            unknown_20: 0,
+            unknown_22: 0,
+            unknown_24: 0x601,
+            unknown_28: 0,
+            unknown_2c: 0,
+            pan: 0,
+            level: 0,
+            unknown_38: 0x7,
+            state: FairlightAudioInputSourceState::AudioFollowsVideo,
+        });
 
         assert_eq!(expected, cmd);
         Ok(())
@@ -245,43 +230,40 @@ mod test {
         let cmd = hex::decode("00540000464d546c000600238d00238effffffffffff0100000101ffffffffffff0100000200ffffffffffff0100000300ffffffffffff0100000400ffffffffffff0100051500ffffffffffff01000516000400")?;
         let cmd = Atom::read(&mut Cursor::new(&cmd))?;
 
-        let expected = Atom::new(
-            FairlightAudioMixerTally {
-                entries: vec![
-                    FairlightAudioMixerTallyEntry {
-                        unknown_0: 0xffffffffffff0100,
-                        source_id: 0x1,
-                        active: true,
-                    },
-                    FairlightAudioMixerTallyEntry {
-                        unknown_0: 0xffffffffffff0100,
-                        source_id: 0x2,
-                        active: false,
-                    },
-                    FairlightAudioMixerTallyEntry {
-                        unknown_0: 0xffffffffffff0100,
-                        source_id: 0x3,
-                        active: false,
-                    },
-                    FairlightAudioMixerTallyEntry {
-                        unknown_0: 0xffffffffffff0100,
-                        source_id: 0x4,
-                        active: false,
-                    },
-                    FairlightAudioMixerTallyEntry {
-                        unknown_0: 0xffffffffffff0100,
-                        source_id: 0x515,
-                        active: false,
-                    },
-                    FairlightAudioMixerTallyEntry {
-                        unknown_0: 0xffffffffffff0100,
-                        source_id: 0x516,
-                        active: false,
-                    },
-                ],
-            }
-            .into(),
-        );
+        let expected = Atom::new(FairlightAudioMixerTally {
+            entries: vec![
+                FairlightAudioMixerTallyEntry {
+                    unknown_0: 0xffffffffffff0100,
+                    source_id: 0x1,
+                    active: true,
+                },
+                FairlightAudioMixerTallyEntry {
+                    unknown_0: 0xffffffffffff0100,
+                    source_id: 0x2,
+                    active: false,
+                },
+                FairlightAudioMixerTallyEntry {
+                    unknown_0: 0xffffffffffff0100,
+                    source_id: 0x3,
+                    active: false,
+                },
+                FairlightAudioMixerTallyEntry {
+                    unknown_0: 0xffffffffffff0100,
+                    source_id: 0x4,
+                    active: false,
+                },
+                FairlightAudioMixerTallyEntry {
+                    unknown_0: 0xffffffffffff0100,
+                    source_id: 0x515,
+                    active: false,
+                },
+                FairlightAudioMixerTallyEntry {
+                    unknown_0: 0xffffffffffff0100,
+                    source_id: 0x516,
+                    active: false,
+                },
+            ],
+        });
 
         assert_eq!(expected, cmd);
 

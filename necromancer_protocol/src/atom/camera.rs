@@ -464,13 +464,13 @@ mod test {
         assert_eq!(expected_pl, pl);
 
         // re-encode from sources
-        let o = Atom::new(pl.into());
+        let o = Atom::new(pl);
         let mut out = Cursor::new(Vec::with_capacity(cmd.len()));
         o.write(&mut out)?;
         assert_eq!(cmd, out.into_inner());
 
         // re-encode from scratch
-        let o = Atom::new(expected_pl.into());
+        let o = Atom::new(expected_pl);
         let mut out = Cursor::new(Vec::with_capacity(cmd.len()));
         o.write(&mut out)?;
 
@@ -498,13 +498,13 @@ mod test {
         assert_eq!(expected_pl, pl);
 
         // re-encode from sources
-        let o = Atom::new(pl.into());
+        let o = Atom::new(pl);
         let mut out = Cursor::new(Vec::with_capacity(cmd.len()));
         o.write(&mut out)?;
         assert_eq!(cmd, out.into_inner());
 
         // re-encode from scratch
-        let o = Atom::new(expected_pl.into());
+        let o = Atom::new(expected_pl);
         let mut out = Cursor::new(Vec::with_capacity(cmd.len()));
         o.write(&mut out)?;
 
@@ -534,13 +534,13 @@ mod test {
         assert_eq!(expected_pl, pl);
 
         // re-encode from sources
-        let o = Atom::new(pl.into());
+        let o = Atom::new(pl);
         let mut out = Cursor::new(Vec::with_capacity(cmd.len()));
         o.write(&mut out)?;
         assert_eq!(cmd, out.into_inner());
 
         // re-encode from scratch
-        let o = Atom::new(expected_pl.into());
+        let o = Atom::new(expected_pl);
         let mut out = Cursor::new(Vec::with_capacity(cmd.len()));
         o.write(&mut out)?;
 
@@ -570,13 +570,13 @@ mod test {
         assert_eq!(expected_pl, pl);
 
         // re-encode from sources
-        let o = Atom::new(pl.into());
+        let o = Atom::new(pl);
         let mut out = Cursor::new(Vec::with_capacity(cmd.len()));
         o.write(&mut out)?;
         assert_eq!(cmd, out.into_inner());
 
         // re-encode from scratch
-        let o = Atom::new(expected_pl.into());
+        let o = Atom::new(expected_pl);
         let mut out = Cursor::new(Vec::with_capacity(cmd.len()));
         o.write(&mut out)?;
 
@@ -633,7 +633,7 @@ mod test {
 
         assert_eq!(expected, cam);
 
-        let o = Atom::new(expected.into());
+        let o = Atom::new(expected);
         let mut out = Cursor::new(Vec::with_capacity(cmd.len()));
         o.write(&mut out)?;
         assert_eq!(cmd, out.into_inner());
@@ -660,7 +660,7 @@ mod test {
 
         assert_eq!(expected, cam);
 
-        let o = Atom::new(expected.into());
+        let o = Atom::new(expected);
         let mut out = Cursor::new(Vec::with_capacity(cmd.len()));
         o.write(&mut out)?;
         assert_eq!(cmd, out.into_inner());

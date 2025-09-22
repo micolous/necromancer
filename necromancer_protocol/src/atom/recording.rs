@@ -119,14 +119,14 @@ mod test {
         let cmd = hex::decode("000c00005263544d01000000")?;
         let cmd = Atom::read(&mut Cursor::new(&cmd))?;
 
-        let expected = Atom::new(RecordToMedia { start: true }.into());
+        let expected = Atom::new(RecordToMedia { start: true });
         assert_eq!(expected, cmd);
 
         // Stop recording
         let cmd = hex::decode("000c00005263544d00000000")?;
         let cmd = Atom::read(&mut Cursor::new(&cmd))?;
 
-        let expected = Atom::new(RecordToMedia { start: false }.into());
+        let expected = Atom::new(RecordToMedia { start: false });
         assert_eq!(expected, cmd);
 
         Ok(())
@@ -138,44 +138,35 @@ mod test {
         let cmd = hex::decode("0010000052544d5300030000000a1a5a")?;
         let cmd = Atom::read(&mut Cursor::new(&cmd))?;
 
-        let expected = Atom::new(
-            RecordToMediaStatus {
-                status: RecordStatus::new()
-                    .with_has_media(true)
-                    .with_recording(true),
-                total_recording_time_available: 0x0a1a5a,
-            }
-            .into(),
-        );
+        let expected = Atom::new(RecordToMediaStatus {
+            status: RecordStatus::new()
+                .with_has_media(true)
+                .with_recording(true),
+            total_recording_time_available: 0x0a1a5a,
+        });
         assert_eq!(expected, cmd);
 
         // Recording stopping
         let cmd = hex::decode("0010ffff52544d5300830001000a1a59")?;
         let cmd = Atom::read(&mut Cursor::new(&cmd))?;
 
-        let expected = Atom::new(
-            RecordToMediaStatus {
-                status: RecordStatus::new()
-                    .with_stopping(true)
-                    .with_has_media(true)
-                    .with_recording(true),
-                total_recording_time_available: 0x0a1a59,
-            }
-            .into(),
-        );
+        let expected = Atom::new(RecordToMediaStatus {
+            status: RecordStatus::new()
+                .with_stopping(true)
+                .with_has_media(true)
+                .with_recording(true),
+            total_recording_time_available: 0x0a1a59,
+        });
         assert_eq!(expected, cmd);
 
         // Recording stopped
         let cmd = hex::decode("0010000052544d5300020000000a1a59")?;
         let cmd = Atom::read(&mut Cursor::new(&cmd))?;
 
-        let expected = Atom::new(
-            RecordToMediaStatus {
-                status: RecordStatus::new().with_has_media(true),
-                total_recording_time_available: 0x0a1a59,
-            }
-            .into(),
-        );
+        let expected = Atom::new(RecordToMediaStatus {
+            status: RecordStatus::new().with_has_media(true),
+            total_recording_time_available: 0x0a1a59,
+        });
         assert_eq!(expected, cmd);
 
         Ok(())
@@ -186,7 +177,7 @@ mod test {
         let cmd = hex::decode("00080000524d4452")?;
         let cmd = Atom::read(&mut Cursor::new(&cmd))?;
 
-        let expected = Atom::new(RecordToMediaDurationRequest {}.into());
+        let expected = Atom::new(RecordToMediaDurationRequest {});
         assert_eq!(expected, cmd);
 
         Ok(())
@@ -205,7 +196,7 @@ mod test {
             drop_frame: false,
         });
 
-        let expected = Atom::new(timecode.clone().into());
+        let expected = Atom::new(timecode.clone());
         assert_eq!(expected, cmd);
 
         let t = timecode.to_duration(50)?;
