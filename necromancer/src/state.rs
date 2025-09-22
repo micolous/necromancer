@@ -96,8 +96,8 @@ pub struct AtemState {
     /// [MediaPlayerFrameDescription] represents it as `u16`, [SetupFileUpload]
     /// and [DownloadRequest] represent it as `u32`.
     ///
-    /// [SetupFileUpload]: crate::commands::SetupFileUpload
-    /// [DownloadRequest]: crate::commands::DownloadRequest
+    /// [SetupFileUpload]: crate::protocol::atom::SetupFileUpload
+    /// [DownloadRequest]: crate::protocol::atom::DownloadRequest
     pub media_player_frame_descriptions: HashMap<u8, MediaPlayerFrameDescription>,
     /// Colour generator configurations.
     ///

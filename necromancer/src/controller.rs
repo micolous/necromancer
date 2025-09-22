@@ -103,6 +103,7 @@ struct AsyncFileUploadRequest {
     storage_lock: Arc<StorageLock>,
 }
 
+#[allow(rustdoc::private_intra_doc_links)]
 /// [AtemController] establishes a session with an ATEM switcher, and keeps
 /// state.
 ///
@@ -132,9 +133,9 @@ pub struct AtemController {
 
 impl AtemController {
     /// Connects to an ATEM controller over UDP.
-    /// 
+    ///
     /// ## Args
-    /// 
+    ///
     /// * `addr`: The UDP socket address to connect to
     /// * `reconnect`: If `true`, reconnect after failures.
     pub async fn connect_udp(addr: SocketAddrV4, reconnect: bool) -> Result<Self, Error> {
@@ -529,7 +530,7 @@ struct AtemReceiver {
     upload_chunk_params_rx: mpsc::Receiver<FileTransferChunkParams>,
     upload_chunk_params_tx: mpsc::Sender<FileTransferChunkParams>,
     /// File uploads which are completed, and awaiting confirmation from the
-    /// switcher ([TransferCompleted]).
+    /// switcher ([TransferCompleted][crate::protocol::atom::TransferCompleted]).
     finished_uploads: HashMap<u16, (Option<oneshot::Sender<Result<(), Error>>>, Arc<StorageLock>)>,
     /// [Notify] used to track when we need to stop our main event loop.
     stop_main_loop: Arc<Notify>,
@@ -598,7 +599,8 @@ impl AtemReceiver {
     /// vs. ATEM's SDK/tools     | 6.66 sec  | 15,672 (3.03x)
     ///
     /// "Duration" is measured from [`SetupFileUpload`] (`FTSD`) to the switcher
-    /// sending [`TransferCompleted`] (`FTDC`). _Lower is better._
+    /// sending [`TransferCompleted`][crate::protocol::atom::TransferCompleted] (`FTDC`).
+    /// _Lower is better._
     ///
     /// "Packets sent" is the number of packets containing a [chunk][]. A number
     /// higher than 5,178 (1x) indicates that the client retransmitted some
@@ -1604,7 +1606,7 @@ impl AtemReceiver {
         Ok(())
     }
 
-    /// Handle an incoming [FileTransferError]
+    /// Handle an incoming [FileTransferError][crate::protocol::atom::FileTransferError].
     async fn handle_transfer_error(&mut self, cmd: Atom) -> Result<(), Error> {
         let Payload::FileTransferError(error) = cmd.payload else {
             return Err(Error::Internal);

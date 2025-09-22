@@ -12,7 +12,7 @@
 //!
 //! Otherwise, the entry is passed as-is.
 //!
-//! The frame pixel format (`ay10`) [is described `yuva` module docs][crate::yuva].
+//! The frame pixel format (`ay10`) [is described `ay10` module docs][crate::ay10].
 
 use crate::{Error, Result};
 
