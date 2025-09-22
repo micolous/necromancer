@@ -1,0 +1,33 @@
+[package]
+name = "necromancer_protocol"
+version = "0.0.0"
+edition = "2021"
+license = "Apache-2.0"
+authors = ["Michael Farrell <micolous+git@gmail.com>"]
+description = "Low level protocol primitives for Blackmagic ATEM control protocol"
+repository = "https://github.com/micolous/necromancer"
+keywords = ["atem", "blackmagic"]
+
+[features]
+default = ["palette"]
+serde = ["dep:serde"]
+clap = ["dep:clap"]
+palette = ["dep:palette"]
+
+[dependencies]
+binrw.workspace = true
+chrono.workspace = true
+clap = { workspace = true, optional = true }
+fixed.workspace = true
+hex.workspace = true
+modular-bitfield.workspace = true
+num-derive.workspace = true
+num-traits.workspace = true
+palette = { workspace = true, optional = true }
+serde = { workspace = true, optional = true }
+thiserror.workspace = true
+tracing.workspace = true
+
+[dev-dependencies]
+tracing-subscriber.workspace = true
+palette.workspace = true
