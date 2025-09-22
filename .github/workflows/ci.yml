@@ -41,9 +41,11 @@ jobs:
 
       - run: cargo check
       - run: cargo check --no-default-features
+      - run: cargo check --all-features
 
       - if: runner.os != 'windows'
         run: cargo clippy --no-deps --workspace
 
       - run: cargo test
       - run: cargo test --no-default-features
+      - run: cargo test --all-features
