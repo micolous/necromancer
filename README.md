@@ -10,7 +10,7 @@
 `necromancer` will be a pure-Rust re-implementation of the Blackmagic Design ATEM control
 protocol.
 
-It is divided up into two crates which share a version number:
+It is divided up into two crates, which will share a version number:
 
-* `necromancer`: high-level client with state machine.
-* `necromancer_protocol`: low-level data structures, re-exported as `necromancer::protocol`.
+* [`necromancer`](./necromancer/): high-level client with state machine.
+* [`necromancer_protocol`](./necromancer_protocol/): low-level data structures.

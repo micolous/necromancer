@@ -22,4 +22,5 @@ pub use {
     },
     necromancer_protocol as protocol,
 };
+
 pub type Result<T = ()> = std::result::Result<T, Error>;
