@@ -5,6 +5,14 @@ members = [
     "necromancer_protocol",
 ]
 
+[workspace.package]
+version = "0.0.0"
+edition = "2021"
+license = "Apache-2.0"
+authors = ["Michael Farrell <micolous+git@gmail.com>"]
+repository = "https://github.com/micolous/necromancer"
+keywords = ["atem", "blackmagic"]
+
 [workspace.dependencies]
 binrw = "0.15.0"
 chrono = "0.4.42"
@@ -18,6 +26,10 @@ palette = "0.7.6"
 serde = "1.0.226"
 thiserror = "2.0.16"
 tracing = "0.1.41"
+
+[workspace.dependencies.necromancer_protocol]
+path = "./necromancer_protocol"
+version = "=0.0.0"
 
 [workspace.dependencies.tracing-subscriber]
 version = "0.3.20"

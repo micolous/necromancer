@@ -356,6 +356,9 @@ dependencies = [
 [[package]]
 name = "necromancer"
 version = "0.0.0"
+dependencies = [
+ "necromancer_protocol",
+]
 
 [[package]]
 name = "necromancer_protocol"

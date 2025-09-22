@@ -1,7 +1,4 @@
-# necromancer &emsp; [![Latest Version]][crates.io] [![Docs version]][docs.rs]
-
-`necromancer` will be a pure-Rust re-implementation of the Blackmagic Design ATEM control
-protocol.
+# necromancer
 
 > [!WARNING]
 > **This is still a work in progress.**
@@ -10,7 +7,10 @@ protocol.
 >
 > A real release will follow soon... it's just taking a while! :)
 
-[crates.io]: https://crates.io/crates/necromancer
-[Docs version]: https://img.shields.io/docsrs/necromancer.svg
-[docs.rs]: https://docs.rs/necromancer/
-[Latest Version]: https://img.shields.io/crates/v/necromancer.svg
+`necromancer` will be a pure-Rust re-implementation of the Blackmagic Design ATEM control
+protocol.
+
+It is divided up into two crates which share a version number:
+
+* `necromancer`: high-level client with state machine.
+* `necromancer_protocol`: low-level data structures, re-exported as `necromancer::protocol`.

@@ -1,12 +1,12 @@
 [package]
 name = "necromancer_protocol"
-version = "0.0.0"
-edition = "2021"
-license = "Apache-2.0"
-authors = ["Michael Farrell <micolous+git@gmail.com>"]
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
 description = "Low level protocol primitives for Blackmagic ATEM control protocol"
-repository = "https://github.com/micolous/necromancer"
-keywords = ["atem", "blackmagic"]
+repository.workspace = true
+keywords.workspace = true
 
 [features]
 default = ["palette"]

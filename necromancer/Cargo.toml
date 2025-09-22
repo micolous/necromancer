@@ -1,11 +1,12 @@
 [package]
 name = "necromancer"
-version = "0.0.0"
-edition = "2021"
-license = "Apache-2.0"
-authors = ["Michael Farrell <micolous+git@gmail.com>"]
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
 description = "Reserving a package name for a pure-Rust re-implementation of the Blackmagic ATEM control protocol"
-repository = "https://github.com/micolous/necromancer"
-keywords = ["atem", "blackmagic"]
+repository.workspace = true
+keywords.workspace = true
 
 [dependencies]
+necromancer_protocol.workspace = true
