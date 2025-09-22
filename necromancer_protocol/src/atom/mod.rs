@@ -96,7 +96,6 @@ mod tally;
 mod time;
 mod topology;
 mod ver;
-mod video;
 mod video_mode;
 mod visca;
 
@@ -140,7 +139,6 @@ pub use self::{
     time::{SetTimeOfDay, SetTimecodeConfig, Time, TimeMode, TimecodeConfig, TimecodeRequest},
     topology::Topology,
     ver::{ProductName, Version},
-    video::{TallyFlags, VideoMode, VideoSource},
     video_mode::{CoreVideoMode, SetVideoMode, SupportedVideoModes},
 };
 

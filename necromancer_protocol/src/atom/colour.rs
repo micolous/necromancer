@@ -1,5 +1,5 @@
-use super::VideoSource;
-use crate::{error::Error, Result};
+/// Colour generator atoms.
+use crate::{error::Error, structs::VideoSource, Result};
 use binrw::{binrw, BinRead, BinWrite};
 use modular_bitfield::{bitfield, specifiers::B5};
 

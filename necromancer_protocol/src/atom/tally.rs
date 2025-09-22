@@ -8,7 +8,7 @@
 //! `TlIn` | `TalliedInputs` | 0xa + entries bytes
 //! `DTOE` | `DskTallyOverride` | 0xc
 
-use super::video::{TallyFlags, VideoSource};
+use crate::structs::{TallyFlags, VideoSource};
 use binrw::binrw;
 use std::{collections::HashMap, ops::Deref};
 

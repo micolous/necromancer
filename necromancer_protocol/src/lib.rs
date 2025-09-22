@@ -10,6 +10,7 @@ pub mod atom;
 mod error;
 mod packet;
 mod rle;
+pub mod structs;
 mod util;
 
 pub use crate::{

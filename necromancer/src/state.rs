@@ -1,9 +1,12 @@
 use crate::{
-    protocol::atom::{
-        Atom, ColourGeneratorParams, FadeToBlackStatus, FairlightAudioMixerInputSourceProperties,
-        InputProperties, MediaPlayerCapabilities, MediaPlayerFrameDescription, MediaPlayerSourceID,
-        MixEffectBlockCapabilities, Payload, ProductName, TallyFlags, Topology, TransitionPosition,
-        Version, VideoMode, VideoSource,
+    protocol::{
+        atom::{
+            Atom, ColourGeneratorParams, FadeToBlackStatus,
+            FairlightAudioMixerInputSourceProperties, InputProperties, MediaPlayerCapabilities,
+            MediaPlayerFrameDescription, MediaPlayerSourceID, MixEffectBlockCapabilities, Payload,
+            ProductName, Topology, TransitionPosition, Version,
+        },
+        structs::{TallyFlags, VideoMode, VideoSource},
     },
     Result,
 };

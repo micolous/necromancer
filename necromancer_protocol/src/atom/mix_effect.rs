@@ -1,6 +1,6 @@
 //! Mix effect block atoms (preview / program output control)
 //!
-use super::video::VideoSource;
+use crate::structs::VideoSource;
 use binrw::binrw;
 
 /// `_MeC`: mix effect block capabilities (`CapabilitiesMEBlock`)
@@ -90,13 +90,11 @@ pub struct SetProgramInput {
 
 #[cfg(test)]
 mod test {
-    use std::io::Cursor;
-
-    use binrw::{BinRead, BinWrite};
-
     use super::*;
-    use crate::atom::{video::VideoSource, Atom, Payload};
+    use crate::atom::{Atom, Payload};
     use crate::Result;
+    use binrw::{BinRead, BinWrite};
+    use std::io::Cursor;
 
     #[test]
     fn mix_effect_caps() -> Result<()> {

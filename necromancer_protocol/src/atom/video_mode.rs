@@ -5,7 +5,7 @@
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------
 //! `AiVM` | `AutoVideoMode` | 0xc
-use super::video::VideoMode;
+use crate::structs::VideoMode;
 use binrw::binrw;
 use std::ops::Deref;
 

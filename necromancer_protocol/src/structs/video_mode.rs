@@ -1,228 +1,5 @@
-//! Video commands and structures
-
+use binrw::binrw;
 use std::fmt::Display;
-
-use binrw::{binrw, BinRead, BinWrite};
-#[cfg(feature = "clap")]
-use clap::ValueEnum;
-use modular_bitfield::{
-    bitfield,
-    specifiers::{B4, B6},
-    Specifier,
-};
-#[cfg(feature = "serde")]
-use serde::{Deserialize, Serialize};
-
-#[binrw]
-#[brw(repr = u16, big)]
-#[derive(Default, Debug, FromPrimitive, ToPrimitive, PartialEq, Eq, Clone, Copy, Hash)]
-#[cfg_attr(feature = "clap", derive(ValueEnum))]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[repr(u16)]
-pub enum VideoSource {
-    Black = 0,
-
-    Input1 = 1,
-    Input2 = 2,
-    Input3 = 3,
-    Input4 = 4,
-    Input5 = 5,
-    Input6 = 6,
-    Input7 = 7,
-    Input8 = 8,
-    Input9 = 9,
-    Input10 = 10,
-    Input11 = 11,
-    Input12 = 12,
-    Input13 = 13,
-    Input14 = 14,
-    Input15 = 15,
-    Input16 = 16,
-    Input17 = 17,
-    Input18 = 18,
-    Input19 = 19,
-    Input20 = 20,
-    Input21 = 21,
-    Input22 = 22,
-    Input23 = 23,
-    Input24 = 24,
-    Input25 = 25,
-    Input26 = 26,
-    Input27 = 27,
-    Input28 = 28,
-    Input29 = 29,
-    Input30 = 30,
-    Input31 = 31,
-    Input32 = 32,
-    Input33 = 33,
-    Input34 = 34,
-    Input35 = 35,
-    Input36 = 36,
-    Input37 = 37,
-    Input38 = 38,
-    Input39 = 39,
-    Input40 = 40,
-
-    ColourBars = 1000,
-    Colour1 = 2001,
-    Colour2 = 2002,
-    // TODO: Colour3 - Colour8 haven't actually been seen, these are just a
-    // guess.
-    Colour3 = 2003,
-    Colour4 = 2004,
-    Colour5 = 2005,
-    Colour6 = 2006,
-    Colour7 = 2007,
-    Colour8 = 2008,
-
-    MediaPlayer1 = 3010,
-    MediaPlayer1Key = 3011,
-    MediaPlayer2 = 3020,
-    MediaPlayer2Key = 3021,
-    MediaPlayer3 = 3030,
-    MediaPlayer3Key = 3031,
-    MediaPlayer4 = 3040,
-    MediaPlayer4Key = 3041,
-
-    Key1Mask = 4010,
-    Key2Mask = 4020,
-    Key3Mask = 4030,
-    Key4Mask = 4040,
-
-    DSK1Mask = 5010,
-    DSK2Mask = 5020,
-
-    SuperSource = 6000,
-
-    CleanFeed1 = 7001,
-    CleanFeed2 = 7002,
-
-    Auxilary1 = 8001,
-    Auxilary2 = 8002,
-    Auxilary3 = 8003,
-    Auxilary4 = 8004,
-    Auxilary5 = 8005,
-    Auxilary6 = 8006,
-
-    ME1Prog = 10010,
-    ME1Prev = 10011,
-    ME2Prog = 10020,
-    ME2Prev = 10021,
-
-    Input1Direct = 11001,
-    /// Internal value: unknown video source state.
-    #[default]
-    Unknown = 0xffff,
-}
-
-/// The external port type of the video switcher.
-///
-/// ## Format
-///
-/// The value is a bitmask, and uses the network port type numbering, which
-/// is different from `BMDSwitcherExternalPortType` in the official SDK:
-///
-/// API value | Network value | Notes
-/// --------- | ------------- | -----------
-/// `0x0e1f`  | `0x0e1f`      | Same in both
-/// `0x01c0`  | `0x00e0`      | `API = Network << 1`
-/// `0x0020`  | `0x0100`      | `API = Network >> 3`
-/// `0xf000`  | `0xf000`      | unused[^1]
-///
-/// [^1]: `0x1000` (RJ45) is unused by the BM SDK.
-#[bitfield(bits = 16)]
-#[repr(u16)]
-#[derive(Specifier, BinRead, BinWrite, Debug, Default, PartialEq, Eq, Clone, Copy)]
-#[br(map = From::<u16>::from)]
-#[bw(map = |&x| Into::<u16>::into(x))]
-pub struct ExternalPortType {
-    /// Serial digital interface (SDI)
-    pub sdi: bool,
-
-    /// High-definition multimedia interface (HDMI)
-    pub hdmi: bool,
-
-    /// Component video
-    pub component: bool,
-
-    /// Composite video
-    pub composite: bool,
-
-    /// S-Video
-    pub svideo: bool,
-
-    /// XLR audio connection
-    pub xlr: bool,
-
-    /// AES EBU audio connection
-    pub aes_ebu: bool,
-
-    /// RCA audio connection
-    pub rca: bool,
-
-    /// Internal port
-    pub internal: bool,
-
-    /// TS audio connection
-    pub ts_jack: bool,
-
-    /// MADI audio connection
-    pub madi: bool,
-
-    /// TRS audio connection
-    pub trs: bool,
-
-    // RJ45 not supported on network layer?
-    #[skip]
-    __: B4,
-}
-
-/// Switcher port types
-#[binrw]
-#[brw(big, repr = u8)]
-#[derive(Debug, FromPrimitive, ToPrimitive, PartialEq, Eq, Clone, Copy)]
-#[repr(u8)]
-pub enum PortType {
-    /// External port (see [ExternalPortType] for specifics).
-    External = 0x00,
-    /// Black video generator port.
-    Black = 0x01,
-    /// Colour bars generator port.
-    ColourBars = 0x02,
-    /// Colour generator port.
-    ColourGenerator = 0x03,
-    /// Media player fill port.
-    MediaPlayerFill = 0x04,
-    /// Media player cut port.
-    MediaPlayerKey = 0x05,
-    /// SuperSource port.
-    SuperSource = 0x06,
-    /// External direct-mode port, which bypasses all switching.
-    ExternalDirect = 0x07,
-    /// Mix effect block output port.
-    MEOutput = 0x80,
-    /// Auxiliary output port.
-    Auxiliary = 0x81,
-    // TODO: may be "key cut output"?
-    Mask = 0x82,
-    /// MultiView output port.
-    Multiview = 0x83,
-}
-
-/// Source tally status.
-#[bitfield(bits = 8)]
-#[repr(u8)]
-#[derive(Specifier, BinRead, BinWrite, Debug, Default, PartialEq, Eq, Clone, Copy)]
-#[br(map = From::<u8>::from)]
-#[bw(map = |&x| Into::<u8>::into(x))]
-pub struct TallyFlags {
-    /// The source is currently in use as a program output.
-    pub program: bool,
-    /// The source is currently in use as a preview output.
-    pub preview: bool,
-    #[skip]
-    __: B6,
-}
 
 /// Input/output video mode
 ///
@@ -495,6 +272,8 @@ impl Display for VideoMode {
 
 #[cfg(test)]
 mod test {
+    use num_traits::FromPrimitive;
+
     use super::*;
 
     #[test]
@@ -508,10 +287,15 @@ mod test {
     }
 
     #[test]
-    fn external_port_types() {
-        assert_eq!(
-            ExternalPortType::new().with_sdi(true),
-            ExternalPortType::from(0x0001u16)
-        );
+    fn interlaced() {
+        for m in [0, 1, 2, 3, 6, 7, 0x1d] {
+            let m = VideoMode::from_u8(m).unwrap();
+            assert!(m.is_interlaced(), "mode {m:?} must be interlaced");
+        }
+
+        for m in [4, 5, 0xc, 0xd, 0x21] {
+            let m = VideoMode::from_u8(m).unwrap();
+            assert!(!m.is_interlaced(), "mode {m:?} must be progressive");
+        }
     }
 }

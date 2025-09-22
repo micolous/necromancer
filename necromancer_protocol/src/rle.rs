@@ -24,8 +24,8 @@ pub const RLE_MARKER: u64 = 0xfefefefefefefefe;
 
 /// Decompressor for "Simple RLE".
 ///
-/// This takes a Simple RLE stream as [`Iterator<Item = u64>`], and itself
-/// implements an [`Iterator<Item = u64>`].
+/// This takes a Simple RLE stream as [`Iterator`] of [`u64`], and itself
+/// implements an [`Iterator`] of [`u64`].
 pub struct RleDecompressor<T: Iterator<Item = u64>> {
     /// Iterator over the file
     i: T,
@@ -94,7 +94,7 @@ impl<T: Iterator<Item = u64>> Iterator for RleDecompressor<T> {
 
 /// Find the size of an RLE sequence in elements.
 ///
-/// Multiply by 8 to get the size in bytes.
+/// Each element corresponds to 2 pixels. Multiply by 8 to get the size in bytes.
 ///
 /// ## Comparison with [RleDecompressor]
 ///
@@ -134,8 +134,8 @@ pub fn rle_size_elements(mut i: impl Iterator<Item = u64>) -> Result<u64> {
 
 /// Compressor for "Simple RLE".
 ///
-/// This takes an image stream as an [`Iterator<Item = u64>`] and itself
-/// implements an [`Iterator<Item = u64>`] for RLE-encoded data.
+/// This takes an image stream as an [`Iterator`] of [`u64`] and itself
+/// implements an [`Iterator`] of [`u64`] for RLE-encoded data.
 pub struct RleCompressor<T: Iterator<Item = u64>> {
     /// Iterator over the file
     i: T,
@@ -234,17 +234,19 @@ mod test {
     use super::*;
     use crate::Result;
 
-    fn rle_size_from_bytes(b: &[u8]) -> Result<u64> {
+    /// Simple RLE stream size, using an input byte array, and returning the size in bytes.
+    fn rle_size_from_bytes_in_bytes(b: &[u8]) -> Result<u64> {
         rle_size_elements(
             b.chunks(8)
                 .map(|c| u64::from_be_bytes(c.try_into().unwrap())),
         )
+        .map(|e| e * 8)
     }
 
     #[test]
     fn rle_black() -> Result {
         let black = hex::decode("fefefefefefefefe00000000000fd2003ac800403ac80040")?;
-        assert_eq!((1920 * 1080 * 4), rle_size_from_bytes(&black)?);
+        assert_eq!((1920 * 1080 * 4), rle_size_from_bytes_in_bytes(&black)?);
         let mut c = 0;
         let i = RleDecompressor::new(
             black
@@ -272,7 +274,7 @@ mod test {
     #[test]
     fn rle_red() -> Result {
         let red = hex::decode("fefefefefefefefe00000000000fd2003ac668f93acefcf9")?;
-        assert_eq!((1920 * 1080 * 4), rle_size_from_bytes(&red)?);
+        assert_eq!((1920 * 1080 * 4), rle_size_from_bytes_in_bytes(&red)?);
         let mut c = 0;
         let i = RleDecompressor::new(
             red.chunks(8)
