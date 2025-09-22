@@ -41,12 +41,27 @@
 //!
 //! The total data size is `(width * height * 6)` bytes.
 //!
+//! ## TODO
+//! 
+//! Provide a version of [`ay10be_to_yuva422p10be`] and [`yuva422p10be_to_ay10be`] which can read
+//! from and write to a file.
+//! 
 //! [0]: https://trac.ffmpeg.org/ticket/10577
 use crate::{Error, Result};
 
 /// Convert bit-packed 10-bit YUVA 4:2:2:4 into a planar format (`yuva422p10be`)
-/// suitable for FFmpeg.
-pub fn ay10be_to_yuva422p10be(b: &[u64]) -> Vec<u8> {
+/// suitable for reading by FFmpeg, for example:
+///
+/// ```sh
+/// # Assumes 1920x1080 frame in BT.709 colour space
+/// ffmpeg -f rawvideo -pixel_format yuva422p10be -colorspace bt709 \
+///     -video_size 1920x1080 -i /tmp/still1.yuva422p10be \
+///     -pix_fmt rgba /tmp/image.'%03d'.png
+/// ```
+///
+/// ATEM switchers also [run-length encode frames][crate::rle], which will need
+/// to be [decompressed before using this method][crate::rle::RleDecompressor].
+pub fn ay10be_to_yuva422p10be(b: impl ExactSizeIterator<Item = u64>) -> Vec<u8> {
     // 8 bytes into 12
     // _AUY _AVY => YY YY | UU | VV | AA AA
     let new_len = b.len() * 12;
@@ -57,7 +72,7 @@ pub fn ay10be_to_yuva422p10be(b: &[u64]) -> Vec<u8> {
     let mut vp = b.len() * 6;
     let mut ap = b.len() * 8;
 
-    for w in b.iter().copied() {
+    for w in b {
         let cr = ((w >> 10) & 0x3ff) as u16;
 
         let y = (((w >> 32) & 0x3ff) as u32) << 16 | (w & 0x3ff) as u32;
@@ -80,8 +95,14 @@ pub fn ay10be_to_yuva422p10be(b: &[u64]) -> Vec<u8> {
     o
 }
 
-/// Convert a `ffmpeg` `yuva422p10be` frame into bit-packed 10-bit YUVA 4:2:2:4
-/// format.
+/// Convert a `ffmpeg` `yuva422p10be` frame into bit-packed 10-bit YUVA 4:2:2:4 format.
+///
+/// For example, to use FFmpeg to encode a PNG file in YUVA for reading by this method:
+///
+/// ```sh
+/// ffmpeg -i /tmp/image.png -f rawvideo -pix_fmt yuva422p10be \
+///     -colorspace bt709 /tmp/image.yuva422p10be
+/// ```
 pub fn yuva422p10be_to_ay10be(b: &[u8]) -> Result<Vec<u64>> {
     // TODO: make this return an iterator instead
 
@@ -149,7 +170,7 @@ mod test {
         let colour_bars = GzDecoder::new(COLOUR_BARS_RLE_GZ);
         let colour_bars: Vec<u64> =
             RleDecompressor::new(IntReader::<_, u64>::new(colour_bars)).collect();
-        let planar = ay10be_to_yuva422p10be(&colour_bars);
+        let planar = ay10be_to_yuva422p10be(colour_bars.iter().copied());
         assert_eq!(colour_bars_planar, planar);
 
         let packed = yuva422p10be_to_ay10be(&planar)?;
