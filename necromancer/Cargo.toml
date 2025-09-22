@@ -1,0 +1,11 @@
+[package]
+name = "necromancer"
+version = "0.0.0"
+edition = "2021"
+license = "Apache-2.0"
+authors = ["Michael Farrell <micolous+git@gmail.com>"]
+description = "Reserving a package name for a pure-Rust re-implementation of the Blackmagic ATEM control protocol"
+repository = "https://github.com/micolous/necromancer"
+keywords = ["atem", "blackmagic"]
+
+[dependencies]
