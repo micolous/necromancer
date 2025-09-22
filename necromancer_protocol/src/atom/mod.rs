@@ -71,6 +71,7 @@
 //! `CXMS` | `ChangeHyperDeckSetup` | 0x18
 
 mod audio;
+#[path = "aux_.rs"]
 mod aux;
 mod camera;
 mod colour;
