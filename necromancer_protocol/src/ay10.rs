@@ -42,10 +42,10 @@
 //! The total data size is `(width * height * 6)` bytes.
 //!
 //! ## TODO
-//! 
+//!
 //! Provide a version of [`ay10be_to_yuva422p10be`] and [`yuva422p10be_to_ay10be`] which can read
 //! from and write to a file.
-//! 
+//!
 //! [0]: https://trac.ffmpeg.org/ticket/10577
 use crate::{Error, Result};
 

@@ -29,6 +29,7 @@ num-traits = "0.2.19"
 palette = "0.7.6"
 rand = "0.9.2"
 thiserror = "2.0.16"
+tomu_usb_simple_client = "0.1.1"
 tracing = "0.1.41"
 
 [workspace.dependencies.clap]

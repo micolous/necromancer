@@ -8,6 +8,9 @@ description = "Reserving a package name for a pure-Rust re-implementation of the
 repository.workspace = true
 keywords.workspace = true
 
+[features]
+clap = ["necromancer_protocol/clap"]
+
 [dependencies]
 binrw.workspace = true
 bitflags.workspace = true
@@ -25,4 +28,9 @@ tracing.workspace = true
 
 [dev-dependencies]
 clap = { workspace = true, features = ["derive"] }
+tomu_usb_simple_client.workspace = true
 tracing-subscriber.workspace = true
+
+[[example]]
+name = "tomu_tally"
+required-features = ["clap"]
