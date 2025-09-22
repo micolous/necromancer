@@ -42,17 +42,25 @@ use tokio::{
 };
 use tokio_stream::wrappers::IntervalStream;
 
+/// Internal type for asynchronous message passing.
 enum AsyncCommand {
+    /// Send [Atom(s)][Atom] to the switcher, and opptionally wait for a response.
     Commands {
+        /// The [Atom(s)][Atom] to send.
         cmds: Vec<Atom>,
+
+        /// If set, notify the caller when the atom(s) were acknowledged by the receiver, or an
+        /// error was returned.
         responder: Option<oneshot::Sender<Result<(), Error>>>,
     },
-    FileDownload {
-        req: AsyncFileDownloadRequest,
-    },
-    FileUpload {
-        req: AsyncFileUploadRequest,
-    },
+
+    /// File download request.
+    FileDownload(AsyncFileDownloadRequest),
+
+    // File upload request.
+    FileUpload(AsyncFileUploadRequest),
+
+    /// Storage lock request
     // TODO: make locking use a state machine
     StorageLock {
         store_id: u16,
@@ -60,6 +68,7 @@ enum AsyncCommand {
     },
 }
 
+/// Asynchronous file download request state.
 struct AsyncFileDownloadRequest {
     store_id: u16,
     index: u8,
@@ -73,6 +82,7 @@ struct AsyncFileDownloadRequest {
     storage_lock: Arc<StorageLock>,
 }
 
+/// Asynchronous file upload request state.
 struct AsyncFileUploadRequest {
     store_id: u16,
     index: u8,
@@ -122,6 +132,11 @@ pub struct AtemController {
 
 impl AtemController {
     /// Connects to an ATEM controller over UDP.
+    /// 
+    /// ## Args
+    /// 
+    /// * `addr`: The UDP socket address to connect to
+    /// * `reconnect`: If `true`, reconnect after failures.
     pub async fn connect_udp(addr: SocketAddrV4, reconnect: bool) -> Result<Self, Error> {
         info!("Initialising connection to switcher...");
         let (mut receiver, cmd_tx) = AtemReceiver::new(addr, reconnect);
@@ -242,7 +257,7 @@ impl AtemController {
             bytes_since_last_ack: 0,
             storage_lock,
         };
-        self.send_ex(AsyncCommand::FileDownload { req }).await?;
+        self.send_ex(AsyncCommand::FileDownload(req)).await?;
 
         Ok(rx)
     }
@@ -307,7 +322,7 @@ impl AtemController {
             semaphore: Arc::new(Semaphore::new(1)),
             storage_lock,
         };
-        self.send_ex(AsyncCommand::FileUpload { req }).await?;
+        self.send_ex(AsyncCommand::FileUpload(req)).await?;
         resp_rx.await.map_err(|_| Error::Timeout)?
     }
 
@@ -602,7 +617,7 @@ impl AtemReceiver {
 
     /// Create a new `recv_task`.
     ///
-    /// ## Arguments
+    /// ## Returns
     ///
     /// * `channel`: UDP connection to work with
     /// * `tx`: [broadcast::Sender] where incoming packets from the device go to
@@ -978,7 +993,7 @@ impl AtemReceiver {
     async fn handle_queued_command(&mut self, async_cmd: AsyncCommand) -> Result<(), Error> {
         let (cmds, responder) = match async_cmd {
             AsyncCommand::Commands { cmds, responder } => (cmds, responder),
-            AsyncCommand::FileDownload { req } => {
+            AsyncCommand::FileDownload(req) => {
                 let id = rand::random();
                 let cmd = Atom::new(DownloadRequest {
                     id,
@@ -993,7 +1008,7 @@ impl AtemReceiver {
                 // TODO: handle leakage on errors
                 (vec![cmd], None)
             }
-            AsyncCommand::FileUpload { req } => {
+            AsyncCommand::FileUpload(req) => {
                 let id = rand::random();
                 let cmd = Atom::new(SetupFileUpload {
                     id,

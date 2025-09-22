@@ -41,6 +41,10 @@ struct CliParser {
     /// Zero-indexed media encoder to watch.
     #[clap(short, long, default_value = "0")]
     pub me: u8,
+
+    /// Automatically reconnect on connection loss.
+    #[clap(short, long)]
+    pub reconnect: bool,
 }
 
 async fn update_tomu(tomu: &mut TomuUsbSimple, tally: TallyFlags) -> Result {
@@ -70,9 +74,11 @@ async fn main() -> Result {
 
     let opts = CliParser::parse();
     let mut tomu = TomuUsbSimple::open().await?;
-    let atem =
-        AtemController::connect_udp(SocketAddrV4::new(opts.ip.parse().unwrap(), 9910), false)
-            .await?;
+    let atem = AtemController::connect_udp(
+        SocketAddrV4::new(opts.ip.parse().unwrap(), 9910),
+        opts.reconnect,
+    )
+    .await?;
     let state = atem.get_state().await;
     info!(
         "Connected ATEM switch: {:?}, FW v{}",

@@ -11,6 +11,10 @@ struct CliParser {
     /// IP address of the ATEM switcher.
     #[clap(short, long)]
     pub ip: String,
+
+    /// Automatically reconnect on connection loss.
+    #[clap(short, long)]
+    pub reconnect: bool,
 }
 
 #[tokio::main]
@@ -24,9 +28,11 @@ async fn main() -> Result<()> {
         .compact()
         .init();
     let opts = CliParser::parse();
-    let atem =
-        AtemController::connect_udp(SocketAddrV4::new(opts.ip.parse().unwrap(), 9910), false)
-            .await?;
+    let atem = AtemController::connect_udp(
+        SocketAddrV4::new(opts.ip.parse().unwrap(), 9910),
+        opts.reconnect,
+    )
+    .await?;
     let state = atem.get_state().await;
     info!(
         "Connected ATEM switch: {:?}, FW v{}",
