@@ -52,7 +52,7 @@ pub struct Auto {
 /// * 2 bytes padding
 #[binrw]
 #[brw(big)]
-#[derive(Debug, PartialEq, Eq, Clone, Copy)]
+#[derive(Debug, PartialEq, Eq, Clone)]
 pub struct TransitionPosition {
     pub me: u8,
     #[br(map = |v: u8| v != 0)]

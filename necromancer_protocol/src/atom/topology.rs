@@ -2,7 +2,7 @@ use binrw::binrw;
 
 /// `_top`: Topology of the switcher (`CapabilitiesTopLevel`)
 #[binrw]
-#[derive(Default, Debug, PartialEq, Eq, Clone, Copy)]
+#[derive(Default, Debug, PartialEq, Eq, Clone)]
 #[brw(big)]
 pub struct Topology {
     /// Number of mix effect blocks (MEs)

@@ -229,9 +229,10 @@ enum AtemPacketPayload {
 impl AtemPacket {
     const HEADERS_LENGTH: u16 = 12;
     /// Maximum packet size, including headers.
-    pub(crate) const MAX_PACKET_LENGTH: u16 = 0x7ff;
+    pub const MAX_PACKET_LENGTH: u16 = 0x7ff;
     /// Maximum packet payload size (minus [AtemPacket] headers)
-    pub(crate) const MAX_PAYLOAD_LENGTH: u16 = Self::MAX_PACKET_LENGTH - Self::HEADERS_LENGTH;
+    pub const MAX_PAYLOAD_LENGTH: u16 = Self::MAX_PACKET_LENGTH - Self::HEADERS_LENGTH;
+    pub const MAX_PACKET_ID: u16 = 0x7fff;
 
     pub fn new(
         flags: AtemPacketFlags,
@@ -333,6 +334,13 @@ impl AtemPacket {
         }
     }
 
+    pub fn control(&self) -> Option<&AtemControl> {
+        match &self.payload {
+            AtemPacketPayload::Control(ctrl) => Some(ctrl),
+            _ => None,
+        }
+    }
+
     /// Gets the [`Atom`][]s for this packet, if this is an Atom packet.
     ///
     /// This will return [`Some`] even if the `Vec<Atom>` is empty.
@@ -340,6 +348,13 @@ impl AtemPacket {
     /// See also: [`AtemPacket::has_atoms()`]
     pub fn atoms(&self) -> Option<&Vec<Atom>> {
         match &self.payload {
+            AtemPacketPayload::Atom(atoms) => Some(atoms),
+            _ => None,
+        }
+    }
+
+    pub fn atoms_mut(&mut self) -> Option<&mut Vec<Atom>> {
+        match &mut self.payload {
             AtemPacketPayload::Atom(atoms) => Some(atoms),
             _ => None,
         }

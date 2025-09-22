@@ -9,12 +9,14 @@ extern crate tracing;
 pub mod atom;
 mod error;
 mod packet;
+mod rle;
 mod util;
 
 pub use crate::{
     atom::Atom,
     error::Error,
     packet::{AtemControl, AtemPacket, AtemPacketFlags},
+    rle::{rle_size_elements, RleCompressor, RleDecompressor, RLE_MARKER},
 };
 
 /// Result type.

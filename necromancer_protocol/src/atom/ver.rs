@@ -34,6 +34,17 @@ impl Display for Version {
     }
 }
 
+impl Version {
+    pub fn check_firmware_version(&self) -> Result<()> {
+        // FIXME: cut/fade to black on 2.31
+        if self.major != 2 || self.minor < 30 || self.minor > 31 {
+            return Err(Error::UnsupportedFirmwareVersion(*self));
+        }
+
+        Ok(())
+    }
+}
+
 /// `_pin`: product name
 ///
 /// ## Packet format

@@ -9,4 +9,20 @@ repository.workspace = true
 keywords.workspace = true
 
 [dependencies]
+binrw.workspace = true
+bitflags.workspace = true
+concread.workspace = true
+futures.workspace = true
+hex.workspace = true
+lazy_static.workspace = true
+md5.workspace = true
 necromancer_protocol.workspace = true
+rand.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tokio-stream.workspace = true
+tracing.workspace = true
+
+[dev-dependencies]
+clap = { workspace = true, features = ["derive"] }
+tracing-subscriber.workspace = true

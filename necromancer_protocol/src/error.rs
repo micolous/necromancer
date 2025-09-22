@@ -1,3 +1,4 @@
+use crate::atom::Version;
 use std::str::Utf8Error;
 use thiserror::Error;
 
@@ -24,11 +25,8 @@ pub enum Error {
     DropFrame,
 
     #[error("data parse error: {0}")]
-    BinRwError(binrw::Error),
-}
+    BinRwError(#[from] binrw::Error),
 
-impl From<binrw::Error> for Error {
-    fn from(value: binrw::Error) -> Self {
-        Self::BinRwError(value)
-    }
+    #[error("unsupported firmware version: {0:?}")]
+    UnsupportedFirmwareVersion(Version),
 }
