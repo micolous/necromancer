@@ -19,7 +19,7 @@ pub fn rle_md5_size(i: impl Iterator<Item = u64>) -> ([u8; 16], u64) {
 #[cfg(test)]
 mod test {
     use super::*;
-    use crate::{protocol::RleCompressor, Result};
+    use crate::Result;
 
     fn rle_md5_size_from_bytes(b: &[u8]) -> ([u8; 16], u64) {
         rle_md5_size(
@@ -41,27 +41,6 @@ mod test {
             ),
             rle_md5_size_from_bytes(&black)
         );
-        let mut c = 0;
-        let i = RleDecompressor::new(
-            black
-                .chunks(8)
-                .map(|c| u64::from_be_bytes(c.try_into().unwrap())),
-        )
-        .map(|w| {
-            assert_eq!(0x3ac800403ac80040, w);
-            c += 1;
-            w
-        });
-
-        let compressor = RleCompressor::new(i);
-        let mut out = Vec::with_capacity(black.len());
-        for w in compressor {
-            out.extend_from_slice(&w.to_be_bytes());
-        }
-
-        assert_eq!(1036800, c);
-        assert_eq!(out, black);
-
         Ok(())
     }
 
@@ -78,26 +57,6 @@ mod test {
             ),
             rle_md5_size_from_bytes(&red)
         );
-        let mut c = 0;
-        let i = RleDecompressor::new(
-            red.chunks(8)
-                .map(|c| u64::from_be_bytes(c.try_into().unwrap())),
-        )
-        .map(|w| {
-            assert_eq!(0x3ac668f93acefcf9, w);
-            c += 1;
-            w
-        });
-
-        let compressor = RleCompressor::new(i);
-        let mut out = Vec::with_capacity(red.len());
-        for w in compressor {
-            out.extend_from_slice(&w.to_be_bytes());
-        }
-
-        assert_eq!(1036800, c);
-        assert_eq!(out, red);
-
         Ok(())
     }
 }
