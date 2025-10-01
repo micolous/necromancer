@@ -2,10 +2,10 @@ use crate::{
     error::Error,
     protocol::{
         atom::{
-            Atom, Auto, Cut, CutToBlack, DownloadRequest, FadeToBlackAuto, FileTransferChunkParams,
-            FileType, FinishFileUpload, MediaPlayerSourceID, MediaPoolLock, Payload,
+            Atom, Auto, Cut, CutToBlack, SetupFileUpload, FadeToBlackAuto, FileTransferChunkParams,
+            FileType, FinishFileDownload, MediaPlayerSourceID, MediaPoolLock, Payload,
             SetColourGeneratorParams, SetMediaPlayerSource, SetPreviewInput, SetProgramInput,
-            SetupFileUpload, TimecodeRequest, TransferChunk, CAPTURE_STILL, CLEAR_STARTUP_SETTINGS,
+            SetupFileDownload, TimecodeRequest, TransferChunk, CAPTURE_STILL, CLEAR_STARTUP_SETTINGS,
             RESTORE_STARTUP_SETTINGS, SAVE_STARTUP_SETTINGS,
         },
         rle::RLE_MARKER,
@@ -997,7 +997,7 @@ impl AtemReceiver {
             AsyncCommand::Commands { cmds, responder } => (cmds, responder),
             AsyncCommand::FileDownload(req) => {
                 let id = rand::random();
-                let cmd = Atom::new(DownloadRequest {
+                let cmd = Atom::new(SetupFileUpload {
                     id,
                     store_id: req.store_id,
                     index: req.index.into(),
@@ -1012,7 +1012,7 @@ impl AtemReceiver {
             }
             AsyncCommand::FileUpload(req) => {
                 let id = rand::random();
-                let cmd = Atom::new(SetupFileUpload {
+                let cmd = Atom::new(SetupFileDownload {
                     id,
                     store_id: req.store_id,
                     index: req.index.into(),
@@ -1749,7 +1749,7 @@ impl AtemReceiver {
                 return Err(Error::UnexpectedState);
             };
 
-            chunks.push(Atom::new(FinishFileUpload {
+            chunks.push(Atom::new(FinishFileDownload {
                 id: params.id,
                 name: upload.name,
                 description: upload.description,

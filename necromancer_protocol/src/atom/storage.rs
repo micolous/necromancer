@@ -1,5 +1,37 @@
 //! # Media pool and file transfers
 //!
+//! There are four file types:
+//!
+//! * Still [ay10 frames][crate::ay10], [compressed with "Simple RLE"][crate::rle]
+//! * Audio clips
+//! * Multi-view labels (client-rendered text)
+//! * Macros
+//!
+//! ## File download (client to switcher) process
+//!
+//! 1. Client obtains a priority lock (`PLCK`)
+//! 1. Switcher responds with:
+//!    * `LKST`: [lock status][MediaPoolLockStatus]
+//!    * `CapA`: ??
+//!    * `CCST`: ??
+//! 1. Client [starts a file download][SetupFileDownload] (`FTSD`)
+//! 1. Switcher [indicates how to chunk the data][FileTransferChunkParams] (`FTCD`), and how many
+//!    data chunks to send before waiting for an acknowledgement.
+//! 1. Client [sends data chunks][TransferChunk] (`FTDa`)
+//! 1. Switcher periodically acknowledges chunks (on a [packet level][crate::packet])
+//! 1. Client [sends file description][FinishFileDownload] (`FTFD`)
+//! 1. Switcher [indicates the transfer was completed][TransferCompleted] (`FTDC`)
+//! 1. Switcher [sends file description update][MediaPlayerFrameDescription] (`MPfe`)
+//! 1. Client [unlocks the file][MediaPoolLock] (`LOCK`)
+//!
+//! ## File upload (switcher to client) process
+//!
+//! 1. Client [sends lock request][MediaPoolLock] (`LOCK`)
+//! 1. Client [sends upload request][SetupFileUpload] (`FTSU`)
+//! 1. Switcher [sends data chunks][TransferChunk] (`FTDa`)
+//! 1. Client [periodically sends acknowledgement atoms][TransferAck] (`FTUA`)
+//! 1. Switcher [indicates the transfer was completed][TransferCompleted] (`FTDC`)
+//!
 //! ## Unimplemented atoms
 //!
 //! FourCC | Atom name | Length
@@ -8,42 +40,6 @@
 //! `FTAD` | `FileTransferCancelDownload` | 0xc
 //! `CLMP` | `ClearMediaPool` | 0x8
 
-// cmd: PLCK -> request lock
-
-// response: LKOB -> lock obtained
-// event: LKST -> lock status changed
-// event: CapA ??
-// event: CCST ??
-
-// cmd: FTSD -> data transfer to switcher
-// size appears to be width * height * 4 bytes
-
-// response: FTCD -> switcher indicates how to chunk the data
-// This has a low limit (320 chunks), can only send that many chunks before-
-// needing to wait for another FTCD.
-
-// cmd: FTDa -> transfer chunk
-// cmd: FTFD -> set file description
-
-// switcher periodically acks some chunks
-
-// event: FTDC -> data transfer completed
-// event: MPfe -> frame description update
-
-// cmd: LOCK -> unlock the file
-
-// downloading data
-
-// cmd: LOCK -> lock request
-
-// cmd: FTSU -> download request
-
-// event: FTDa -> transfer chunk
-// cmd: FTUA -> special "transfer ack" command
-
-// event: FTDC -> download completed
-
-// single colour frames look very small
 // colour format may be defined in BMDSwitcherPixelFormat
 
 use super::{str_from_utf8_null, Atom};
@@ -76,7 +72,7 @@ pub enum FileType {
 #[binrw]
 #[brw(big)]
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
-pub struct DownloadRequest {
+pub struct SetupFileUpload {
     pub id: u16,
     pub store_id: u16,
     pub index: u32,
@@ -146,7 +142,7 @@ pub struct FileTransferChunkParams {
 #[binrw]
 #[brw(big)]
 #[derive(Debug, PartialEq, Eq, Clone)]
-pub struct SetupFileUpload {
+pub struct SetupFileDownload {
     /// Transfer ID
     pub id: u16,
     pub store_id: u16,
@@ -159,7 +155,7 @@ pub struct SetupFileUpload {
     pub is_rle: bool,
 }
 
-/// `FTFD`: finish file upload
+/// `FTFD`: finish file download
 ///
 /// Used by the client to set file metadata on the switcher for a newly-uploaded
 /// file.
@@ -178,7 +174,7 @@ pub struct SetupFileUpload {
 #[binrw]
 #[brw(big)]
 #[derive(Debug, Default, PartialEq, Eq, Clone)]
-pub struct FinishFileUpload {
+pub struct FinishFileDownload {
     /// Transfer ID
     pub id: u16,
     /// Name of the file, up to 64 bytes. This normally doesn't contain a file
@@ -553,7 +549,7 @@ mod test {
     #[test]
     fn setup_file_upload() -> Result<()> {
         let _ = tracing_subscriber::fmt().try_init();
-        let expected = SetupFileUpload {
+        let expected = SetupFileDownload {
             id: 9183,
             store_id: 0,
             index: 2,
@@ -564,7 +560,7 @@ mod test {
         // removed uninitialized memory
         let cmd: Vec<u8> = hex::decode("001800004654534423df000000000002007e900000010000")?;
         let ftsd = Atom::read(&mut Cursor::new(&cmd))?;
-        let Payload::SetupFileUpload(ftsd) = ftsd.payload else {
+        let Payload::SetupFileDownload(ftsd) = ftsd.payload else {
             panic!("wrong command type");
         };
         assert_eq!(expected, ftsd);
@@ -579,7 +575,7 @@ mod test {
     #[test]
     fn finish_file_upload() -> Result<()> {
         let _ = tracing_subscriber::fmt().try_init();
-        let expected = FinishFileUpload {
+        let expected = FinishFileDownload {
             id: 35522,
             name: "_DSC1248".to_string(),
             description: String::new(),
@@ -607,7 +603,7 @@ mod test {
             "0000",
         ))?;
         let ftfd = Atom::read(&mut Cursor::new(&cmd))?;
-        let Payload::FinishFileUpload(ftfd) = ftfd.payload else {
+        let Payload::FinishFileDownload(ftfd) = ftfd.payload else {
             panic!("wrong command type");
         };
         assert_eq!(expected, ftfd);

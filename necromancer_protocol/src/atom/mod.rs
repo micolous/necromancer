@@ -122,8 +122,8 @@ pub use self::{
         RESTORE_STARTUP_SETTINGS, SAVE_STARTUP_SETTINGS,
     },
     storage::{
-        DownloadRequest, FileTransferChunkParams, FileTransferError, FileType, FinishFileUpload,
-        LockObtained, MediaPlayerFrameDescription, MediaPoolLock, MediaPoolLockStatus,
+        FileTransferChunkParams, FileTransferError, FileType, FinishFileDownload, LockObtained,
+        MediaPlayerFrameDescription, MediaPoolLock, MediaPoolLockStatus, SetupFileDownload,
         SetupFileUpload, TransferAck, TransferChunk, TransferCompleted,
     },
     tally::TalliedSources,
@@ -203,7 +203,7 @@ pub enum Payload {
     #[brw(magic = b"FCut")]
     CutToBlack(CutToBlack),
     #[brw(magic = b"FTSU")]
-    DownloadRequest(DownloadRequest),
+    SetupFileUpload(SetupFileUpload),
     #[brw(magic = b"FtbA")]
     FadeToBlackAuto(FadeToBlackAuto),
     #[brw(magic = b"FtbC")]
@@ -219,7 +219,7 @@ pub enum Payload {
     #[brw(magic = b"FTCD")]
     FileTransferChunkParams(FileTransferChunkParams),
     #[brw(magic = b"FTFD")]
-    FinishFileUpload(FinishFileUpload),
+    FinishFileDownload(FinishFileDownload),
     #[brw(magic = b"VidM")]
     CoreVideoMode(CoreVideoMode),
     #[brw(magic = b"InCm")]
@@ -277,7 +277,7 @@ pub enum Payload {
     #[brw(magic = b"CVdM")]
     SetVideoMode(SetVideoMode),
     #[brw(magic = b"FTSD")]
-    SetupFileUpload(SetupFileUpload),
+    SetupFileDownload(SetupFileDownload),
     #[brw(magic = b"_VMC")]
     SupportedVideoModes(SupportedVideoModes),
     #[brw(magic = b"TlSr")]
@@ -346,7 +346,7 @@ atom_payloads!(
     ColourGeneratorParams,
     Cut,
     CutToBlack,
-    DownloadRequest,
+    SetupFileUpload,
     FadeToBlackAuto,
     SetFadeToBlackParams,
     FadeToBlackParams,
@@ -354,7 +354,7 @@ atom_payloads!(
     FairlightAudioMixerInputSourceProperties,
     FairlightAudioMixerTally,
     FileTransferChunkParams,
-    FinishFileUpload,
+    FinishFileDownload,
     CoreVideoMode,
     InitialisationComplete,
     InputProperties,
@@ -382,7 +382,7 @@ atom_payloads!(
     SetProgramInput,
     SetTimecodeConfig,
     SetTimeOfDay,
-    SetupFileUpload,
+    SetupFileDownload,
     SetVideoMode,
     SupportedVideoModes,
     TalliedSources,
