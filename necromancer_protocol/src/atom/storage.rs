@@ -1,4 +1,4 @@
-//! Media pool and file transfer commands
+//! # Media pool and file transfers
 //!
 //! ## Unimplemented atoms
 //!

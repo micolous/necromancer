@@ -1,4 +1,4 @@
-//! Run-length frame encoding ("Simple RLE")
+//! #  Run-length frame encoding ("Simple RLE")
 //!
 //! ## Data format
 //!

@@ -1,4 +1,4 @@
-//! ATEM commands / atoms
+//! # ATEM commands / atoms
 //!
 //! Structures here map to `BEPAtom*` and `BEPStruct*` classes in `BMDSwitcherAPI`.
 //!
@@ -15,6 +15,10 @@
 //!
 //! `necromancer` will _generally_ favour Blackmagic's terminology (unless it's clunky or wrong),
 //! and mention third-party names for things where relevant and accurate.
+//!
+//! ## Progress
+//!
+//! In BMDSwitcherAPI 9.8.3: implemented 58 of 253 atoms
 //!
 //! ## Uncategorised unimplemented atoms
 //!

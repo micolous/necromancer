@@ -1,4 +1,4 @@
-//! Media player atoms
+//! # Media player
 //!
 //! ## Unimplemented atoms
 //!

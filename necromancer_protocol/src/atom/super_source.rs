@@ -1,6 +1,6 @@
-//! SuperSource commands
+//! # SuperSource
 //!
-//! //! ## Unimplemented atoms
+//! ## Unimplemented atoms
 //!
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------

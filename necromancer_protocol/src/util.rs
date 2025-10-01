@@ -1,3 +1,4 @@
+//! # Internal utilities
 use std::{
     io::{Seek, SeekFrom, Write},
     marker::PhantomData,

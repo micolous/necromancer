@@ -1,4 +1,4 @@
-//! RTMP streaming commands
+//! # RTMP streaming
 //!
 //! ## Unimplemented atoms
 //!

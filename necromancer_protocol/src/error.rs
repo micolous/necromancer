@@ -1,8 +1,9 @@
+//! # Error types
 use crate::atom::Version;
 use std::str::Utf8Error;
 use thiserror::Error;
 
-/// Error types.
+/// Error types
 #[derive(Debug, Error)]
 pub enum Error {
     #[cfg(test)]

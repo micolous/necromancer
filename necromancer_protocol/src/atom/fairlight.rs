@@ -1,4 +1,4 @@
-//! Fairlight audio atoms
+//! # Fairlight audio
 //!
 //! ## Unimplemented atoms
 //!

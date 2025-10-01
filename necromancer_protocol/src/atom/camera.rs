@@ -1,4 +1,4 @@
-//! Camera control commands
+//! # Camera control
 //!
 //! This is similar to the "Abstract Packet Format" described in
 //! [Blackmagic SDI Camera Control Protocol v1.3][bmsdi].

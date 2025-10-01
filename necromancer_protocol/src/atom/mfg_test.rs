@@ -1,4 +1,4 @@
-//! Manufacturing tests
+//! # Manufacturing tests
 //!
 //! **Warning:** public ATEM software doesn't call these APIs, so functionality
 //! is unknown. This could damage your device.

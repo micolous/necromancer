@@ -1,3 +1,3 @@
-//! Network commands
+//! # Network
 //!
 //! * `NIfT`: `NetworkingInterfaceInformation`

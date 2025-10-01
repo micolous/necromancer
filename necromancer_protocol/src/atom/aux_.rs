@@ -1,4 +1,4 @@
-//! Aux commands
+//! # Aux
 //!
 //! ## Unimplemented atoms
 //!
@@ -6,4 +6,3 @@
 //! ------ | --------- | ------
 //! `AuxS` | `AuxSource` | 0xc
 //! `CAuS` | `ChangeAuxSource` | 0xc
-//!

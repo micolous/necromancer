@@ -1,4 +1,4 @@
-//! Disk recording commands
+//! # Disk recording
 //!
 //! ## Unimplemented atoms
 //!

@@ -1,3 +1,4 @@
+//! # Input properties
 use crate::{
     atom::{colour::video_source_to_generator_id, str_from_utf8_null},
     structs::{ExternalPortType, PortType, VideoSource},

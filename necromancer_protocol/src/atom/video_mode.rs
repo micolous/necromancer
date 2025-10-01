@@ -1,4 +1,4 @@
-//! Video mode commands.
+//! # Video mode
 //!
 //! ## Unimplemented atoms
 //!

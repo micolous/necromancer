@@ -492,7 +492,7 @@ struct PacketWaitingForResponse {
 
 /// Coordinates the connection with the device.
 ///
-/// This runs its own event loop ([`AtemReceiver::start`]).
+/// This runs its own event loop ([`AtemReceiver::run()`]).
 struct AtemReceiver {
     addr: SocketAddrV4,
     channel: AtemUdpChannel,

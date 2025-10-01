@@ -1,4 +1,4 @@
-//! Version atoms
+//! # Version and product information
 //!
 //! ## Unimplemented atoms
 //!

@@ -1,4 +1,4 @@
-//! Macro atoms
+//! # Macros
 //!
 //! ## Unimplemented atoms
 //!

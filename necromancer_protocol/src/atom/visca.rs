@@ -1,4 +1,4 @@
-//! Visca commands
+//! # Visca
 //!
 //! ## Unimplemented atoms
 //!

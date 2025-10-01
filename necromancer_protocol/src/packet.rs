@@ -1,3 +1,4 @@
+//! # Control protocol packets
 #![allow(rustdoc::private_intra_doc_links)]
 
 use crate::{atom::*, util::OffsetCounter, Error, Result};

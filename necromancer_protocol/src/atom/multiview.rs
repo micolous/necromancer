@@ -1,4 +1,4 @@
-//! Multiview commands
+//! # Multiview
 //!
 //! ## Unimplemented atoms
 //!

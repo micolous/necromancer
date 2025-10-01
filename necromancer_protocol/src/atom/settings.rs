@@ -1,3 +1,4 @@
+//! # Start-up settings
 use binrw::binrw;
 
 /// Command to save the current settings to the start-up configuration.

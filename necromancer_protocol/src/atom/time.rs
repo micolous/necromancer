@@ -1,4 +1,4 @@
-//! Time and timecode atoms
+//! # Time and timecode
 //!
 //! ## Unimplemented atoms
 //!

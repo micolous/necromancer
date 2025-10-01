@@ -1,4 +1,4 @@
-//! Converters for bit-packed 10-bit YUVA 4:2:2:4 ("ay10")
+//! # Converters for bit-packed 10-bit YUVA 4:2:2:4 ("ay10")
 //!
 //! The switchers store still images in this format,
 //! [but `ffmpeg` doesn't support it][0]. 😿

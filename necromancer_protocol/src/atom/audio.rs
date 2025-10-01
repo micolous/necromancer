@@ -1,4 +1,4 @@
-//! Audio (non-Fairlight) commands
+//! # Audio (non-Fairlight)
 //!
 //! ## Unimplemented atoms
 //!

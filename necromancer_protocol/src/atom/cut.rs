@@ -1,4 +1,4 @@
-//! Cut and auto (transition) atoms
+//! # Cut and auto (transitions)
 //!
 //! ## Unimplemented atoms
 //!

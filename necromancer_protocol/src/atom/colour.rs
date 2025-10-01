@@ -1,4 +1,4 @@
-/// Colour generator atoms.
+//! # Colour generator
 use crate::{error::Error, structs::VideoSource, Result};
 use binrw::{binrw, BinRead, BinWrite};
 use modular_bitfield::{bitfield, specifiers::B5};

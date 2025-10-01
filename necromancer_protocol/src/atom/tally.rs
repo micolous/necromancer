@@ -1,4 +1,4 @@
-//! Tally commands
+//! # Tally
 //!
 //! ## Unimplemented atoms
 //!
