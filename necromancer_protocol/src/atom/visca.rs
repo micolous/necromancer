@@ -1,4 +1,4 @@
-//! # Visca
+//! # Visca PTZ camera control
 //!
 //! ## Unimplemented atoms
 //!

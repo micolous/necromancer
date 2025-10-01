@@ -6,6 +6,7 @@
 //! ------ | --------- | ------
 //! `PLCK` | `MediaPoolPriorityLock` | 0x10
 //! `FTAD` | `FileTransferCancelDownload` | 0xc
+//! `CLMP` | `ClearMediaPool` | 0x8
 
 // cmd: PLCK -> request lock
 

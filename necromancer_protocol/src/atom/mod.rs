@@ -30,66 +30,32 @@
 //!
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------
-//! `KeOn` | `KeyOnAir` | 0xc
 //! `DDsA` | `DoDskAuto` | 0xc
-//! `RFIK` | `RunFlyKey` | 0x10
-//! `KeFS` | `KeyFlyState` | 0x10
 //! `Powr` | `PowerStatus` | 0xc
 //! `CDsC` | `ChangeDskCut` | 0xc
 //! `CDsT` | `ChangeDskTie` | 0xc
-//! `CKeC` | `ChangeKeyCut` | 0xc
 //! `RILo` | `RemoteSource` | 0x90
 //! `CDsF` | `ChangeDskFill` | 0xc
 //! `CDsL` | `ChangeDskLive` | 0xc
 //! `CDsM` | `ChangeDskMask` | 0x14
 //! `CDsR` | `ChangeDskRate` | 0xc
-//! `CKeF` | `ChangeKeyFill` | 0xc
-//! `CKMs` | `ChangeKeyMask` | 0x14
-//! `CKTp` | `ChangeKeyType` | 0x10
-//! `DKOn` | `DelayKeyOnAir` | 0x10
-//! `CKOn` | `ChangeKeyOnAir` | 0xc
-//! `CLMP` | `ClearMediaPool` | 0x8
-//! `RXCE` | `HyperDeckError` | 0xc
-//! `RXHI` | `HyperDeckModel` | 0x4c
-//! `RXMS` | `HyperDeckSetup` | 0x1c
 //! `Warn` | `WarningMessage` | 0x34
 //! `_DVE` | `CapabilitiesDVE` | variable
 //! `ClrM` | `ColorimetryMode` | 0xc
 //! `DskS` | `DskCurrentState` | 0x10
 //! `RInL` | `ResetInputLabels` | 0xc
-//! `CKfT` | `ChangeKeyTypeFill` | 0x10
 //! `DskB` | `DskInputSelection` | 0x10
-//! `KeLm` | `KeyLumaParameters` | 0x14
-//! `SFKF` | `SetKeyFlyKeyFrame` | 0xc
-//! `RXCC` | `HyperDeckClipCount` | 0xc
-//! `CXSS` | `HyperDeckSetSource` | 0x10
-//! `KeBP` | `KeyBasicParameters` | 0x1c
 //! `SPtM` | `SerialPortFunction` | 0xc
 //! `DskP` | `DskConfigParameters` | 0x1c
-//! `RXCS` | `HyperDeckClipStatus` | 0x5c
 //! `Whol` | `IdentityInformation` | 0xb8
-//! `KeCk` | `KeyChromaParameters` | 0x14
-//! `RFKF` | `ResetKeyFlyKeyFrame` | 0xc
-//! `AMPP` | `AudioMixerProperties` | 0xc
-//! `CXMS` | `ChangeHyperDeckSetup` | 0x18
-//! `KePt` | `KeyPatternParemeters` | 0x18
-//! `SKPV` | `SetKeyPatternVelocity` | 0x18
 //! `C3sl` | `ChangeSDI3GOutputLevel` | 0xc
-//! `RXSS` | `HyperDeckCurrentSource` | 0x28
-//! `KeDV` | `KeyDVEAndFlyParameters` | 0x44
-//! `RACK` | `ResetKeyAdvancedChroma` | 0xc
 //! `V3sl` | `CurrentSDI3GOutputLevel` | 0xc
-//! `RXCP` | `HyperDeckClipPlayStatus` | 0x1c
-//! `KACC` | `KeyAdvancedChromaCursor` | 0x18
 //! `RXML` | `RemoteSourceExternalXML` | 0x40c
-//! `SKDV` | `SetKeyDVEAndFlyVelocity` | 0x1c
 //! `DcOt` | `CurrentDownConvertedMode` | 0xc
 //! `DHVm` | `DownConvertedHDVideoMode` | 0xc
-//! `KKFP` | `KeyFlyKeyFrameParemeters` | 0x3c
 //! `MMOP` | `MixMinusOutputProperties` | 0x14
 //! `RSca` | `RemoteSourceCapabilities` | 0xc
 //! `RSDs` | `RemoteSourceDiscoverable` | 0xc
-//! `RXHS` | `HyperDeckStorageMediaInfo` | 0x8c
 //! `RIMa` | `RemoteSourceExternalAdded` | 0x8c
 //! `RIMd` | `RemoteSourceExternalRemove` | 0xc
 
@@ -101,8 +67,10 @@ mod colour;
 mod cut;
 mod fairlight;
 mod ftb;
+mod hyperdeck;
 mod initialisation;
 mod inpr;
+mod key;
 mod macros;
 mod media_player;
 mod mfg_test;
