@@ -18,7 +18,9 @@ pub struct MixEffectBlockCapabilities {
     pub keyers: u8,
 }
 
-/// `PrvI`: preview input change event
+/// `PrvI`: preview input selection
+///
+/// Sent by the switcher to indicate when the preview input for an ME has changed.
 ///
 /// ## Packet format
 ///
@@ -42,6 +44,8 @@ pub struct PreviewInput {
 
 /// `CPvI`: set preview input (`ChangePreviewInput`)
 ///
+/// Sent by a client to change the preview input.
+///
 /// ## Packet format
 ///
 /// * `u8`: ME
@@ -56,7 +60,9 @@ pub struct SetPreviewInput {
     pub video_source: VideoSource,
 }
 
-/// `PrgI`: program input event
+/// `PrgI`: program input selection
+///
+/// Sent by the switcher to indicate when the program input for an ME has changed.
 ///
 /// ## Packet format
 ///
@@ -73,6 +79,8 @@ pub struct ProgramInput {
 }
 
 /// `CPgI`: set program input (`ChangeProgramInput`)
+///
+/// Sent by a client to change the program input.
 ///
 /// ## Packet format
 ///

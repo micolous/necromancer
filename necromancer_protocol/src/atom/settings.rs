@@ -11,7 +11,7 @@ pub const RESTORE_STARTUP_SETTINGS: RestoreSettings = RestoreSettings { slot: 0 
 /// Command to clear the start-up configuration.
 pub const CLEAR_STARTUP_SETTINGS: ClearSettings = ClearSettings { slot: 0 };
 
-/// `SRsv`: Save settings
+/// `SRsv`: Save settings (`SaveRecallSaveSettings`)
 ///
 /// ## Packet format
 ///
@@ -25,7 +25,7 @@ pub struct SaveSettings {
     pub slot: u8,
 }
 
-/// `SRrs`: Restore settings
+/// `SRrs`: Restore settings (`SaveRecallRestoreSettings`)
 ///
 /// ## Packet format
 ///
@@ -42,7 +42,7 @@ pub struct RestoreSettings {
     pub slot: u8,
 }
 
-/// `SRcl`: Clear settings
+/// `SRcl`: Clear settings (`SaveRecallClearSettings`)
 ///
 /// ## Packet format
 ///

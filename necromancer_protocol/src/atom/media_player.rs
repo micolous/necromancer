@@ -5,9 +5,16 @@
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------
 //! `MPSp` | `MediaPlayerSetup` | 0x14
+//! `CMPA` | `ClearMediaPlayerAudio` | 0xc
+//! `CSTL` | `ClearMediaPlayerStill` | 0xc
+//! `MPAS` | `MediaPlayerAudioEntry` | 0x5c
+//! `MPCS` | `MediaPlayerClipStatus` | 0x4c
 //! `SMPC` | `SetMediaPlayerClip` | 0x4c
 //! `SMPA` | `SetMediaPlayerAudio` | 0x4c
 //! `SMPS` | `SetMediaPlayerStill` | 0x4c
+//! `CMPS` | `ChangeMediaPlayerSetup` | 0x10
+//! `CapA` | `StillCaptureAvailability` | 0xc
+//! `RCPS` | `MediaPlayerClipPlayStatus` | 0x10
 
 use binrw::binrw;
 
@@ -31,7 +38,7 @@ pub enum MediaPlayerSourceID {
     VideoClip(#[brw(pad_before = 1)] u8),
 }
 
-/// `MPCE`: Media player source change event
+/// `MPCE`: Media player current source event (`MediaPlayerCurrentSource`)
 ///
 /// ## Packet format
 ///

@@ -45,7 +45,7 @@ impl Version {
     }
 }
 
-/// `_pin`: product name
+/// `_pin`: Product info (`CapabilitiesProductInfo`)
 ///
 /// ## Packet format
 ///

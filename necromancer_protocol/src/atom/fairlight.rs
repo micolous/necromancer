@@ -27,6 +27,7 @@
 //! `FAIP` | `FairlightAudioMixerInputProperties` | 0x18 bytes
 //! `FAMC` | `CapabilitiesFairlightAudioMixerAuxOutMixer` | 0xc bytes
 //! `FAOC` | `CapabilitiesFairlightAudioMixerAuxOut` | 0xc bytes
+//! `FAMS` | `FairlightAudioMixerSolo` | 0x20
 
 use binrw::binrw;
 

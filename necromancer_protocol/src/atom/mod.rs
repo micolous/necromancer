@@ -61,7 +61,6 @@
 //! `CXSS` | `HyperDeckSetSource` | 0x10
 //! `KeBP` | `KeyBasicParameters` | 0x1c
 //! `SPtM` | `SerialPortFunction` | 0xc
-//! `SSCs` | `SuperSourceCascade` | 0xc
 //! `DskP` | `DskConfigParameters` | 0x1c
 //! `RXCS` | `HyperDeckClipStatus` | 0x5c
 //! `Whol` | `IdentityInformation` | 0xb8
@@ -69,6 +68,26 @@
 //! `RFKF` | `ResetKeyFlyKeyFrame` | 0xc
 //! `AMPP` | `AudioMixerProperties` | 0xc
 //! `CXMS` | `ChangeHyperDeckSetup` | 0x18
+//! `KePt` | `KeyPatternParemeters` | 0x18
+//! `SKPV` | `SetKeyPatternVelocity` | 0x18
+//! `C3sl` | `ChangeSDI3GOutputLevel` | 0xc
+//! `RXSS` | `HyperDeckCurrentSource` | 0x28
+//! `KeDV` | `KeyDVEAndFlyParameters` | 0x44
+//! `RACK` | `ResetKeyAdvancedChroma` | 0xc
+//! `V3sl` | `CurrentSDI3GOutputLevel` | 0xc
+//! `RXCP` | `HyperDeckClipPlayStatus` | 0x1c
+//! `KACC` | `KeyAdvancedChromaCursor` | 0x18
+//! `RXML` | `RemoteSourceExternalXML` | 0x40c
+//! `SKDV` | `SetKeyDVEAndFlyVelocity` | 0x1c
+//! `DcOt` | `CurrentDownConvertedMode` | 0xc
+//! `DHVm` | `DownConvertedHDVideoMode` | 0xc
+//! `KKFP` | `KeyFlyKeyFrameParemeters` | 0x3c
+//! `MMOP` | `MixMinusOutputProperties` | 0x14
+//! `RSca` | `RemoteSourceCapabilities` | 0xc
+//! `RSDs` | `RemoteSourceDiscoverable` | 0xc
+//! `RXHS` | `HyperDeckStorageMediaInfo` | 0x8c
+//! `RIMa` | `RemoteSourceExternalAdded` | 0x8c
+//! `RIMd` | `RemoteSourceExternalRemove` | 0xc
 
 mod audio;
 #[path = "aux_.rs"]

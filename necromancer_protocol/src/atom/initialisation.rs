@@ -1,6 +1,8 @@
 use binrw::binrw;
 
-/// `InCm`: initialisation complete
+/// `InCm`: Initialisation complete (`InitialStateComplete`)
+///
+/// Sent by the switcher when it has finished initialising the client's state after connection.
 #[binrw]
 #[brw(big)]
 #[derive(Clone, Debug, PartialEq, Eq)]

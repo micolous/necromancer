@@ -5,6 +5,14 @@
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------
 //! `DAu2` | `DoTransitionAuto_2` | 0xc
+//! `TrPr` | `TransitionPreviewTrans` | 0xc
+//! `TDpP` | `TransitionDipProperties` | 0xc
+//! `TDvP` | `TransitionDVEProperties` | 0xc
+//! `TMxP` | `TransitionMixProperties` | 0xc
+//! `CTPs` | `ChangeTransitionPosition` | 0xc
+//! `TrSS` | `TransitionSelectionState` | 0x10
+//! `TWpP` | `TransitionWipeProperties` | 0x1c
+//! `STWV` | `SetTransitionWipeVelocity` | 0x18
 
 use binrw::binrw;
 
@@ -40,7 +48,7 @@ pub struct Auto {
     pub me: u8,
 }
 
-/// `TrPs`: transition position
+/// `TrPs`: transition position (`TransitionCurrentPosition`)
 ///
 /// ## Packet format
 ///

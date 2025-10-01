@@ -8,6 +8,8 @@
 //! `TcSt` | `TimecodeStatus` | 0xc
 //! `DSTV` | `DisplayClockTime` | 0x10
 //! `DCSC` | `ControlDisplayClock` | 0xc
+//! `DCPV` | `DisplayClockProperties` | 0x1c
+//! `DSTR` | `RequestDisplayClockTime` | 0xc
 
 use binrw::binrw;
 use chrono::{DateTime, FixedOffset, Offset, TimeZone};

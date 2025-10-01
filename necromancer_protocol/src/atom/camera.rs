@@ -28,7 +28,7 @@
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------
 //! `CCdo` | `CameraControlCommandOptions` |
-//! `CCts` | `CameraControlSettings` |
+//! `CCts` | `CameraControlSettings` | 0xc
 //! `InMp` | `InputCameraModel` | 0x10
 //!
 //! [bmsdi]: https://documents.blackmagicdesign.com/DeveloperManuals/BlackmagicCameraControl.pdf

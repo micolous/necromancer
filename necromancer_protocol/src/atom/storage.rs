@@ -1,4 +1,11 @@
 //! Media pool and file transfer commands
+//!
+//! ## Unimplemented atoms
+//!
+//! FourCC | Atom name | Length
+//! ------ | --------- | ------
+//! `PLCK` | `MediaPoolPriorityLock` | 0x10
+//! `FTAD` | `FileTransferCancelDownload` | 0xc
 
 // cmd: PLCK -> request lock
 
@@ -54,7 +61,9 @@ pub enum FileType {
     Macro = 0x03,
 }
 
-/// `FTSU`: Frame download request
+/// `FTSU`: File Transfer Setup Upload
+///
+/// Used by the client to setup a data download from the switcher.
 ///
 /// ## Packet format
 ///
@@ -74,9 +83,9 @@ pub struct DownloadRequest {
     pub typ: FileType,
 }
 
-/// `FTCD`: file transfer chunk parameters
+/// `FTCD`: file transfer chunk parameters (`FileTransferCanDownload`)
 ///
-/// Used by the switcher to indicate how to chunk and burst a transfer.
+/// Used by the switcher to indicate to the client how to chunk and burst a transfer.
 ///
 /// The switcher will periodically sends this message, even if the client hasn't
 /// used up all the [`chunk_count`][Self::chunk_count] from the previous
@@ -118,7 +127,9 @@ pub struct FileTransferChunkParams {
     pub chunk_count: u16,
 }
 
-/// `FTSD`: setup file upload
+/// `FTSD`: File Transfer Setup Download
+///
+/// Used by the client to setup a data upload to the switcher.
 ///
 /// ## Packet format
 ///
@@ -236,7 +247,9 @@ impl TransferChunk {
     }
 }
 
-/// `FTUA`: acknowledgement of [`TransferChunk`]
+/// `FTUA`: File Transfer Upload Ack
+///
+/// Acknowledgement of [`TransferChunk`]
 ///
 /// ## Packet format
 ///
@@ -250,7 +263,7 @@ pub struct TransferAck {
     pub id: u16,
 }
 
-/// `FTDC`: transfer completed
+/// `FTDC`: File transfer complete
 ///
 /// ## Packet format
 ///
@@ -373,7 +386,7 @@ impl MediaPoolLock {
     }
 }
 
-/// `LKOB`: storage lock obtained
+/// `LKOB`: media pool / storage lock obtained
 ///
 /// ## Packet format
 ///

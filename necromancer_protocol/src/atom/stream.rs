@@ -18,3 +18,4 @@
 //! `SRST` | `StreamRtmpStreamingTimecode` | 0x10
 //! `SCTR` | `StreamingControl` | 0x10
 //! `SFPr` | `StreamingProfile` | 0x60
+//! `SSDC` | `StreamDownConvertMode` | 0xc
