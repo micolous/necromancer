@@ -8,7 +8,7 @@ _ATOM_NAME = compile(r"BEPAtom(.+)10Initialise")
 _BASE_PATH = dirname(abspath(__name__))
 _ATOMS_TXT = join(_BASE_PATH, "atoms.txt")
 _SOURCE_ATOM_PATH = join(_BASE_PATH, "src", "atom")
-_MARKDOWN_CODE_BLOCK = compile(r"//[^\n]+`([^`\n]+)`")
+_MARKDOWN_CODE_BLOCK = compile(r"//[^\n]+`([^`\n]{5,})`")
 
 re_atoms: set[str] = set()
 with open(_ATOMS_TXT, "rt") as f:
