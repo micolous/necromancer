@@ -1,6 +1,6 @@
 //! # Key; 0/32 atoms
 //!
-//! ## Unimplemented atoms
+//! ## Unimplemented atoms (32)
 //!
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------

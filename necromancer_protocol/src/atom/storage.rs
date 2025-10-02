@@ -32,7 +32,7 @@
 //! 1. Client [periodically sends acknowledgement atoms][TransferAck] (`FTUA`)
 //! 1. Switcher [indicates the transfer was completed][TransferCompleted] (`FTDC`)
 //!
-//! ## Unimplemented atoms
+//! ## Unimplemented atoms (3)
 //!
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------

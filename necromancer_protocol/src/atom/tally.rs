@@ -1,6 +1,6 @@
 //! # Tally; 1/5 atoms
 //!
-//! ## Unimplemented atoms
+//! ## Unimplemented atoms (4)
 //!
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------

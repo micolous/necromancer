@@ -23,7 +23,7 @@
 //! look at `AtomCameraControlCommand::GetPtr_data{32,64}` in a
 //! disassembler and you'll see what I mean. :)
 //!
-//! ## Unimplemented atoms
+//! ## Unimplemented atoms (4)
 //!
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------

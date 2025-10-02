@@ -1,6 +1,6 @@
 //! # Macros; 0/9 atoms
 //!
-//! ## Unimplemented atoms
+//! ## Unimplemented atoms (9)
 //!
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------

@@ -1,15 +1,15 @@
 //! # Disk recording; 4/10 atoms
 //!
-//! ## Unimplemented atoms
+//! ## Unimplemented atoms (6)
 //!
-//! Seen atoms
+//! ### Seen atoms (2)
 //!
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------
 //! `RMRD` | `RecordToMediaRecordingDuration` | 0x10
 //! `RTMD` | `RecordToMediaDisk` | 0x54
 //!
-//! Not seen
+//! ### Not seen (4)
 //!
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------

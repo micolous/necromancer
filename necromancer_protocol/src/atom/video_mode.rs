@@ -1,6 +1,6 @@
 //! # Video mode; 3/6 atoms
 //!
-//! ## Unimplemented atoms
+//! ## Unimplemented atoms (3)
 //!
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------

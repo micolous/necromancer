@@ -1,6 +1,6 @@
 //! # Cut and auto (transitions); 3/20 atoms
 //!
-//! ## Unimplemented atoms
+//! ## Unimplemented atoms (17)
 //!
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------

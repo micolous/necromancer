@@ -1,6 +1,6 @@
 //! # RTMP streaming; 0/16 atoms
 //!
-//! ## Unimplemented atoms
+//! ## Unimplemented atoms (16)
 //!
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------

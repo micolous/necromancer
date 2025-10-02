@@ -1,6 +1,6 @@
 //! # Visca PTZ camera control; 0/17 atoms
 //!
-//! ## Unimplemented atoms
+//! ## Unimplemented atoms (17)
 //!
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------

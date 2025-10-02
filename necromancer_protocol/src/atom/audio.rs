@@ -1,6 +1,6 @@
-//! # Audio (non-Fairlight); 0/22 atoms
+//! # Audio (non-Fairlight); 0/23 atoms
 //!
-//! ## Unimplemented atoms
+//! ## Unimplemented atoms (23)
 //!
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------

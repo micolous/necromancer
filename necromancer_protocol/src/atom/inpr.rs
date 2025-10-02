@@ -1,6 +1,6 @@
 //! # Input properties; 1/2 atoms
 //! 
-//! ## Unimplemented atoms
+//! ## Unimplemented atoms (1)
 //!
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------

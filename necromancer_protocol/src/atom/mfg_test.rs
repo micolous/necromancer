@@ -1,7 +1,11 @@
 //! # Manufacturing tests; 2/2 atoms
 //!
+//! <div class="warning">
+//!
 //! **Warning:** public ATEM software doesn't call these APIs, so functionality
 //! is unknown. This could damage your device.
+//!
+//! </div>
 use binrw::binrw;
 
 /// **Warning:** public ATEM software doesn't call these APIs, so functionality
