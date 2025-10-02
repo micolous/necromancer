@@ -1,4 +1,4 @@
-//! # Disk recording
+//! # Disk recording; 4/10 atoms
 //!
 //! ## Unimplemented atoms
 //!
@@ -6,17 +6,17 @@
 //!
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------
-//! `RTMD` | `RecordToMediaDisk` | 0x54 bytes
-//! `RMRD` | `RecordToMediaRecordingDuration` | 0x10 bytes
+//! `RMRD` | `RecordToMediaRecordingDuration` | 0x10
+//! `RTMD` | `RecordToMediaDisk` | 0x54
 //!
 //! Not seen
 //!
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------
-//! `ISOi` | `RecordAllISOInputs` | 0xc bytes
-//! `RMSu` | `RecordToMediaSetup` | 0x94 bytes
-//! `RMSp` | `RecordToMediaSwitchDisk` | 0x8 bytes
-//! `CRMS` | `ChangeRecordToMediaSetup` | 0x98 bytes
+//! `CRMS` | `ChangeRecordToMediaSetup` | 0x98
+//! `ISOi` | `RecordAllISOInputs` | 0xc
+//! `RMSp` | `RecordToMediaSwitchDisk` | 0x8
+//! `RMSu` | `RecordToMediaSetup` | 0x94
 
 use crate::atom::Time;
 use binrw::{binrw, BinRead, BinWrite};
@@ -68,13 +68,13 @@ pub struct RecordStatus {
     pub unknown_error: bool,
 }
 
-/// `RMDR`: Record to Media Duration Request
+/// `RMDR`: Record to Media Duration Request (`RecordToMediaDurationRequest`)
 #[binrw]
 #[brw(big)]
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct RecordToMediaDurationRequest {}
 
-/// `RTMR`: Record to Media Recording timecode
+/// `RTMR`: Record to Media Recording timecode (`RecordToMediaRecordingTimecode`)
 #[binrw]
 #[brw(big)]
 #[derive(Clone, Debug, PartialEq, Eq)]

@@ -1,4 +1,4 @@
-//! # Camera control
+//! # Camera control; 2/6 atoms
 //!
 //! This is similar to the "Abstract Packet Format" described in
 //! [Blackmagic SDI Camera Control Protocol v1.3][bmsdi].
@@ -27,7 +27,8 @@
 //!
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------
-//! `CCdo` | `CameraControlCommandOptions` |
+//! `CCdo` | `CameraControlCommandOptions` | 0x10
+//! `CCcs` | `ChangeCameraControlSettings` | 0x10
 //! `CCts` | `CameraControlSettings` | 0xc
 //! `InMp` | `InputCameraModel` | 0x10
 //!
@@ -391,7 +392,7 @@ pub enum PtzControlParam {
     MemoryPreset = 1,
 }
 
-/// `CCdP`: Camera Control Command Properties
+/// `CCdP`: Camera Control Command Properties (`CameraControlCommandProperties`)
 ///
 /// ## Format
 ///
@@ -410,7 +411,7 @@ pub struct CameraControl {
     pub value: CameraParameterValue,
 }
 
-/// `CCmd`: Camera Control Command (change parameter)
+/// `CCmd`: Change camera parameter (`CameraControlCommand`)
 ///
 /// ## Format
 ///

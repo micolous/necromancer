@@ -1,5 +1,4 @@
-//! # Mix effect block (preview / program output control)
-//!
+//! # Mix effect block (preview / program output control); 5/5 atoms
 use crate::structs::VideoSource;
 use binrw::binrw;
 

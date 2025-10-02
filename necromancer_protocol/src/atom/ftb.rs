@@ -1,4 +1,4 @@
-//! # Fade to black
+//! # Fade to black; 5/6 atoms
 //!
 //! ## Unimplemented atoms
 //!

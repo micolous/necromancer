@@ -1,33 +1,58 @@
-//! # Fairlight audio
+//! # Fairlight audio; 2/51 atoms
 //!
 //! ## Unimplemented atoms
 //!
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------
-//! `_FAC` | `CapabilitiesFairlightAudioMixer` | 0xc bytes
-//! `_FEC` | `CapabilitiesFairlightEqualiserBandRange` | 0xc + (0xc * frequency_limits_len) bytes
-//! `_FMH` | `CapabilitiesFairlightAudioMixerHeadphoneOut` | 0xc bytes
-//! `CEBP` | `ChangeFairlightAudioMixerInputSourceEqualiserBandProperties` | 0x28 bytes
-//! `CFAI` | `ChangeFairlightAudioMixerAuxOutInputProperties` | 0x14 bytes
-//! `CFAO` | `ChangeFairlightAudioMixerAuxOutMixerProperties` | 0x14 bytes
-//! `CFEP` | `ChangeFairlightAudioMixerAnalogInputExtendedProperties` | 0x10 bytes
-//! `CFIP` | `ChangeFairlightAudioMixerInputProperties` | 0x10 bytes
-//! `CFMH` | `ChangeFairlightAudioMixerHeadphoneOutProperties` | 0x2c bytes
-//! `CFMP` | `ChangeFairlightAudioMixerMasterOutProperties` | 0x1c bytes
-//! `CFMS` | `ChangeFairlightAudioMixerSolo` | 0x20 bytes
-//! `CFSP` | `ChangeFairlightAudioMixerInputSourceProperties` | 0x38 bytes
-//! `CICP` | `ChangeFairlightAudioMixerInputSourceCompressorProperties` | 0x30 bytes
-//! `CILP` | `ChangeFairlightAudioMixerInputSourceLimiterProperties` | 0x2c bytes
-//! `CIXP` | `ChangeFairlightAudioMixerInputSourceExpanderProperties` | 0x30 bytes
-//! `CMBP` | `ChangeFairlightAudioMixerMasterOutEqualiserBandProperties` | 0x1c bytes
-//! `CMCP` | `ChangeFairlightAudioMixerMasterOutCompressorProperties` | 0x20 bytes
-//! `CMLP` | `ChangeFairlightAudioMixerMasterOutLimiterProperties` | 0x1c bytes
-//! `CMPP` | `ChangeFairlightAudioMixerProperties` | 0xc bytes
-//! `FAIC` | `CapabilitiesFairlightAudioMixerAuxOutInput` | 0x10 bytes
-//! `FAIP` | `FairlightAudioMixerInputProperties` | 0x18 bytes
-//! `FAMC` | `CapabilitiesFairlightAudioMixerAuxOutMixer` | 0xc bytes
-//! `FAOC` | `CapabilitiesFairlightAudioMixerAuxOut` | 0xc bytes
+//! `_FAC` | `CapabilitiesFairlightAudioMixer` | 0xc
+//! `_FEC` | `CapabilitiesFairlightEqualiserBandRange` | 0xc + (0xc * frequency_limits_len)
+//! `_FMH` | `CapabilitiesFairlightAudioMixerHeadphoneOut` | 0xc
+//! `AEBP` | `FairlightAudioMixerInputSourceEqualiserBandProperties` | 0x2c
+//! `AICP` | `FairlightAudioMixerInputSourceCompressorProperties` | 0x30
+//! `AILP` | `FairlightAudioMixerInputSourceLimiterProperties` | 0x2c
+//! `AIXP` | `FairlightAudioMixerInputSourceExpanderProperties` | 0x30
+//! `AMBP` | `FairlightAudioMixerMasterOutEqualiserBandProperties` | 0x1c
+//! `AMLP` | `FairlightAudioMixerMasterOutLimiterProperties` | 0x1c
+//! `CEBP` | `ChangeFairlightAudioMixerInputSourceEqualiserBandProperties` | 0x28
+//! `CFAI` | `ChangeFairlightAudioMixerAuxOutInputProperties` | 0x14
+//! `CFAO` | `ChangeFairlightAudioMixerAuxOutMixerProperties` | 0x14
+//! `CFEP` | `ChangeFairlightAudioMixerAnalogInputExtendedProperties` | 0x10
+//! `CFIP` | `ChangeFairlightAudioMixerInputProperties` | 0x10
+//! `CFMH` | `ChangeFairlightAudioMixerHeadphoneOutProperties` | 0x2c
+//! `CFMP` | `ChangeFairlightAudioMixerMasterOutProperties` | 0x1c
+//! `CFMS` | `ChangeFairlightAudioMixerSolo` | 0x20
+//! `CFSP` | `ChangeFairlightAudioMixerInputSourceProperties` | 0x38
+//! `CICP` | `ChangeFairlightAudioMixerInputSourceCompressorProperties` | 0x30
+//! `CILP` | `ChangeFairlightAudioMixerInputSourceLimiterProperties` | 0x2c
+//! `CILP` | `ChangeFairlightAudioMixerInputSourceLimiterProperties` | 0x2c
+//! `CIXP` | `ChangeFairlightAudioMixerInputSourceExpanderProperties` | 0x30
+//! `CMBP` | `ChangeFairlightAudioMixerMasterOutEqualiserBandProperties` | 0x1c
+//! `CMCP` | `ChangeFairlightAudioMixerMasterOutCompressorProperties` | 0x20
+//! `CMLP` | `ChangeFairlightAudioMixerMasterOutLimiterProperties` | 0x1c
+//! `CMPP` | `ChangeFairlightAudioMixerProperties` | 0xc
+//! `FAIC` | `CapabilitiesFairlightAudioMixerAuxOutInput` | 0x10
+//! `FAIP` | `FairlightAudioMixerInputProperties` | 0x18
+//! `FAMC` | `CapabilitiesFairlightAudioMixerAuxOutMixer` | 0xc
+//! `FAMP` | `FairlightAudioMixerMasterOutProperties` | 0x1c
 //! `FAMS` | `FairlightAudioMixerSolo` | 0x20
+//! `FAOC` | `CapabilitiesFairlightAudioMixerAuxOut` | 0xc
+//! `FASD` | `FairlightAudioMixerInputSourceDeactivated` | 0x18
+//! `FASG` | `FairlightAudioMixerInputSourceInputGainProperties` | 0x20
+//! `FASP` | `FairlightAudioMixerInputSourceProperties` | 0x3c
+//! `FDLv` | `FairlightAudioMixerMasterOutLevels` | 0x24
+//! `FIEP` | `FairlightAudioMixerAnalogInputExtendedProperties` | 0xc
+//! `FMAI` | `FairlightAudioMixerAuxOutInputProperties` | 0x14
+//! `FMAO` | `FairlightAudioMixerAuxOutMixerProperties` | 0x14
+//! `FMHP` | `FairlightAudioMixerHeadphoneOutProperties` | 0x28
+//! `FMLv` | `FairlightAudioMixerInputSourceLevels` | 0x30
+//! `MOCP` | `FairlightAudioMixerMasterOutCompressorProperties` | 0x20
+//! `RFIP` | `ResetFairlightAudioMixerInputSourceLevelPeaks` | 0x1c
+//! `RFLP` | `ResetFairlightAudioMixerLevelPeaks` | 0xc
+//! `RICD` | `ResetFairlightAudioMixerInputSourceDynamics` | 0x1c
+//! `RICE` | `ResetFairlightAudioMixerInputSourceEqualiser` | 0x1c
+//! `RMOD` | `ResetFairlightAudioMixerMasterOutDynamics` | 0xc
+//! `RMOE` | `ResetFairlightAudioMixerMasterOutEqualiser` | 0xc
+//! `SFLN` | `SetFairlightAudioMixerLevelsNotification` | 0xc
 
 use binrw::binrw;
 
@@ -80,7 +105,7 @@ pub struct FairlightAudioMixerInputSourceProperties {
     pub state: FairlightAudioInputSourceState,
 }
 
-/// `FMTl`: Fairlight audio Mixer Tally
+/// `FMTl`: Fairlight audio mixer tally (`FairlightAudioMixerTally`)
 #[binrw]
 #[brw(big)]
 #[derive(Clone, Debug, PartialEq, Eq)]

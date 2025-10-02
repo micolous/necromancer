@@ -18,9 +18,14 @@
 //!
 //! ## Progress
 //!
-//! In BMDSwitcherAPI 9.8.3: implemented 58 of 253 atoms
+//! In BMDSwitcherAPI 9.8.3
 //!
-//! ## Uncategorised unimplemented atoms
+//! * total atoms: 344
+//! * implemented atoms: 58
+//! * implemented and identified atoms: 327
+//! * *missing atoms*: 17
+//!
+//! ## Uncategorised unimplemented atoms (9)
 //!
 //! <div class="warning">
 //!
@@ -30,34 +35,15 @@
 //!
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------
-//! `DDsA` | `DoDskAuto` | 0xc
-//! `Powr` | `PowerStatus` | 0xc
-//! `CDsC` | `ChangeDskCut` | 0xc
-//! `CDsT` | `ChangeDskTie` | 0xc
-//! `RILo` | `RemoteSource` | 0x90
-//! `CDsF` | `ChangeDskFill` | 0xc
-//! `CDsL` | `ChangeDskLive` | 0xc
-//! `CDsM` | `ChangeDskMask` | 0x14
-//! `CDsR` | `ChangeDskRate` | 0xc
-//! `Warn` | `WarningMessage` | 0x34
 //! `_DVE` | `CapabilitiesDVE` | variable
-//! `ClrM` | `ColorimetryMode` | 0xc
-//! `DskS` | `DskCurrentState` | 0x10
-//! `RInL` | `ResetInputLabels` | 0xc
-//! `DskB` | `DskInputSelection` | 0x10
-//! `SPtM` | `SerialPortFunction` | 0xc
-//! `DskP` | `DskConfigParameters` | 0x1c
-//! `Whol` | `IdentityInformation` | 0xb8
 //! `C3sl` | `ChangeSDI3GOutputLevel` | 0xc
+//! `ClrM` | `ColorimetryMode` | 0xc
+//! `Powr` | `PowerStatus` | 0xc
+//! `RInL` | `ResetInputLabels` | 0xc
+//! `SPtM` | `SerialPortFunction` | 0xc
 //! `V3sl` | `CurrentSDI3GOutputLevel` | 0xc
-//! `RXML` | `RemoteSourceExternalXML` | 0x40c
-//! `DcOt` | `CurrentDownConvertedMode` | 0xc
-//! `DHVm` | `DownConvertedHDVideoMode` | 0xc
-//! `MMOP` | `MixMinusOutputProperties` | 0x14
-//! `RSca` | `RemoteSourceCapabilities` | 0xc
-//! `RSDs` | `RemoteSourceDiscoverable` | 0xc
-//! `RIMa` | `RemoteSourceExternalAdded` | 0x8c
-//! `RIMd` | `RemoteSourceExternalRemove` | 0xc
+//! `Warn` | `WarningMessage` | 0x34
+//! `Whol` | `IdentityInformation` | 0xb8
 
 mod audio;
 #[path = "aux_.rs"]
@@ -65,6 +51,8 @@ mod aux;
 mod camera;
 mod colour;
 mod cut;
+mod down_convert;
+mod dsk;
 mod fairlight;
 mod ftb;
 mod hyperdeck;
@@ -78,6 +66,7 @@ mod mix_effect;
 mod multiview;
 mod network;
 mod recording;
+mod remote_source;
 mod settings;
 mod storage;
 mod stream;
@@ -91,9 +80,8 @@ mod video_mode;
 mod visca;
 
 use crate::{packet::AtemPacket, util::OffsetCounter, Result};
-use std::{fmt::Debug, io::SeekFrom};
-
 use binrw::{binrw, helpers::until_eof, io::TakeSeekExt};
+use std::{fmt::Debug, io::SeekFrom};
 
 pub use self::{
     camera::{CameraCommand, CameraControl},
@@ -106,8 +94,8 @@ pub use self::{
     initialisation::InitialisationComplete,
     inpr::InputProperties,
     media_player::{
-        CaptureStill, MediaPlayerCapabilities, MediaPlayerSource, MediaPlayerSourceID,
-        SetMediaPlayerSource, CAPTURE_STILL,
+        CaptureStill, MediaPlayerCapabilities, MediaPlayerFrameDescription, MediaPlayerSource,
+        MediaPlayerSourceID, SetMediaPlayerSource, CAPTURE_STILL,
     },
     mfg_test::{MfgTest, MfgTestResult},
     mix_effect::{
@@ -123,8 +111,8 @@ pub use self::{
     },
     storage::{
         FileTransferChunkParams, FileTransferError, FileType, FinishFileDownload, LockObtained,
-        MediaPlayerFrameDescription, MediaPoolLock, MediaPoolLockStatus, SetupFileDownload,
-        SetupFileUpload, TransferAck, TransferChunk, TransferCompleted,
+        MediaPoolLock, MediaPoolLockStatus, SetupFileDownload, SetupFileUpload, TransferAck,
+        TransferChunk, TransferCompleted,
     },
     tally::TalliedSources,
     time::{SetTimeOfDay, SetTimecodeConfig, Time, TimeMode, TimecodeConfig, TimecodeRequest},

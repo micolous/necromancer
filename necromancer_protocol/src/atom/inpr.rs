@@ -1,4 +1,10 @@
-//! # Input properties
+//! # Input properties; 1/2 atoms
+//! 
+//! ## Unimplemented atoms
+//!
+//! FourCC | Atom name | Length
+//! ------ | --------- | ------
+//! `CInL` | `ChangeInputProperties` | 0x28
 use crate::{
     atom::{colour::video_source_to_generator_id, str_from_utf8_null},
     structs::{ExternalPortType, PortType, VideoSource},

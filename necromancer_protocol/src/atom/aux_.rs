@@ -1,4 +1,4 @@
-//! # Aux
+//! # Aux; 0/2 atoms
 //!
 //! ## Unimplemented atoms
 //!

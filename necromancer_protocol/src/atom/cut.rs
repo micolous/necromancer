@@ -1,18 +1,25 @@
-//! # Cut and auto (transitions)
+//! # Cut and auto (transitions); 3/19 atoms
 //!
 //! ## Unimplemented atoms
 //!
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------
+//! `CTDp` | `ChangeTransitionDipProperties` | 0x10
+//! `CTDv` | `ChangeTransitionDVEProperties` | 0x1c
+//! `CTMx` | `ChangeTransitionMixProperties` | 0xc
+//! `CTPr` | `ChangeTransitionPreviewTrans` | 0xc
+//! `CTPs` | `ChangeTransitionPosition` | 0xc
+//! `CTSt` | `ChangeTransitionStingerProperties` | 0x1c
+//! `CTWp` | `ChangeTransitionWipeProperties` | 0x1c
 //! `DAu2` | `DoTransitionAuto_2` | 0xc
-//! `TrPr` | `TransitionPreviewTrans` | 0xc
+//! `STWV` | `SetTransitionWipeVelocity` | 0x18
 //! `TDpP` | `TransitionDipProperties` | 0xc
 //! `TDvP` | `TransitionDVEProperties` | 0xc
 //! `TMxP` | `TransitionMixProperties` | 0xc
-//! `CTPs` | `ChangeTransitionPosition` | 0xc
+//! `TrPr` | `TransitionPreviewTrans` | 0xc
 //! `TrSS` | `TransitionSelectionState` | 0x10
+//! `TStP` | `TransitionStingerProperties` | 0x1c
 //! `TWpP` | `TransitionWipeProperties` | 0x1c
-//! `STWV` | `SetTransitionWipeVelocity` | 0x18
 
 use binrw::binrw;
 

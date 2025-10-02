@@ -1,12 +1,13 @@
-//! # Tally
+//! # Tally; 1/5 atoms
 //!
 //! ## Unimplemented atoms
 //!
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------
 //! `_TlC` | `CapabilitiesTally` | 0x10
-//! `TlIn` | `TalliedInputs` | 0xa + entries bytes
 //! `DTOE` | `DskTallyOverride` | 0xc
+//! `TlIn` | `TalliedInputs` | 0xa + entries bytes
+//! `TlFc` | `TallyForceSelectionOnSDI` | variable
 
 use crate::structs::{TallyFlags, VideoSource};
 use binrw::binrw;

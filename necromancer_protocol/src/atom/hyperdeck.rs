@@ -1,16 +1,17 @@
-//! # HyperDeck
+//! # HyperDeck; 0/11 atoms
 //!
 //! ## Unimplemented atoms
 //!
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------
-//! `RXCE` | `HyperDeckError` | 0xc
-//! `RXHI` | `HyperDeckModel` | 0x4c
-//! `RXMS` | `HyperDeckSetup` | 0x1c
-//! `RXCC` | `HyperDeckClipCount` | 0xc
-//! `CXSS` | `HyperDeckSetSource` | 0x10
-//! `RXCS` | `HyperDeckClipStatus` | 0x5c
+//! `CXCP` | `HyperDeckSetClipPlayStatus` | 0x1c
 //! `CXMS` | `ChangeHyperDeckSetup` | 0x18
-//! `RXSS` | `HyperDeckCurrentSource` | 0x28
+//! `CXSS` | `HyperDeckSetSource` | 0x10
+//! `RXCC` | `HyperDeckClipCount` | 0xc
+//! `RXCE` | `HyperDeckError` | 0xc
 //! `RXCP` | `HyperDeckClipPlayStatus` | 0x1c
+//! `RXCS` | `HyperDeckClipStatus` | 0x5c
+//! `RXHI` | `HyperDeckModel` | 0x4c
 //! `RXHS` | `HyperDeckStorageMediaInfo` | 0x8c
+//! `RXMS` | `HyperDeckSetup` | 0x1c
+//! `RXSS` | `HyperDeckCurrentSource` | 0x28

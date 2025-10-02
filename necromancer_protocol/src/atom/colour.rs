@@ -1,4 +1,4 @@
-//! # Colour generator
+//! # Colour generator; 2/2 atoms
 use crate::{error::Error, structs::VideoSource, Result};
 use binrw::{binrw, BinRead, BinWrite};
 use modular_bitfield::{bitfield, specifiers::B5};
@@ -112,7 +112,7 @@ struct SetColourGeneratorMask {
     __: B5,
 }
 
-/// `CClV`: Set colour generator parameters
+/// `CClV`: Set colour generator parameters (`ChangeColourSourceValue`)
 ///
 /// ## Examples
 ///

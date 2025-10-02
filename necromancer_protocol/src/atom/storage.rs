@@ -1,4 +1,4 @@
-//! # Media pool and file transfers
+//! # Media pool and file transfers; 11/14 atoms
 //!
 //! There are four file types:
 //!
@@ -12,7 +12,7 @@
 //! 1. Client obtains a priority lock (`PLCK`)
 //! 1. Switcher responds with:
 //!    * `LKST`: [lock status][MediaPoolLockStatus]
-//!    * `CapA`: ??
+//!    * `CapA`: still capture availability
 //!    * `CCST`: ??
 //! 1. Client [starts a file download][SetupFileDownload] (`FTSD`)
 //! 1. Switcher [indicates how to chunk the data][FileTransferChunkParams] (`FTCD`), and how many
@@ -21,7 +21,7 @@
 //! 1. Switcher periodically acknowledges chunks (on a [packet level][crate::packet])
 //! 1. Client [sends file description][FinishFileDownload] (`FTFD`)
 //! 1. Switcher [indicates the transfer was completed][TransferCompleted] (`FTDC`)
-//! 1. Switcher [sends file description update][MediaPlayerFrameDescription] (`MPfe`)
+//! 1. Switcher [sends file description update][super::MediaPlayerFrameDescription] (`MPfe`)
 //! 1. Client [unlocks the file][MediaPoolLock] (`LOCK`)
 //!
 //! ## File upload (switcher to client) process
@@ -36,9 +36,9 @@
 //!
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------
-//! `PLCK` | `MediaPoolPriorityLock` | 0x10
-//! `FTAD` | `FileTransferCancelDownload` | 0xc
 //! `CLMP` | `ClearMediaPool` | 0x8
+//! `FTAD` | `FileTransferCancelDownload` | 0xc
+//! `PLCK` | `MediaPoolPriorityLock` | 0x10
 
 // colour format may be defined in BMDSwitcherPixelFormat
 
@@ -46,7 +46,7 @@ use super::{str_from_utf8_null, Atom};
 use binrw::binrw;
 use std::fmt::Debug;
 
-/// File type for [DownloadRequest] and [SetupFileUpload]
+/// File type for [SetupFileDownload] and [SetupFileUpload]
 #[binrw]
 #[brw(big, repr = u8)]
 #[derive(Debug, FromPrimitive, ToPrimitive, PartialEq, Eq, Clone, Copy)]
@@ -58,7 +58,7 @@ pub enum FileType {
     Macro = 0x03,
 }
 
-/// `FTSU`: File Transfer Setup Upload
+/// `FTSU`: File Transfer Setup Upload (`FileTransferSetupUpload`)
 ///
 /// Used by the client to setup a data download from the switcher.
 ///
@@ -155,7 +155,7 @@ pub struct SetupFileDownload {
     pub is_rle: bool,
 }
 
-/// `FTFD`: finish file download
+/// `FTFD`: finish file download (`FileTransferFinaliseDownload`)
 ///
 /// Used by the client to set file metadata on the switcher for a newly-uploaded
 /// file.
@@ -290,59 +290,6 @@ pub struct FileTransferError {
     /// Error code
     #[brw(pad_after = 1)]
     pub code: u8,
-}
-
-/// `MPfe`: media player frame description
-///
-/// ## Packet format
-///
-/// Packets are padded to 4 byte boundaries.
-///
-/// * `u8`: store ID
-/// * 1 byte padding
-/// * `u16`: storage index / slot
-/// * `u8`: is valid
-/// * `char[16]`: MD5 hash of image frame
-/// * 1 byte padding
-/// * `u16`: image name length
-/// * image name
-/// * 0 - 3 bytes of padding
-#[binrw]
-#[brw(big)]
-#[derive(Default, PartialEq, Eq, Clone)]
-pub struct MediaPlayerFrameDescription {
-    #[brw(pad_after = 1)]
-    pub store_id: u8,
-    pub index: u16,
-    #[br(map = |v: u8| v != 0)]
-    #[bw(map = |v: &bool| Into::<u8>::into(*v))]
-    pub is_valid: bool,
-    #[brw(pad_after = 1)]
-    pub md5: [u8; 16],
-
-    #[br(temp)]
-    #[bw(try_calc(u16::try_from(name.len())))]
-    name_length: u16,
-
-    #[br(count = name_length, try_map = |v: Vec<u8>| str_from_utf8_null(&v).map(str::to_string))]
-    #[bw(map = |v: &String| { v.as_bytes().to_vec() })]
-    #[brw(align_after = 4)]
-    pub name: String,
-}
-
-impl Debug for MediaPlayerFrameDescription {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let mut b = f.debug_struct("MediaPlayerFrameDescription");
-
-        b.field("store_id", &self.store_id)
-            .field("index", &self.index)
-            .field("is_valid", &self.is_valid);
-        if self.is_valid {
-            b.field("md5", &hex::encode(self.md5))
-                .field("name", &self.name);
-        }
-        b.finish()
-    }
 }
 
 /// `LOCK`: obtain media pool lock
@@ -612,182 +559,6 @@ mod test {
         let mut out = Cursor::new(Vec::with_capacity(cmd.len()));
         o.write(&mut out)?;
         assert_eq!(cmd, out.into_inner());
-        Ok(())
-    }
-
-    #[test]
-    fn media_player_frame_description() -> Result<()> {
-        let _ = tracing_subscriber::fmt().try_init();
-        // All of these samples had uninitialised memory :(
-        // Occupied slot
-        let expected = MediaPlayerFrameDescription {
-            store_id: 0,
-            index: 5,
-            is_valid: true,
-            md5: [
-                0xb1, 0xa6, 0x19, 0x4d, 0x4f, 0x52, 0xb4, 0x49, 0xfd, 0x51, 0x98, 0x70, 0xa6, 0x3c,
-                0xb3, 0xc2,
-            ],
-            name: "tram-1080p.rle".to_string(),
-        };
-        let cmd: Vec<u8> = hex::decode("003000004d5066650000000501b1a6194d4f52b449fd519870a63cb3c200000e7472616d2d31303830702e726c650000")?;
-        let mpfe = Atom::read(&mut Cursor::new(&cmd))?;
-        let Payload::MediaPlayerFrameDescription(mpfe) = mpfe.payload else {
-            panic!("wrong command type");
-        };
-        assert_eq!(expected, mpfe);
-
-        let o = Atom::new(expected);
-        let mut out = Cursor::new(Vec::with_capacity(cmd.len()));
-        o.write(&mut out)?;
-        assert_eq!(cmd, out.into_inner());
-
-        // Empty slot
-        let expected = MediaPlayerFrameDescription {
-            store_id: 0,
-            index: 2,
-            is_valid: false,
-            md5: [0; 16],
-            name: "".to_string(),
-        };
-        let cmd: Vec<u8> =
-            hex::decode("002000004d506665000000020000000000000000000000000000000000000000")?;
-        let mpfe = Atom::read(&mut Cursor::new(&cmd))?;
-        let Payload::MediaPlayerFrameDescription(mpfe) = mpfe.payload else {
-            panic!("wrong command type");
-        };
-        assert_eq!(expected, mpfe);
-
-        let o = Atom::new(expected);
-        let mut out = Cursor::new(Vec::with_capacity(cmd.len()));
-        o.write(&mut out)?;
-        assert_eq!(cmd, out.into_inner());
-
-        // Checking word alignment, 1 byte name
-        let expected = MediaPlayerFrameDescription {
-            store_id: 0,
-            index: 0,
-            is_valid: true,
-            md5: [
-                0xb1, 0xa6, 0x19, 0x4d, 0x4f, 0x52, 0xb4, 0x49, 0xfd, 0x51, 0x98, 0x70, 0xa6, 0x3c,
-                0xb3, 0xc2,
-            ],
-            name: "A".to_string(),
-        };
-        let cmd: Vec<u8> = hex::decode(
-            "002400004d5066650000000001b1a6194d4f52b449fd519870a63cb3c200000141000000",
-        )?;
-        let mpfe = Atom::read(&mut Cursor::new(&cmd))?;
-        let Payload::MediaPlayerFrameDescription(mpfe) = mpfe.payload else {
-            panic!("wrong command type");
-        };
-        assert_eq!(expected, mpfe);
-
-        let o = Atom::new(expected);
-        let mut out = Cursor::new(Vec::with_capacity(cmd.len()));
-        o.write(&mut out)?;
-        assert_eq!(cmd, out.into_inner());
-
-        // Checking word alignment, 1 byte name
-        let expected = MediaPlayerFrameDescription {
-            store_id: 0,
-            index: 1,
-            is_valid: true,
-            md5: [
-                0xb1, 0xa6, 0x19, 0x4d, 0x4f, 0x52, 0xb4, 0x49, 0xfd, 0x51, 0x98, 0x70, 0xa6, 0x3c,
-                0xb3, 0xc2,
-            ],
-            name: "AB".to_string(),
-        };
-        let cmd: Vec<u8> = hex::decode(
-            "002400004d5066650000000101b1a6194d4f52b449fd519870a63cb3c200000241420000",
-        )?;
-        let mpfe = Atom::read(&mut Cursor::new(&cmd))?;
-        let Payload::MediaPlayerFrameDescription(mpfe) = mpfe.payload else {
-            panic!("wrong command type");
-        };
-        assert_eq!(expected, mpfe);
-
-        let o = Atom::new(expected);
-        let mut out = Cursor::new(Vec::with_capacity(cmd.len()));
-        o.write(&mut out)?;
-        assert_eq!(cmd, out.into_inner());
-
-        // Checking word alignment, 3 byte name
-        let expected = MediaPlayerFrameDescription {
-            store_id: 0,
-            index: 2,
-            is_valid: true,
-            md5: [
-                0xb1, 0xa6, 0x19, 0x4d, 0x4f, 0x52, 0xb4, 0x49, 0xfd, 0x51, 0x98, 0x70, 0xa6, 0x3c,
-                0xb3, 0xc2,
-            ],
-            name: "ABC".to_string(),
-        };
-        let cmd: Vec<u8> = hex::decode(
-            "002400004d5066650000000201b1a6194d4f52b449fd519870a63cb3c200000341424300",
-        )?;
-        let mpfe = Atom::read(&mut Cursor::new(&cmd))?;
-        let Payload::MediaPlayerFrameDescription(mpfe) = mpfe.payload else {
-            panic!("wrong command type");
-        };
-        assert_eq!(expected, mpfe);
-
-        let o = Atom::new(expected);
-        let mut out = Cursor::new(Vec::with_capacity(cmd.len()));
-        o.write(&mut out)?;
-        assert_eq!(cmd, out.into_inner());
-
-        // Checking word alignment, 4 byte name
-        let expected = MediaPlayerFrameDescription {
-            store_id: 0,
-            index: 3,
-            is_valid: true,
-            md5: [
-                0xb1, 0xa6, 0x19, 0x4d, 0x4f, 0x52, 0xb4, 0x49, 0xfd, 0x51, 0x98, 0x70, 0xa6, 0x3c,
-                0xb3, 0xc2,
-            ],
-            name: "ABCD".to_string(),
-        };
-        let cmd: Vec<u8> = hex::decode(
-            "002400004d5066650000000301b1a6194d4f52b449fd519870a63cb3c200000441424344",
-        )?;
-        let mpfe = Atom::read(&mut Cursor::new(&cmd))?;
-        let Payload::MediaPlayerFrameDescription(mpfe) = mpfe.payload else {
-            panic!("wrong command type");
-        };
-        assert_eq!(expected, mpfe);
-
-        let o = Atom::new(expected);
-        let mut out = Cursor::new(Vec::with_capacity(cmd.len()));
-        o.write(&mut out)?;
-        assert_eq!(cmd, out.into_inner());
-
-        // Checking word alignment, 5 byte name
-        let expected = MediaPlayerFrameDescription {
-            store_id: 0,
-            index: 4,
-            is_valid: true,
-            md5: [
-                0xb1, 0xa6, 0x19, 0x4d, 0x4f, 0x52, 0xb4, 0x49, 0xfd, 0x51, 0x98, 0x70, 0xa6, 0x3c,
-                0xb3, 0xc2,
-            ],
-            name: "ABCDE".to_string(),
-        };
-        let cmd: Vec<u8> = hex::decode(
-            "002800004d5066650000000401b1a6194d4f52b449fd519870a63cb3c20000054142434445000000",
-        )?;
-        let mpfe = Atom::read(&mut Cursor::new(&cmd))?;
-        let Payload::MediaPlayerFrameDescription(mpfe) = mpfe.payload else {
-            panic!("wrong command type");
-        };
-        assert_eq!(expected, mpfe);
-
-        let o = Atom::new(expected);
-        let mut out = Cursor::new(Vec::with_capacity(cmd.len()));
-        o.write(&mut out)?;
-        assert_eq!(cmd, out.into_inner());
-
         Ok(())
     }
 

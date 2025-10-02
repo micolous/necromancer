@@ -1,4 +1,4 @@
-//! # Time and timecode
+//! # Time and timecode; 5/12 atoms
 //!
 //! ## Unimplemented atoms
 //!
@@ -10,6 +10,7 @@
 //! `DCSC` | `ControlDisplayClock` | 0xc
 //! `DCPV` | `DisplayClockProperties` | 0x1c
 //! `DSTR` | `RequestDisplayClockTime` | 0xc
+//! `DCPC` | `ChangeDisplayClockProperties` | 0x24
 
 use binrw::binrw;
 use chrono::{DateTime, FixedOffset, Offset, TimeZone};
@@ -17,7 +18,7 @@ use std::time::Duration;
 
 use crate::{error::Error, Result};
 
-/// `Time`: Timecode (clock) command/event.
+/// `Time`: Timecode (clock) command/event (`Timecode`)
 ///
 /// Used as a:
 ///
@@ -125,7 +126,7 @@ pub struct SetTimecodeConfig(#[brw(pad_after = 3)] pub TimeMode);
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct TimecodeRequest {}
 
-/// `SToD`: Set time of day
+/// `SToD`: Set time of day (`SetTimeOfDay`)
 ///
 /// Sets the device's internal clock and timezone.
 ///

@@ -1,4 +1,4 @@
-//! # Topology
+//! # Topology; 1/1 atoms
 use binrw::binrw;
 
 /// `_top`: Topology of the switcher (`CapabilitiesTopLevel`)

@@ -1,4 +1,4 @@
-//! # Start-up settings
+//! # Start-up settings; 3/3 atoms
 use binrw::binrw;
 
 /// Command to save the current settings to the start-up configuration.

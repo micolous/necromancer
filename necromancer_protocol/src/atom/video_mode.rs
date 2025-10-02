@@ -1,10 +1,12 @@
-//! # Video mode
+//! # Video mode; 3/6 atoms
 //!
 //! ## Unimplemented atoms
 //!
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------
+//! `_VML` | `VideoModeDescriptorList` | 0xc + (entries * 0xc)
 //! `AiVM` | `AutoVideoMode` | 0xc
+//! `VMC2` | `CapabilitiesVideoModeExtended` | 0xc + (entries * 0x10)
 use crate::structs::VideoMode;
 use binrw::binrw;
 use std::ops::Deref;
@@ -40,7 +42,7 @@ impl Deref for CoreVideoMode {
     }
 }
 
-/// `CVdM`: set video mode
+/// `CVdM`: set video mode (`ChangeCoreVideoMode`)
 #[binrw]
 #[brw(big)]
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -66,7 +68,7 @@ impl Deref for SetVideoMode {
     }
 }
 
-/// `_VMC`: supported video modes
+/// `_VMC`: supported video modes (`CapabilitiesVideoMode`)
 ///
 /// ## Packet format
 ///

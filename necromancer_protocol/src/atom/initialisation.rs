@@ -1,4 +1,4 @@
-//! # Initialisation atoms
+//! # Initialisation; 1/1 atoms
 use binrw::binrw;
 
 /// `InCm`: Initialisation complete (`InitialStateComplete`)
