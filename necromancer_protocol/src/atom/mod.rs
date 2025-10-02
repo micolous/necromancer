@@ -86,7 +86,12 @@ pub use self::{
     camera::{CameraCommand, CameraControl},
     colour::{ColourGeneratorParams, SetColourGeneratorParams},
     cut::{Auto, Cut, TransitionPosition},
-    fairlight::{FairlightAudioMixerInputSourceProperties, FairlightAudioMixerTally},
+    fairlight::{
+        CapabilitiesFairlightAudioMixer, CapabilitiesFairlightAudioMixerHeadphoneOut,
+        FairlightAudioMixerInputSourceProperties,
+        FairlightAudioMixerMasterOutEqualiserBandProperties, FairlightAudioMixerTally,
+        FairlightEqualiserBandRangeCapabilities, HeadphoneOutputCapabilities,
+    },
     ftb::{
         CutToBlack, FadeToBlackAuto, FadeToBlackParams, FadeToBlackStatus, SetFadeToBlackParams,
     },
@@ -114,7 +119,10 @@ pub use self::{
         TransferChunk, TransferCompleted,
     },
     tally::TalliedSources,
-    time::{SetTimeOfDay, SetTimecodeConfig, Time, TimeMode, TimecodeConfig, TimecodeRequest, TIMECODE_REQUEST},
+    time::{
+        SetTimeOfDay, SetTimecodeConfig, Time, TimeMode, TimecodeConfig, TimecodeRequest,
+        TIMECODE_REQUEST,
+    },
     topology::Topology,
     ver::{ProductName, Version},
     video_mode::{CoreVideoMode, SetVideoMode, SupportedVideoModes},
@@ -199,6 +207,16 @@ pub enum Payload {
     FadeToBlackParams(FadeToBlackParams),
     #[brw(magic = b"FtbS")]
     FadeToBlackStatus(FadeToBlackStatus),
+    #[brw(magic = b"_FAC")]
+    CapabilitiesFairlightAudioMixer(CapabilitiesFairlightAudioMixer),
+    #[brw(magic = b"_FMH")]
+    CapabilitiesFairlightAudioMixerHeadphoneOut(CapabilitiesFairlightAudioMixerHeadphoneOut),
+    #[brw(magic = b"_FEC")]
+    FairlightEqualiserBandRangeCapabilities(FairlightEqualiserBandRangeCapabilities),
+    #[brw(magic = b"AMBP")]
+    FairlightAudioMixerMasterOutEqualiserBandProperties(
+        FairlightAudioMixerMasterOutEqualiserBandProperties,
+    ),
     #[brw(magic = b"FASP")]
     FairlightAudioMixerInputSourceProperties(FairlightAudioMixerInputSourceProperties),
     #[brw(magic = b"FMTl")]
@@ -338,6 +356,10 @@ atom_payloads!(
     SetFadeToBlackParams,
     FadeToBlackParams,
     FadeToBlackStatus,
+    CapabilitiesFairlightAudioMixer,
+    CapabilitiesFairlightAudioMixerHeadphoneOut,
+    FairlightAudioMixerMasterOutEqualiserBandProperties,
+    FairlightEqualiserBandRangeCapabilities,
     FairlightAudioMixerInputSourceProperties,
     FairlightAudioMixerTally,
     FileTransferChunkParams,

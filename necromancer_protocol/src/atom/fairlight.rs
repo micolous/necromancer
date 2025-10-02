@@ -1,17 +1,13 @@
-//! # Fairlight audio; 2/52 atoms
+//! # Fairlight audio; 6/52 atoms
 //!
-//! ## Unimplemented atoms (50)
+//! ## Unimplemented atoms (46)
 //!
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------
-//! `_FAC` | `CapabilitiesFairlightAudioMixer` | 0xc
-//! `_FEC` | `CapabilitiesFairlightEqualiserBandRange` | 0xc + (0xc * frequency_limits_len)
-//! `_FMH` | `CapabilitiesFairlightAudioMixerHeadphoneOut` | 0xc
 //! `AEBP` | `FairlightAudioMixerInputSourceEqualiserBandProperties` | 0x2c
 //! `AICP` | `FairlightAudioMixerInputSourceCompressorProperties` | 0x30
 //! `AILP` | `FairlightAudioMixerInputSourceLimiterProperties` | 0x2c
 //! `AIXP` | `FairlightAudioMixerInputSourceExpanderProperties` | 0x30
-//! `AMBP` | `FairlightAudioMixerMasterOutEqualiserBandProperties` | 0x1c
 //! `AMLP` | `FairlightAudioMixerMasterOutLimiterProperties` | 0x1c
 //! `CEBP` | `ChangeFairlightAudioMixerInputSourceEqualiserBandProperties` | 0x28
 //! `CFAI` | `ChangeFairlightAudioMixerAuxOutInputProperties` | 0x14
@@ -55,7 +51,120 @@
 //! `RMOE` | `ResetFairlightAudioMixerMasterOutEqualiser` | 0xc
 //! `SFLN` | `SetFairlightAudioMixerLevelsNotification` | 0xc
 
-use binrw::binrw;
+use crate::structs::{EqualiserRange, EqualiserShape, FairlightEqualiserBandRangeFrequencyLimits};
+use binrw::{binrw, BinRead, BinWrite};
+use modular_bitfield::{bitfield, specifiers::B12, Specifier};
+
+/// `_FAC`: Fairlight audio mixer capabilities (`CapabilitiesFairlightAudioMixer`)
+///
+/// ## Packet format
+///
+/// * `u8`: input channel count
+/// * `bool`: has headphone output
+/// * 2 bytes padding
+#[binrw]
+#[brw(big)]
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct CapabilitiesFairlightAudioMixer {
+    pub channels: u8,
+
+    #[brw(pad_after = 2)]
+    #[br(map = |v: u8| v != 0)]
+    #[bw(map = |v: &bool| Into::<u8>::into(*v))]
+    pub has_headphone_output: bool,
+}
+
+#[bitfield(bits = 16)]
+#[repr(u16)]
+#[derive(Specifier, BinRead, BinWrite, Debug, Default, PartialEq, Eq, Clone, Copy)]
+#[br(map = From::<u16>::from)]
+#[bw(map = |&x| Into::<u16>::into(x))]
+pub struct HeadphoneOutputCapabilities {
+    pub has_solo_output: bool,
+    pub has_talkback: bool,
+    pub has_sidetone: bool,
+    pub has_mute: bool,
+    #[skip]
+    __: B12,
+}
+
+/// `_FMH`: Fairlight audio mixer headphone output capabilities
+/// (`CapabilitiesFairlightAudioMixerHeadphoneOut`)
+///
+/// ## Packet format
+///
+/// * `u16`: [HeadphoneOutputCapabilities][] bitmask
+/// * 2 bytes padding
+#[binrw]
+#[brw(big)]
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct CapabilitiesFairlightAudioMixerHeadphoneOut {
+    #[brw(pad_after = 2)]
+    pub caps: HeadphoneOutputCapabilities,
+}
+
+/// `_FEC`: Fairlight audio mixer equaliser band range capabilities
+/// (`CapabilitiesFairlightEqualiserBandRange`)
+///
+/// ## Packet format
+///
+/// * `u16`: entry count
+/// * 2 bytes padding
+/// * repeated `BEPStructFairlightEqualiserBandRangeFrequencyLimits` (0xc bytes)
+#[binrw]
+#[brw(big)]
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct FairlightEqualiserBandRangeCapabilities {
+    #[brw(pad_after = 2)]
+    #[br(temp)]
+    #[bw(try_calc(u16::try_from(v.len())))]
+    length: u16,
+
+    #[br(count=length)]
+    v: Vec<FairlightEqualiserBandRangeFrequencyLimits>,
+}
+
+/// `AMBP`: Fairlight audio mixer master out equaliser band properties
+/// (`FairlightAudioMixerMasterOutEqualiserBandProperties`)
+///
+/// ## Packet format
+///
+/// * `u8`: band ID
+/// * `bool`: enabled
+/// * `u8`: supported shapes (bitmask)
+/// * `u8`: current shape
+/// * `u8`: supported frequency ranges (bitmask)
+/// * `u8`: current frequency range
+/// * 2 bytes padding
+/// * `u32`: frequency
+/// * `i32`: gain
+/// * `u16`: q factor
+#[binrw]
+#[brw(big)]
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct FairlightAudioMixerMasterOutEqualiserBandProperties {
+    pub band_id: u8,
+
+    #[br(map = |v: u8| v != 0)]
+    #[bw(map = |v: &bool| Into::<u8>::into(*v))]
+    pub enabled: bool,
+
+    pub supported_shapes: u8,
+    pub shape: EqualiserShape,
+    pub supported_frequency_ranges: u8,
+    #[brw(pad_after = 2)]
+    pub frequency_range: EqualiserRange,
+
+    /// Frequency, in hertz
+    pub frequency: u32,
+
+    /// Band gain, in 0.01dB.
+    pub gain: i32,
+
+    /// Q Factor, in 0.01dB. Only valid for `shape` == [`BandPass`][EqualiserShape::BandPass].
+    #[brw(pad_after = 2)]
+    pub q_factor: u16,
+}
 
 #[binrw]
 #[brw(repr = u8)]
@@ -142,7 +251,30 @@ mod test {
     use std::io::Cursor;
 
     #[test]
-    fn fasp() -> Result<()> {
+    fn capabilities() -> Result {
+        // ATEM Mini Pro, ATEM Mini Pro ISO
+        let cmd = hex::decode("000c00005f46414306000000")?;
+        let cmd = Atom::read(&mut Cursor::new(&cmd))?;
+
+        let expected = Atom::new(CapabilitiesFairlightAudioMixer {
+            channels: 6,
+            has_headphone_output: false,
+        });
+        assert_eq!(expected, cmd);
+
+        Ok(())
+    }
+
+    #[test]
+    fn ambp() -> Result {
+        let cmd = hex::decode("001c0000414d425001012d010f012d04000000310000000000640000")?;
+        let cmd = Atom::read(&mut Cursor::new(&cmd))?;
+
+        Ok(())
+    }
+
+    #[test]
+    fn fasp() -> Result {
         // Off, Input 1, centre, level +10dB
         let cmd = hex::decode("003c0000464153500001000000000001ffffffffffff010001000000000000000002000006010004000000000000000000000bc2000003e807010027")?;
         let cmd = Atom::read(&mut Cursor::new(&cmd))?;
@@ -253,7 +385,7 @@ mod test {
     }
 
     #[test]
-    fn fmtl() -> Result<()> {
+    fn fmtl() -> Result {
         let cmd = hex::decode("00540000464d546c000600238d00238effffffffffff0100000101ffffffffffff0100000200ffffffffffff0100000300ffffffffffff0100000400ffffffffffff0100051500ffffffffffff01000516000400")?;
         let cmd = Atom::read(&mut Cursor::new(&cmd))?;
 

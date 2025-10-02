@@ -2,11 +2,11 @@ use crate::{
     error::Error,
     protocol::{
         atom::{
-            Atom, Auto, Cut, CutToBlack, SetupFileUpload, FadeToBlackAuto, FileTransferChunkParams,
-            FileType, FinishFileDownload, MediaPlayerSourceID, MediaPoolLock, Payload,
+            Atom, Auto, Cut, CutToBlack, FadeToBlackAuto, FileTransferChunkParams, FileType,
+            FinishFileDownload, MediaPlayerSourceID, MediaPoolLock, Payload,
             SetColourGeneratorParams, SetMediaPlayerSource, SetPreviewInput, SetProgramInput,
-            SetupFileDownload, TimecodeRequest, TransferChunk, CAPTURE_STILL, CLEAR_STARTUP_SETTINGS,
-            RESTORE_STARTUP_SETTINGS, SAVE_STARTUP_SETTINGS,
+            SetupFileDownload, SetupFileUpload, TimecodeRequest, TransferChunk, CAPTURE_STILL,
+            CLEAR_STARTUP_SETTINGS, RESTORE_STARTUP_SETTINGS, SAVE_STARTUP_SETTINGS,
         },
         rle::RLE_MARKER,
         structs::VideoSource,
