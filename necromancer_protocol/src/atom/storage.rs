@@ -124,7 +124,7 @@ pub struct FileTransferChunkParams {
     pub chunk_count: u16,
 }
 
-/// `FTSD`: File Transfer Setup Download
+/// `FTSD`: File Transfer Setup Download (`FileTransferSetupDownload`)
 ///
 /// Used by the client to setup a data upload to the switcher.
 ///
@@ -244,7 +244,7 @@ impl TransferChunk {
     }
 }
 
-/// `FTUA`: File Transfer Upload Ack
+/// `FTUA`: File transfer upload acknowledgement (`FileTransferUploadAck`)
 ///
 /// Acknowledgement of [`TransferChunk`]
 ///
@@ -260,7 +260,7 @@ pub struct TransferAck {
     pub id: u16,
 }
 
-/// `FTDC`: File transfer complete
+/// `FTDC`: File transfer complete (`FileTransferComplete`)
 ///
 /// ## Packet format
 ///
@@ -274,7 +274,7 @@ pub struct TransferCompleted {
     unknown: u16,
 }
 
-/// `FTDE`: file transfer error
+/// `FTDE`: file transfer error (`FileTransferError`)
 ///
 /// ## Packet format
 ///
@@ -292,7 +292,7 @@ pub struct FileTransferError {
     pub code: u8,
 }
 
-/// `LOCK`: obtain media pool lock
+/// `LOCK`: obtain media pool lock (`MediaPoolLock`)
 ///
 /// ## Packet format
 ///
@@ -330,7 +330,7 @@ impl MediaPoolLock {
     }
 }
 
-/// `LKOB`: media pool / storage lock obtained
+/// `LKOB`: media pool / storage lock obtained (`MediaPoolLockObtained`)
 ///
 /// ## Packet format
 ///
@@ -350,7 +350,7 @@ impl LockObtained {
     }
 }
 
-/// `LKST`: storage lock state changed
+/// `LKST`: storage lock state changed (`MediaPoolLockStatus`)
 ///
 /// ## Packet format
 ///

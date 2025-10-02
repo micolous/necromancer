@@ -11,7 +11,7 @@ use crate::structs::VideoMode;
 use binrw::binrw;
 use std::ops::Deref;
 
-/// `VidM`: current / core video mode
+/// `VidM`: current video mode (`CoreVideoMode`)
 ///
 /// ## Packet format
 ///

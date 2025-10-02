@@ -24,6 +24,6 @@
 //! `CAMm` | `ChangeAudioMixerMonitorOutProperties` | 0x14
 //! `CAMP` | `ChangeAudioMixerProperties` | 0xc
 //! `CMMP` | `ChangeMixMinusOutProperties` | 0x10
-//! `MMOP` | `MixMinusOutputProperties` | 0x14
+//! `MMOP` | `MixMinusOutProperties` | 0x14
 //! `SALN` | `SetAudioMixerLevelsNotification` | 0xc
 //! `RAMP` | `ResetAudioMixerPeakLevels` | 0x10

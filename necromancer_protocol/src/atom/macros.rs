@@ -1,4 +1,4 @@
-//! # Macros; 0/8 atoms
+//! # Macros; 0/9 atoms
 //!
 //! ## Unimplemented atoms
 //!
@@ -12,3 +12,4 @@
 //! `MSlp` | `MacroSleep` | 0xc
 //! `MSRc` | `MacroStartRecord` | variable
 //! `MRCP` | `ChangeMacroRunProperties` | 0xc
+//! `CMPr` | `ChangeMacroProperties` | variable

@@ -1,4 +1,4 @@
-//! # Media player; 5/18 atoms
+//! # Media player; 5/19 atoms
 //!
 //! ## Unimplemented atoms
 //!
@@ -6,6 +6,7 @@
 //! ------ | --------- | ------
 //! `CapA` | `StillCaptureAvailability` | 0xc
 //! `CMPA` | `ClearMediaPlayerAudio` | 0xc
+//! `CMPC` | `ClearMediaPlayerClip` | 0xc
 //! `CMPS` | `ChangeMediaPlayerSetup` | 0x10
 //! `CSTL` | `ClearMediaPlayerStill` | 0xc
 //! `MPAS` | `MediaPlayerAudioEntry` | 0x5c
@@ -59,7 +60,7 @@ pub struct MediaPlayerSource {
     pub source: MediaPlayerSourceID,
 }
 
-/// `MPSS`: Set media player source
+/// `MPSS`: Set media player source (`MediaPlayerSetSource`)
 ///
 /// ## Packet format
 ///

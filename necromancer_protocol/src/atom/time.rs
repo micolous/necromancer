@@ -112,14 +112,16 @@ pub enum TimeMode {
     TimeOfDay = 1,
 }
 
-/// `CTCC`: Change timecode config
+/// `CTCC`: Change timecode config (`ChangeTimecodeConfig`)
 ///
 /// See also: [`TimecodeConfig`][]
 #[binrw]
 #[derive(Clone, Debug, PartialEq, Eq, FromPrimitive, ToPrimitive)]
 pub struct SetTimecodeConfig(#[brw(pad_after = 3)] pub TimeMode);
 
-/// `TiRq`: request current timecode
+pub const TIMECODE_REQUEST: TimecodeRequest = TimecodeRequest {};
+
+/// `TiRq`: request current timecode (`TimecodeRequest`)
 ///
 /// This causes the switcher to send a [Time] command to all connected clients.
 #[binrw]
@@ -327,7 +329,7 @@ mod test {
 
         assert!(matches!(ct.payload, Payload::TimecodeRequest(_)));
 
-        let o = Atom::new(TimecodeRequest {});
+        let o = Atom::new(TIMECODE_REQUEST);
         let mut out = Cursor::new(Vec::with_capacity(cmd.len()));
         o.write(&mut out)?;
         assert_eq!(cmd, out.into_inner());

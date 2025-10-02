@@ -1,4 +1,4 @@
-//! # Multiview; 0/15 atoms
+//! # Multiview; 0/16 atoms
 //!
 //! ## Unimplemented atoms
 //!
@@ -8,6 +8,7 @@
 //! `CMvI` | `ChangeMultiViewInput` | 0xc
 //! `CMVM` | `ChangeMultiViewVideoMode` | 0xc
 //! `CMvO` | `ChangeMultiViewOverlayVisibility` | 0x10
+//! `CMvP` | `ChangeMultiViewProperties` | 0xc
 //! `MvBC` | `MultiViewBorderColour` | 0x14
 //! `MvIn` | `MultiViewInput` | 0x10
 //! `MvOc` | `MultiViewOverlayAvailability` | 0xc

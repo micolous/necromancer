@@ -23,7 +23,7 @@ use binrw::{binrw, BinRead, BinWrite};
 use modular_bitfield::{bitfield, prelude::B7};
 use std::ops::{Deref, DerefMut};
 
-/// `RcTM`: ReCord To Media
+/// `RcTM`: Record to media (`RecordToMedia`)
 #[binrw]
 #[brw(big)]
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -34,7 +34,7 @@ pub struct RecordToMedia {
     pub start: bool,
 }
 
-/// `RTMS`: Record To Media Status
+/// `RTMS`: Record to media status (`RecordToMediaStatus`)
 #[binrw]
 #[brw(big)]
 #[derive(Clone, Debug, PartialEq, Eq)]

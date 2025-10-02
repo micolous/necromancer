@@ -1,4 +1,4 @@
-//! # Remote source; 0/10 atoms
+//! # Remote source; 0/11 atoms
 //!
 //! ## Unimplemented atoms
 //!
@@ -9,6 +9,7 @@
 //! `RIMs` | `RemoteSourceExternal` | 0x8c
 //! `RIMa` | `RemoteSourceExternalAdded` | 0x8c
 //! `RIMd` | `RemoteSourceExternalRemove` | 0xc
+//! `RISs` | `RemoteSourceSettings` | 0x10
 //! `RSca` | `RemoteSourceCapabilities` | 0xc
 //! `RSDs` | `RemoteSourceDiscoverable` | 0xc
 //! `RSip` | `RemoteSourceForceInternetProbe` | 0x8

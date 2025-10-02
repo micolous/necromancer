@@ -1,4 +1,4 @@
-//! # Fairlight audio; 2/51 atoms
+//! # Fairlight audio; 2/52 atoms
 //!
 //! ## Unimplemented atoms
 //!
@@ -45,6 +45,7 @@
 //! `FMAO` | `FairlightAudioMixerAuxOutMixerProperties` | 0x14
 //! `FMHP` | `FairlightAudioMixerHeadphoneOutProperties` | 0x28
 //! `FMLv` | `FairlightAudioMixerInputSourceLevels` | 0x30
+//! `FMPP` | `FairlightAudioMixerProperties` | 0xc
 //! `MOCP` | `FairlightAudioMixerMasterOutCompressorProperties` | 0x20
 //! `RFIP` | `ResetFairlightAudioMixerInputSourceLevelPeaks` | 0x1c
 //! `RFLP` | `ResetFairlightAudioMixerLevelPeaks` | 0xc

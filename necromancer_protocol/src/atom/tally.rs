@@ -13,7 +13,7 @@ use crate::structs::{TallyFlags, VideoSource};
 use binrw::binrw;
 use std::{collections::HashMap, ops::Deref};
 
-/// `TlSr`: tally status by video source
+/// `TlSr`: tally status by video source (`TalliedSources`)
 ///
 /// This `struct` can be converted to/from a
 /// [`HashMap<VideoSource, TallyFlags>`] using the [`From`] trait.

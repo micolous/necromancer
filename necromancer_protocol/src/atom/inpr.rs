@@ -13,7 +13,7 @@ use crate::{
 use binrw::binrw;
 use std::fmt::Debug;
 
-/// `InPr`: Input properties
+/// `InPr`: Input properties (`InputProperties`)
 #[binrw]
 #[brw(big)]
 #[derive(PartialEq, Eq, Clone)]

@@ -1,4 +1,4 @@
-//! # Key; 0/31 atoms
+//! # Key; 0/32 atoms
 //!
 //! ## Unimplemented atoms
 //!
@@ -6,6 +6,7 @@
 //! ------ | --------- | ------
 //! `CACC` | `ChangeKeyAdvancedChromaCursor` | 0x1c
 //! `CACK` | `ChangeKeyAdvancedChromaParameters` | 0x24
+//! `CKCk` | `ChangeKeyChromaParameters` | 0x18
 //! `CKDV` | `ChangeKeyDVEAndFlyParameters` | 0x48
 //! `CKeC` | `ChangeKeyCut` | 0xc
 //! `CKeF` | `ChangeKeyFill` | 0xc
@@ -25,8 +26,8 @@
 //! `KeFS` | `KeyFlyState` | 0x10
 //! `KeLm` | `KeyLumaParameters` | 0x14
 //! `KeOn` | `KeyOnAir` | 0xc
-//! `KePt` | `KeyPatternParemeters` | 0x18
-//! `KKFP` | `KeyFlyKeyFrameParemeters` | 0x3c
+//! `KePt` | `KeyPatternParameters` | 0x18
+//! `KKFP` | `KeyFlyKeyFrameParameters` | 0x3c
 //! `RACK` | `ResetKeyAdvancedChroma` | 0xc
 //! `RFIK` | `RunFlyKey` | 0x10
 //! `RFKF` | `ResetKeyFlyKeyFrame` | 0xc

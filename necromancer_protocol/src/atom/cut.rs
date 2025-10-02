@@ -1,4 +1,4 @@
-//! # Cut and auto (transitions); 3/19 atoms
+//! # Cut and auto (transitions); 3/20 atoms
 //!
 //! ## Unimplemented atoms
 //!
@@ -10,6 +10,7 @@
 //! `CTPr` | `ChangeTransitionPreviewTrans` | 0xc
 //! `CTPs` | `ChangeTransitionPosition` | 0xc
 //! `CTSt` | `ChangeTransitionStingerProperties` | 0x1c
+//! `CTTp` | `ChangeTransitionNext` | 0xc
 //! `CTWp` | `ChangeTransitionWipeProperties` | 0x1c
 //! `DAu2` | `DoTransitionAuto_2` | 0xc
 //! `STWV` | `SetTransitionWipeVelocity` | 0x18

@@ -21,9 +21,8 @@
 //! In BMDSwitcherAPI 9.8.3
 //!
 //! * total atoms: 344
-//! * implemented atoms: 58
-//! * implemented and identified atoms: 327
-//! * *missing atoms*: 17
+//! * implemented atoms: 58 (17%)
+//! * identified atoms: 344 (100%)
 //!
 //! ## Uncategorised unimplemented atoms (9)
 //!
@@ -115,7 +114,7 @@ pub use self::{
         TransferChunk, TransferCompleted,
     },
     tally::TalliedSources,
-    time::{SetTimeOfDay, SetTimecodeConfig, Time, TimeMode, TimecodeConfig, TimecodeRequest},
+    time::{SetTimeOfDay, SetTimecodeConfig, Time, TimeMode, TimecodeConfig, TimecodeRequest, TIMECODE_REQUEST},
     topology::Topology,
     ver::{ProductName, Version},
     video_mode::{CoreVideoMode, SetVideoMode, SupportedVideoModes},
