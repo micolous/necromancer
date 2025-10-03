@@ -21,7 +21,7 @@
 //! In BMDSwitcherAPI 9.8.3
 //!
 //! * total atoms: 344
-//! * implemented atoms: 67 (19%)
+//! * implemented atoms: 68 (19%)
 //! * identified atoms: 344 (100%)
 //!
 //! ## Uncategorised unimplemented atoms (9)
@@ -97,6 +97,7 @@ pub use self::{
     },
     initialisation::InitialisationComplete,
     inpr::InputProperties,
+    macros::MacroCapabilities,
     media_player::{
         CaptureStill, MediaPlayerCapabilities, MediaPlayerFrameDescription, MediaPlayerSource,
         MediaPlayerSourceID, SetMediaPlayerSource, CAPTURE_STILL,
@@ -237,6 +238,7 @@ atom_payloads!(
     b"_FAC" => CapabilitiesFairlightAudioMixer,
     b"_FEC" => FairlightEqualiserBandRangeCapabilities,
     b"_FMH" => CapabilitiesFairlightAudioMixerHeadphoneOut,
+    b"_MAC" => MacroCapabilities,
     b"_MeC" => MixEffectBlockCapabilities,
     b"_mpl" => MediaPlayerCapabilities,
     b"_pin" => ProductName,
