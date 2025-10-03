@@ -87,22 +87,25 @@ pub struct AtemState {
     fade_to_black_status: [FadeToBlackStatus; MAX_MES],
     fade_to_black_rates: [u8; MAX_MES],
     pub media_player_capabilities: MediaPlayerCapabilities,
+
     /// List of media player sources.
     ///
     /// Entries are set to `None` when there is no available information,
     /// after a Topology message but before a MediaPlayerSource message.
     media_player_sources: [Option<MediaPlayerSourceID>; MAX_MEDIA_PLAYERS as usize],
+
     /// Media player frame descriptions. Slots are 0-indexed.
     ///
     /// Indexes here are `u8` as [MediaPlayerCapabilities] indicates a maximum
     /// clip count as `u8`.
     ///
     /// [MediaPlayerFrameDescription] represents it as `u16`, [SetupFileUpload]
-    /// and [DownloadRequest] represent it as `u32`.
+    /// and [SetupFileDownload] represent it as `u32`.
     ///
     /// [SetupFileUpload]: crate::protocol::atom::SetupFileUpload
-    /// [DownloadRequest]: crate::protocol::atom::DownloadRequest
+    /// [SetupFileDownload]: crate::protocol::atom::SetupFileDownload
     pub media_player_frame_descriptions: HashMap<u8, MediaPlayerFrameDescription>,
+
     /// Colour generator configurations.
     ///
     /// Entries are 0-indexed (ie: `colour_generator[0]` == [VideoSource::Colour1]).
