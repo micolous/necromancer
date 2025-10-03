@@ -14,7 +14,7 @@
 
 use binrw::binrw;
 use chrono::{DateTime, FixedOffset, Offset, TimeZone};
-use std::time::Duration;
+use std::{fmt::Display, time::Duration};
 
 use crate::{error::Error, Result};
 
@@ -92,6 +92,27 @@ impl Time {
             frame: (duration.subsec_micros() / (1_000_000 / (framerate as u32))) as u8,
             drop_frame: false,
         })
+    }
+
+    /// Get the field separator character, per SMPTE 258M.
+    #[inline]
+    pub const fn separator(&self) -> char {
+        if self.drop_frame {
+            ';'
+        } else {
+            ':'
+        }
+    }
+}
+
+impl Display for Time {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let sep = self.separator();
+        write!(
+            f,
+            "{:02}{sep}{:02}{sep}{:02}{sep}{:02}",
+            self.hour, self.minute, self.second, self.frame,
+        )
     }
 }
 
@@ -223,15 +244,24 @@ mod test {
         };
 
         assert_eq!(expected, time);
+        assert_eq!("16:31:22:25", time.to_string());
+
+        // Time -> Duration
         assert_eq!(Duration::from_millis(59482_500), time.to_duration(50)?);
+
+        // Time -> Duration fails when the frame is too high for the framerate
         assert!(matches!(
             time.to_duration(24),
             Err(Error::ParameterOutOfRange)
         ));
+
+        // Duration -> Time
         assert_eq!(
             time,
             Time::from_duration(&Duration::from_millis(59482_500), 50)?
         );
+
+        // Different framerate for same duration
         assert_eq!(
             Time {
                 hour: 16,
@@ -241,6 +271,19 @@ mod test {
                 drop_frame: false,
             },
             Time::from_duration(&Duration::from_millis(59482_500), 25)?
+        );
+
+        // Drop frame
+        assert_eq!(
+            "01;09;00;00",
+            Time {
+                hour: 1,
+                minute: 9,
+                second: 0,
+                frame: 0,
+                drop_frame: true
+            }
+            .to_string()
         );
 
         let o = AtemPacket::new_atoms(
