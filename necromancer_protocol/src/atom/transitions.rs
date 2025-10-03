@@ -1,10 +1,9 @@
-//! # Transitions and digital video effects; 3/21 atoms
+//! # Transitions and digital video effects; 4/21 atoms
 //!
-//! ## Unimplemented atoms (18)
+//! ## Unimplemented atoms (17)
 //!
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------
-//! `_DVE` | `CapabilitiesDVE` | variable
 //! `CTDp` | `ChangeTransitionDipProperties` | 0x10
 //! `CTDv` | `ChangeTransitionDVEProperties` | 0x1c
 //! `CTMx` | `ChangeTransitionMixProperties` | 0xc
@@ -23,7 +22,36 @@
 //! `TStP` | `TransitionStingerProperties` | 0x1c
 //! `TWpP` | `TransitionWipeProperties` | 0x1c
 
+use crate::structs::DVETransitionStyle;
 use binrw::binrw;
+
+/// `_DVE`: Digital video effects capabilities (`CapabilitiesDVE`)
+///
+/// ## Packet format
+///
+/// * `bool`: can rotate
+/// * `bool`: can scale up
+/// * `u16`: number of supported transition styles
+/// * `u8[style_count]`: transition style ID
+#[binrw]
+#[brw(big)]
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct DVECapabilities {
+    #[br(map = |v: u8| v != 0)]
+    #[bw(map = |v: &bool| Into::<u8>::into(*v))]
+    pub can_rotate: bool,
+
+    #[br(map = |v: u8| v != 0)]
+    #[bw(map = |v: &bool| Into::<u8>::into(*v))]
+    pub can_scale_up: bool,
+
+    #[br(temp)]
+    #[bw(try_calc(u16::try_from(supported_dve_transition_styles.len())))]
+    length: u16,
+
+    #[br(count = length)]
+    pub supported_dve_transition_styles: Vec<DVETransitionStyle>,
+}
 
 /// `DCut`: cut (`DoTransitionCut`)
 ///
@@ -84,20 +112,51 @@ pub struct TransitionPosition {
 
 #[cfg(test)]
 mod test {
-    use std::io::Cursor;
-
-    use binrw::{BinRead, BinWrite};
-
+    use super::*;
     use crate::{
         atom::{Atom, Payload},
         packet::{AtemPacket, AtemPacketFlags},
         Result,
     };
-
-    use super::*;
+    use binrw::{BinRead, BinWrite};
+    use std::io::Cursor;
 
     #[test]
-    fn cut() -> Result<()> {
+    fn capabilities() -> Result {
+        // ATEM Mini
+        let cmd = hex::decode("002000005f44564500010011101112131415161718191a1b1c1d1e1f22000000")?;
+        let cmd = Atom::read(&mut Cursor::new(&cmd))?;
+
+        let expected = Atom::new(DVECapabilities {
+            can_rotate: false,
+            can_scale_up: true,
+            supported_dve_transition_styles: vec![
+                DVETransitionStyle::SqueezeTopLeft,
+                DVETransitionStyle::SqueezeTop,
+                DVETransitionStyle::SqueezeTopRight,
+                DVETransitionStyle::SqueezeLeft,
+                DVETransitionStyle::SqueezeRight,
+                DVETransitionStyle::SqueezeBottomLeft,
+                DVETransitionStyle::SqueezeBottom,
+                DVETransitionStyle::SqueezeBottomRight,
+                DVETransitionStyle::PushTopLeft,
+                DVETransitionStyle::PushTop,
+                DVETransitionStyle::PushTopRight,
+                DVETransitionStyle::PushLeft,
+                DVETransitionStyle::PushRight,
+                DVETransitionStyle::PushBottomLeft,
+                DVETransitionStyle::PushBottom,
+                DVETransitionStyle::PushBottomRight,
+                DVETransitionStyle::GraphicLogoWipe,
+            ],
+        });
+        assert_eq!(expected, cmd);
+
+        Ok(())
+    }
+
+    #[test]
+    fn cut() -> Result {
         let cmd = hex::decode("08188001000000000001000f000c00004443757400000000")?;
         let pkt = AtemPacket::read(&mut Cursor::new(&cmd))?;
         let payload = pkt.atoms().expect("wrong payload type");

@@ -6,7 +6,7 @@ use crate::{
             MediaPlayerFrameDescription, MediaPlayerSourceID, MixEffectBlockCapabilities, Payload,
             ProductName, Topology, TransitionPosition, Version,
         },
-        structs::{EqualiserRange, TallyFlags, VideoMode, VideoSource},
+        structs::{DVETransitionStyle, EqualiserRange, TallyFlags, VideoMode, VideoSource},
     },
     Result,
 };
@@ -41,6 +41,7 @@ bitflags! {
         const FAIRLIGHT_TALLY                = 1 << 18;
         const FAIRLIGHT_INPUT_SOURCE_PROPS   = 1 << 19;
         const FAIRLIGHT_FREQUENCY_RANGES     = 1 << 20;
+        const DVE_CAPABILITIES               = 1 << 21;
 
         const PREVIEW_OR_PROGRAM_SOURCE = Self::PREVIEW_SOURCE.bits() | Self::PROGRAM_SOURCE.bits();
         const UNSUPPORTED_COMMAND            = 1 << 31;
@@ -128,6 +129,10 @@ pub struct AtemState {
 
     /// Supported Fairlight audio equaliser frequency ranges.
     pub fairlight_audio_frequency_ranges: BTreeMap<EqualiserRange, RangeInclusive<u32>>,
+
+    pub dve_can_rotate: bool,
+    pub dve_can_scale_up: bool,
+    pub dve_supported_transition_styles: HashSet<DVETransitionStyle>,
 }
 
 impl AtemState {
@@ -349,6 +354,16 @@ impl AtemState {
                             .insert(limit.range, limit.into());
                     }
                     updated_fields |= StateUpdate::FAIRLIGHT_FREQUENCY_RANGES;
+                }
+
+                Payload::DVECapabilities(dve) => {
+                    debug!(?dve, "updated DVE capabilities");
+                    self.dve_can_rotate = dve.can_rotate;
+                    self.dve_can_scale_up = dve.can_scale_up;
+                    self.dve_supported_transition_styles =
+                        HashSet::from_iter(dve.supported_dve_transition_styles.iter().copied());
+
+                    updated_fields |= StateUpdate::DVE_CAPABILITIES;
                 }
 
                 _ => (),

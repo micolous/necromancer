@@ -46,6 +46,10 @@ async fn main() -> Result<()> {
         info!("ME {me}: Program {pgm:?}, Preview {pre:?}");
     }
     info!(
+        "Supported DVE transition styles (scale={:?}, rotate={:?}): {:?}",
+        state.dve_can_scale_up, state.dve_can_rotate, state.dve_supported_transition_styles,
+    );
+    info!(
         "Fairlight EQ frequencies: {:?}",
         state.fairlight_audio_frequency_ranges
     );

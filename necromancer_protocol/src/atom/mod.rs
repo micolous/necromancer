@@ -21,7 +21,7 @@
 //! In BMDSwitcherAPI 9.8.3
 //!
 //! * total atoms: 344
-//! * implemented atoms: 68 (19%)
+//! * implemented atoms: 69 (20%)
 //! * identified atoms: 344 (100%)
 //!
 //! ## Uncategorised unimplemented atoms (8)
@@ -126,7 +126,7 @@ pub use self::{
         TIMECODE_REQUEST,
     },
     topology::Topology,
-    transitions::{Auto, Cut, TransitionPosition},
+    transitions::{Auto, Cut, DVECapabilities, TransitionPosition},
     ver::{ProductName, Version},
     video_mode::{CoreVideoMode, SetVideoMode, SupportedVideoModes},
     visca::{Visca422AutoAllocateAddresses, VISCA_422_AUTO_ALLOCATE_ADDRESSES},
@@ -234,6 +234,7 @@ macro_rules! atom_payloads {
 }
 
 atom_payloads!(
+    b"_DVE" => DVECapabilities,
     b"_FAC" => CapabilitiesFairlightAudioMixer,
     b"_FEC" => FairlightEqualiserBandRangeCapabilities,
     b"_FMH" => CapabilitiesFairlightAudioMixerHeadphoneOut,
