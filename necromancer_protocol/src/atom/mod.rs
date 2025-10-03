@@ -21,7 +21,7 @@
 //! In BMDSwitcherAPI 9.8.3
 //!
 //! * total atoms: 344
-//! * implemented atoms: 63 (18%)
+//! * implemented atoms: 67 (19%)
 //! * identified atoms: 344 (100%)
 //!
 //! ## Uncategorised unimplemented atoms (9)
