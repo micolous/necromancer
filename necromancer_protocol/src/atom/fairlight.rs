@@ -51,7 +51,10 @@
 //! `RMOE` | `ResetFairlightAudioMixerMasterOutEqualiser` | 0xc
 //! `SFLN` | `SetFairlightAudioMixerLevelsNotification` | 0xc
 
-use crate::structs::{EqualiserRange, EqualiserShape, FairlightEqualiserBandRangeFrequencyLimits};
+use crate::structs::{
+    EqualiserRange, EqualiserRangeLimit, EqualiserShape, SupportedEqualiserRanges,
+    SupportedEqualiserShapes,
+};
 use binrw::{binrw, BinRead, BinWrite};
 use modular_bitfield::{bitfield, specifiers::B12, Specifier};
 
@@ -115,13 +118,13 @@ pub struct CapabilitiesFairlightAudioMixerHeadphoneOut {
 #[brw(big)]
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct FairlightEqualiserBandRangeCapabilities {
-    #[brw(pad_after = 2)]
+    #[brw(pad_size_to = 4)]
     #[br(temp)]
-    #[bw(try_calc(u16::try_from(v.len())))]
+    #[bw(try_calc(u16::try_from(limits.len())))]
     length: u16,
 
     #[br(count=length)]
-    v: Vec<FairlightEqualiserBandRangeFrequencyLimits>,
+    pub limits: Vec<EqualiserRangeLimit>,
 }
 
 /// `AMBP`: Fairlight audio mixer master out equaliser band properties
@@ -143,15 +146,24 @@ pub struct FairlightEqualiserBandRangeCapabilities {
 #[brw(big)]
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct FairlightAudioMixerMasterOutEqualiserBandProperties {
+    /// Zero-indexed band ID.
     pub band_id: u8,
 
+    /// `true` if this equaliser band is enabled.
     #[br(map = |v: u8| v != 0)]
     #[bw(map = |v: &bool| Into::<u8>::into(*v))]
     pub enabled: bool,
 
-    pub supported_shapes: u8,
+    /// Equaliser shapes supported on this frequency band.
+    pub supported_shapes: SupportedEqualiserShapes,
+
+    /// The current equaliser shape.
     pub shape: EqualiserShape,
-    pub supported_frequency_ranges: u8,
+
+    /// Frequency ranges supported on this frequency band.
+    pub supported_frequency_ranges: SupportedEqualiserRanges,
+
+    /// The current frequency range.
     #[brw(pad_after = 2)]
     pub frequency_range: EqualiserRange,
 
@@ -267,8 +279,89 @@ mod test {
 
     #[test]
     fn ambp() -> Result {
-        let cmd = hex::decode("001c0000414d425001012d010f012d04000000310000000000640000")?;
+        // Low highpass
+        let cmd = hex::decode("001c0000414d425000003310010101000000002e0000000000470000")?;
         let cmd = Atom::read(&mut Cursor::new(&cmd))?;
+
+        let expected = Atom::new(FairlightAudioMixerMasterOutEqualiserBandProperties {
+            band_id: 0,
+            enabled: false,
+            supported_shapes: SupportedEqualiserShapes::new()
+                .with_low_shelf(true)
+                .with_low_pass(true)
+                .with_high_pass(true)
+                .with_high_shelf(true),
+            shape: EqualiserShape::HighPass,
+            supported_frequency_ranges: SupportedEqualiserRanges::new().with_low(true),
+            frequency_range: EqualiserRange::Low,
+            frequency: 46,
+            gain: 0,
+            q_factor: 71,
+        });
+
+        assert_eq!(expected, cmd);
+
+        let cmd = hex::decode("001c0000414d425002012d040f0200c8000000ab0000000000e60000")?;
+        let cmd = Atom::read(&mut Cursor::new(&cmd))?;
+
+        // Middle bandpass
+        let expected = Atom::new(FairlightAudioMixerMasterOutEqualiserBandProperties {
+            band_id: 2,
+            enabled: true,
+            supported_shapes: SupportedEqualiserShapes::new()
+                .with_low_shelf(true)
+                .with_band_pass(true)
+                .with_notch(true)
+                .with_high_shelf(true),
+            shape: EqualiserShape::BandPass,
+            supported_frequency_ranges: SupportedEqualiserRanges::new()
+                .with_low(true)
+                .with_mid_low(true)
+                .with_mid_high(true)
+                .with_high(true),
+            frequency_range: EqualiserRange::MidLow,
+            frequency: 171,
+            gain: 0,
+            q_factor: 230,
+        });
+
+        assert_eq!(expected, cmd);
+
+        Ok(())
+    }
+
+    #[test]
+    fn fec() -> Result {
+        // ATEM Mini
+        let cmd = hex::decode("003c00005f46454300040000010000000000001e0000018b0200000000000064000005c804000000000001c200001ee60800000000000578000054c4")?;
+        let cmd = Atom::read(&mut Cursor::new(&cmd))?;
+
+        let expected = Atom::new(FairlightEqualiserBandRangeCapabilities {
+            limits: vec![
+                EqualiserRangeLimit {
+                    range: EqualiserRange::Low,
+                    min_freq: 30,
+                    max_freq: 395,
+                },
+                EqualiserRangeLimit {
+                    range: EqualiserRange::MidLow,
+                    min_freq: 100,
+                    max_freq: 1480,
+                },
+                EqualiserRangeLimit {
+                    range: EqualiserRange::MidHigh,
+                    min_freq: 450,
+                    max_freq: 7910,
+                },
+                EqualiserRangeLimit {
+                    range: EqualiserRange::High,
+                    min_freq: 1400,
+                    max_freq: 21700,
+                },
+            ],
+        });
+
+        assert_eq!(expected, cmd);
 
         Ok(())
     }

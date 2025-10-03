@@ -9,7 +9,10 @@ mod video_mode;
 mod video_source;
 
 pub use self::{
-    equaliser::{EqualiserRange, EqualiserShape, FairlightEqualiserBandRangeFrequencyLimits},
+    equaliser::{
+        EqualiserRange, EqualiserRangeLimit, EqualiserShape, SupportedEqualiserRanges,
+        SupportedEqualiserShapes,
+    },
     external_port_type::ExternalPortType,
     port_type::PortType,
     tally::TallyFlags,
