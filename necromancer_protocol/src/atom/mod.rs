@@ -21,7 +21,7 @@
 //! In BMDSwitcherAPI 9.8.3
 //!
 //! * total atoms: 344
-//! * implemented atoms: 58 (17%)
+//! * implemented atoms: 63 (18%)
 //! * identified atoms: 344 (100%)
 //!
 //! ## Uncategorised unimplemented atoms (9)
@@ -66,9 +66,9 @@ mod multiview;
 mod network;
 mod recording;
 mod remote_source;
+mod rtmp;
 mod settings;
 mod storage;
-mod stream;
 mod super_source;
 mod talkback;
 mod tally;
@@ -107,16 +107,19 @@ pub use self::{
     },
     recording::{
         RecordToMedia, RecordToMediaDurationRequest, RecordToMediaRecordingTimecode,
-        RecordToMediaStatus,
+        RecordToMediaStatus, RecordToMediaSwitchDisk, RECORD_TO_MEDIA_DURATION_REQUEST,
+        RECORD_TO_MEDIA_SWITCH_DISK,
     },
+    remote_source::{RemoteSourceForceInternetProbe, REMOTE_SOURCE_FORCE_INTERNET_PROBE},
+    rtmp::{RtmpDurationRequest, RTMP_DURATION_REQUEST},
     settings::{
         ClearSettings, RestoreSettings, SaveSettings, CLEAR_STARTUP_SETTINGS,
         RESTORE_STARTUP_SETTINGS, SAVE_STARTUP_SETTINGS,
     },
     storage::{
-        FileTransferChunkParams, FileTransferError, FileType, FinishFileDownload, LockObtained,
-        MediaPoolLock, MediaPoolLockStatus, SetupFileDownload, SetupFileUpload, TransferAck,
-        TransferChunk, TransferCompleted,
+        ClearMediaPool, FileTransferChunkParams, FileTransferError, FileType, FinishFileDownload,
+        LockObtained, MediaPoolLock, MediaPoolLockStatus, SetupFileDownload, SetupFileUpload,
+        TransferAck, TransferChunk, TransferCompleted, CLEAR_MEDIA_POOL,
     },
     tally::TalliedSources,
     time::{
@@ -126,6 +129,7 @@ pub use self::{
     topology::Topology,
     ver::{ProductName, Version},
     video_mode::{CoreVideoMode, SetVideoMode, SupportedVideoModes},
+    visca::{Visca422AutoAllocateAddresses, VISCA_422_AUTO_ALLOCATE_ADDRESSES},
 };
 
 /// Structure for BEP atoms: commands sent by the SDK to the switcher, and events from the
@@ -177,6 +181,7 @@ impl std::fmt::Debug for Atom {
     }
 }
 
+/// [Atom][] payload type.
 #[binrw]
 #[brw(big)]
 #[derive(Clone, PartialEq, Eq)]
@@ -189,6 +194,8 @@ pub enum Payload {
     CameraControl(CameraControl),
     #[brw(magic = b"Capt")]
     CaptureStill(CaptureStill),
+    #[brw(magic = b"CLMP")]
+    ClearMediaPool(ClearMediaPool),
     #[brw(magic = b"SRcl")]
     ClearSettings(ClearSettings),
     #[brw(magic = b"ColV")]
@@ -263,8 +270,14 @@ pub enum Payload {
     RecordToMediaDurationRequest(RecordToMediaDurationRequest),
     #[brw(magic = b"RTMR")]
     RecordToMediaRecordingTimecode(RecordToMediaRecordingTimecode),
+    #[brw(magic = b"RMSp")]
+    RecordToMediaSwitchDisk(RecordToMediaSwitchDisk),
+    #[brw(magic = b"RSip")]
+    RemoteSourceForceInternetProbe(RemoteSourceForceInternetProbe),
     #[brw(magic = b"SRrs")]
     RestoreSettings(RestoreSettings),
+    #[brw(magic = b"SRDR")]
+    RtmpDurationRequest(RtmpDurationRequest),
     #[brw(magic = b"SRsv")]
     SaveSettings(SaveSettings),
     #[brw(magic = b"CClV")]
@@ -307,6 +320,8 @@ pub enum Payload {
     TransitionPosition(TransitionPosition),
     #[brw(magic = b"_ver")]
     Version(Version),
+    #[brw(magic = b"PZSA")]
+    Visca422AutoAllocateAddresses(Visca422AutoAllocateAddresses),
     Unknown([u8; 4], #[br(parse_with = until_eof)] Vec<u8>),
 }
 
@@ -347,6 +362,7 @@ atom_payloads!(
     CameraCommand,
     CameraControl,
     CaptureStill,
+    ClearMediaPool,
     ClearSettings,
     ColourGeneratorParams,
     Cut,
@@ -383,7 +399,10 @@ atom_payloads!(
     RecordToMediaDurationRequest,
     RecordToMediaRecordingTimecode,
     RecordToMediaStatus,
+    RecordToMediaSwitchDisk,
+    RemoteSourceForceInternetProbe,
     RestoreSettings,
+    RtmpDurationRequest,
     SaveSettings,
     SetColourGeneratorParams,
     SetMediaPlayerSource,
@@ -405,6 +424,7 @@ atom_payloads!(
     FileTransferError,
     TransitionPosition,
     Version,
+    Visca422AutoAllocateAddresses,
 );
 
 impl Atom {

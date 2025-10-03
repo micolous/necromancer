@@ -6,7 +6,8 @@ use crate::{
             FinishFileDownload, MediaPlayerSourceID, MediaPoolLock, Payload,
             SetColourGeneratorParams, SetMediaPlayerSource, SetPreviewInput, SetProgramInput,
             SetupFileDownload, SetupFileUpload, TimecodeRequest, TransferChunk, CAPTURE_STILL,
-            CLEAR_STARTUP_SETTINGS, RESTORE_STARTUP_SETTINGS, SAVE_STARTUP_SETTINGS,
+            CLEAR_MEDIA_POOL, CLEAR_STARTUP_SETTINGS, RESTORE_STARTUP_SETTINGS,
+            RTMP_DURATION_REQUEST, SAVE_STARTUP_SETTINGS,
         },
         rle::RLE_MARKER,
         structs::VideoSource,
@@ -436,6 +437,17 @@ impl AtemController {
             id: media_player,
             source,
         });
+        self.send(vec![cmd]).await
+    }
+
+    /// Delete all items in the media pool.
+    pub async fn clear_media_pool(&self) -> Result<(), Error> {
+        let cmd = Atom::new(CLEAR_MEDIA_POOL);
+        self.send(vec![cmd]).await
+    }
+
+    pub async fn rtmp_stream_duration(&self) -> Result<(), Error> {
+        let cmd = Atom::new(RTMP_DURATION_REQUEST);
         self.send(vec![cmd]).await
     }
 

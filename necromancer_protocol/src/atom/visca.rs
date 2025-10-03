@@ -1,6 +1,6 @@
-//! # Visca PTZ camera control; 0/17 atoms
+//! # Visca PTZ camera control; 1/17 atoms
 //!
-//! ## Unimplemented atoms (17)
+//! ## Unimplemented atoms (16)
 //!
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------
@@ -10,7 +10,6 @@
 //! `PZGP` | `PtzRs422ViscaGotoPanTiltPosition` | 0x10
 //! `PZGZ` | `PtzRs422ViscaGotoZoomPosition` | 0xc
 //! `PZPC` | `PtzRs422ViscaPosition` | 0x10
-//! `PZSA` | `PtzRs422ViscaAutoAllocateAddresses` | 0x8
 //! `PZVC` | `PtzRs422ViscaVelocity` | 0xc
 //! `SPZS` | `PtzRs422ViscaSettings` | 0xc
 //! `SPZV` | `PtzRs422ViscaSetVelocity` | 0x10
@@ -21,3 +20,20 @@
 //! `vsIP` | `AddViscaIPDevice` | 0x88
 //! `vsPG` | `ViscaIPAddressPing` | 0x48
 //! `vspg` | `ViscaIPAddressPingResponse` | 0x4c
+
+use binrw::binrw;
+
+/// `PZSA`: Auto-allocate addresses to Visca-compatible PTZ cameras connected over RS-422
+/// (`PtzRs422ViscaAutoAllocateAddresses`)
+///
+/// ## Packet format
+///
+/// No payload.
+#[binrw]
+#[derive(Default, Debug, PartialEq, Eq, Clone, Copy)]
+pub struct Visca422AutoAllocateAddresses {}
+
+/// Command to automatically allocate addresses to Visca-compatible PTZ cameras connected over
+/// RS-422.
+pub const VISCA_422_AUTO_ALLOCATE_ADDRESSES: Visca422AutoAllocateAddresses =
+    Visca422AutoAllocateAddresses {};

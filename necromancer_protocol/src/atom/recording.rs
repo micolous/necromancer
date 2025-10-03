@@ -1,21 +1,20 @@
-//! # Disk recording; 4/10 atoms
+//! # Disk recording; 5/10 atoms
 //!
-//! ## Unimplemented atoms (6)
+//! ## Unimplemented atoms (5)
 //!
-//! ### Seen atoms (2)
-//!
-//! FourCC | Atom name | Length
-//! ------ | --------- | ------
-//! `RMRD` | `RecordToMediaRecordingDuration` | 0x10
-//! `RTMD` | `RecordToMediaDisk` | 0x54
-//!
-//! ### Not seen (4)
+//! ### Seen atoms (3)
 //!
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------
 //! `CRMS` | `ChangeRecordToMediaSetup` | 0x98
+//! `RMRD` | `RecordToMediaRecordingDuration` | 0x10
+//! `RTMD` | `RecordToMediaDisk` | 0x54
+//!
+//! ### Not seen (2)
+//!
+//! FourCC | Atom name | Length
+//! ------ | --------- | ------
 //! `ISOi` | `RecordAllISOInputs` | 0xc
-//! `RMSp` | `RecordToMediaSwitchDisk` | 0x8
 //! `RMSu` | `RecordToMediaSetup` | 0x94
 
 use crate::atom::Time;
@@ -74,6 +73,9 @@ pub struct RecordStatus {
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct RecordToMediaDurationRequest {}
 
+pub const RECORD_TO_MEDIA_DURATION_REQUEST: RecordToMediaDurationRequest =
+    RecordToMediaDurationRequest {};
+
 /// `RTMR`: Record to Media Recording timecode (`RecordToMediaRecordingTimecode`)
 #[binrw]
 #[brw(big)]
@@ -105,6 +107,14 @@ impl DerefMut for RecordToMediaRecordingTimecode {
         &mut self.0
     }
 }
+
+/// `RMSp`: Record to media switch disk (`RecordToMediaSwitchDisk`)
+#[binrw]
+#[brw(big)]
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct RecordToMediaSwitchDisk {}
+
+pub const RECORD_TO_MEDIA_SWITCH_DISK: RecordToMediaSwitchDisk = RecordToMediaSwitchDisk {};
 
 #[cfg(test)]
 mod test {

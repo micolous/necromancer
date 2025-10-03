@@ -1,4 +1,4 @@
-//! # Media pool and file transfers; 11/14 atoms
+//! # Media pool and file transfers; 12/14 atoms
 //!
 //! There are four file types:
 //!
@@ -32,11 +32,10 @@
 //! 1. Client [periodically sends acknowledgement atoms][TransferAck] (`FTUA`)
 //! 1. Switcher [indicates the transfer was completed][TransferCompleted] (`FTDC`)
 //!
-//! ## Unimplemented atoms (3)
+//! ## Unimplemented atoms (2)
 //!
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------
-//! `CLMP` | `ClearMediaPool` | 0x8
 //! `FTAD` | `FileTransferCancelDownload` | 0xc
 //! `PLCK` | `MediaPoolPriorityLock` | 0x10
 
@@ -367,6 +366,18 @@ pub struct MediaPoolLockStatus {
     #[bw(map = |v: &bool| Into::<u8>::into(*v))]
     pub locked: bool,
 }
+
+/// `CLMP`: Clear media pool (`ClearMediaPool`)
+///
+/// ## Packet format
+///
+/// No payload.
+#[binrw]
+#[derive(Default, Debug, PartialEq, Eq, Clone, Copy)]
+pub struct ClearMediaPool {}
+
+/// Command to clear the media pool.
+pub const CLEAR_MEDIA_POOL: ClearMediaPool = ClearMediaPool {};
 
 #[cfg(test)]
 mod test {

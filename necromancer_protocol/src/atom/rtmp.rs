@@ -1,6 +1,6 @@
-//! # RTMP streaming; 0/16 atoms
+//! # RTMP streaming; 1/16 atoms
 //!
-//! ## Unimplemented atoms (16)
+//! ## Unimplemented atoms (15)
 //!
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------
@@ -10,7 +10,6 @@
 //! `SCTR` | `StreamingControl` | 0x10
 //! `SFPr` | `StreamingProfile` | 0x60
 //! `SLow` | `StreamRtmpLowLatency` | 0xc
-//! `SRDR` | `StreamRtmpDurationRequest` | 0x8
 //! `SRES` | `StreamRtmpSrtExtensions` | 0x20c
 //! `SRSD` | `StreamRtmpStreamingDuration` | 0x10
 //! `SRSS` | `StreamRtmpStreamingStatistics` | 0x10
@@ -20,3 +19,17 @@
 //! `STAB` | `StreamRtmpAudioBitrates` | 0x10
 //! `StrR` | `StreamRTMP` | 0xc
 //! `StRS` | `StreamRtmpStatus` | 0xc
+
+use binrw::binrw;
+
+/// `SRDR`: RTMP stream duration request (`StreamRtmpDurationRequest`)
+///
+/// ## Packet format
+///
+/// No payload.
+#[binrw]
+#[derive(Default, Debug, PartialEq, Eq, Clone, Copy)]
+pub struct RtmpDurationRequest {}
+
+/// Command to request RTMP streaming duration.
+pub const RTMP_DURATION_REQUEST: RtmpDurationRequest = RtmpDurationRequest {};
