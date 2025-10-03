@@ -1,9 +1,10 @@
-//! # Cut and auto (transitions); 3/20 atoms
+//! # Transitions and digital video effects; 3/21 atoms
 //!
-//! ## Unimplemented atoms (17)
+//! ## Unimplemented atoms (18)
 //!
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------
+//! `_DVE` | `CapabilitiesDVE` | variable
 //! `CTDp` | `ChangeTransitionDipProperties` | 0x10
 //! `CTDv` | `ChangeTransitionDVEProperties` | 0x1c
 //! `CTMx` | `ChangeTransitionMixProperties` | 0xc

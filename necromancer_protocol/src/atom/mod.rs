@@ -24,7 +24,7 @@
 //! * implemented atoms: 68 (19%)
 //! * identified atoms: 344 (100%)
 //!
-//! ## Uncategorised unimplemented atoms (9)
+//! ## Uncategorised unimplemented atoms (8)
 //!
 //! <div class="warning">
 //!
@@ -34,7 +34,6 @@
 //!
 //! FourCC | Atom name | Length
 //! ------ | --------- | ------
-//! `_DVE` | `CapabilitiesDVE` | variable
 //! `C3sl` | `ChangeSDI3GOutputLevel` | 0xc
 //! `ClrM` | `ColorimetryMode` | 0xc
 //! `Powr` | `PowerStatus` | 0xc
@@ -49,7 +48,6 @@ mod audio;
 mod aux;
 mod camera;
 mod colour;
-mod cut;
 mod down_convert;
 mod dsk;
 mod fairlight;
@@ -74,6 +72,7 @@ mod talkback;
 mod tally;
 mod time;
 mod topology;
+mod transitions;
 mod ver;
 mod video_mode;
 mod visca;
@@ -85,7 +84,6 @@ use std::{fmt::Debug, io::SeekFrom};
 pub use self::{
     camera::{CameraCommand, CameraControl},
     colour::{ColourGeneratorParams, SetColourGeneratorParams},
-    cut::{Auto, Cut, TransitionPosition},
     fairlight::{
         CapabilitiesFairlightAudioMixer, CapabilitiesFairlightAudioMixerHeadphoneOut,
         FairlightAudioMixerInputSourceProperties,
@@ -128,6 +126,7 @@ pub use self::{
         TIMECODE_REQUEST,
     },
     topology::Topology,
+    transitions::{Auto, Cut, TransitionPosition},
     ver::{ProductName, Version},
     video_mode::{CoreVideoMode, SetVideoMode, SupportedVideoModes},
     visca::{Visca422AutoAllocateAddresses, VISCA_422_AUTO_ALLOCATE_ADDRESSES},
