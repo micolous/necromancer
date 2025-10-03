@@ -45,6 +45,10 @@ async fn main() -> Result<()> {
 
         info!("ME {me}: Program {pgm:?}, Preview {pre:?}");
     }
+    info!(
+        "Fairlight EQ frequencies: {:?}",
+        state.fairlight_audio_frequency_ranges
+    );
 
     loop {
         let Ok((state, update)) = atem.state_update_events().recv().await else {

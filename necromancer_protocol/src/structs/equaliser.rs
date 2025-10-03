@@ -3,6 +3,7 @@ use modular_bitfield::{
     bitfield,
     specifiers::{B2, B4},
 };
+use std::ops::RangeInclusive;
 
 /// Equaliser frequency band range (`BMDSwitcherFairlightAudioEqualizerBandFrequencyRange`).
 ///
@@ -10,7 +11,7 @@ use modular_bitfield::{
 /// [`FairlightEqualiserBandRangeCapabilities`][crate::atom::FairlightEqualiserBandRangeCapabilities].
 #[binrw]
 #[brw(big, repr = u8)]
-#[derive(Debug, FromPrimitive, ToPrimitive, PartialEq, Eq, Clone, Copy)]
+#[derive(Debug, FromPrimitive, ToPrimitive, PartialEq, Eq, Clone, Copy, PartialOrd, Ord, Hash)]
 #[repr(u8)]
 pub enum EqualiserRange {
     /// Low frequency range
@@ -24,6 +25,11 @@ pub enum EqualiserRange {
 
     /// High frequency range
     High = 0x08,
+}
+
+impl EqualiserRange {
+    /// Number of supported frequency ranges.
+    pub const COUNT: usize = 4;
 }
 
 impl From<EqualiserRange> for SupportedEqualiserRanges {
@@ -65,7 +71,7 @@ impl SupportedEqualiserRanges {
 /// Equaliser shape (`BMDSwitcherFairlightAudioEqualizerBandShape`)
 #[binrw]
 #[brw(big, repr = u8)]
-#[derive(Debug, FromPrimitive, ToPrimitive, PartialEq, Eq, Clone, Copy)]
+#[derive(Debug, FromPrimitive, ToPrimitive, PartialEq, Eq, Clone, Copy, PartialOrd, Ord, Hash)]
 #[repr(u8)]
 pub enum EqualiserShape {
     /// Low shelf filter. >─
@@ -140,7 +146,7 @@ impl SupportedEqualiserShapes {
 /// * `u32`: maximum frequency, in hertz
 #[binrw]
 #[brw(big)]
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq, Copy)]
 pub struct EqualiserRangeLimit {
     /// Equaliser range the limits apply to
     #[brw(pad_size_to = 4)]
@@ -151,6 +157,18 @@ pub struct EqualiserRangeLimit {
 
     /// Maximum band frequency, in hertz
     pub max_freq: u32,
+}
+
+impl From<EqualiserRangeLimit> for (EqualiserRange, RangeInclusive<u32>) {
+    fn from(value: EqualiserRangeLimit) -> Self {
+        (value.range, value.min_freq..=value.max_freq)
+    }
+}
+
+impl From<EqualiserRangeLimit> for RangeInclusive<u32> {
+    fn from(value: EqualiserRangeLimit) -> Self {
+        value.min_freq..=value.max_freq
+    }
 }
 
 #[cfg(test)]

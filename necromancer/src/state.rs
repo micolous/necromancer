@@ -6,11 +6,14 @@ use crate::{
             MediaPlayerFrameDescription, MediaPlayerSourceID, MixEffectBlockCapabilities, Payload,
             ProductName, Topology, TransitionPosition, Version,
         },
-        structs::{TallyFlags, VideoMode, VideoSource},
+        structs::{EqualiserRange, TallyFlags, VideoMode, VideoSource},
     },
     Result,
 };
-use std::collections::{BTreeMap, HashMap, HashSet};
+use std::{
+    collections::{BTreeMap, HashMap, HashSet},
+    ops::RangeInclusive,
+};
 
 bitflags! {
     #[derive(Debug, Default, PartialEq, Eq, Clone, Copy)]
@@ -37,6 +40,7 @@ bitflags! {
         const MEDIA_PLAYER_SOURCE            = 1 << 17;
         const FAIRLIGHT_TALLY                = 1 << 18;
         const FAIRLIGHT_INPUT_SOURCE_PROPS   = 1 << 19;
+        const FAIRLIGHT_FREQUENCY_RANGES     = 1 << 20;
 
         const PREVIEW_OR_PROGRAM_SOURCE = Self::PREVIEW_SOURCE.bits() | Self::PROGRAM_SOURCE.bits();
         const UNSUPPORTED_COMMAND            = 1 << 31;
@@ -118,6 +122,9 @@ pub struct AtemState {
 
     /// Properties for each Fairlight audio mixer input.
     pub fairlight_audio_mixer_input_props: BTreeMap<u16, FairlightAudioMixerInputSourceProperties>,
+
+    /// Supported Fairlight audio equaliser frequency ranges.
+    pub fairlight_audio_frequency_ranges: BTreeMap<EqualiserRange, RangeInclusive<u32>>,
 }
 
 impl AtemState {
@@ -329,6 +336,16 @@ impl AtemState {
                     self.fairlight_audio_mixer_input_props
                         .insert(fasp.source_id, fasp.clone());
                     updated_fields |= StateUpdate::FAIRLIGHT_INPUT_SOURCE_PROPS;
+                }
+
+                Payload::FairlightEqualiserBandRangeCapabilities(fec) => {
+                    debug!(?fec, "updated fairlight audio mixer equaliser band ranges");
+
+                    for limit in fec.limits.clone() {
+                        self.fairlight_audio_frequency_ranges
+                            .insert(limit.range, limit.into());
+                    }
+                    updated_fields |= StateUpdate::FAIRLIGHT_FREQUENCY_RANGES;
                 }
 
                 _ => (),
