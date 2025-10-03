@@ -132,17 +132,19 @@ pub use self::{
     visca::{Visca422AutoAllocateAddresses, VISCA_422_AUTO_ALLOCATE_ADDRESSES},
 };
 
-/// Structure for BEP atoms: commands sent by the SDK to the switcher, and events from the
-/// switcher sent to the SDK.
+/// Structure for BEP atoms.
+///
+/// This includes commands sent by the client to the switcher, and events from the switcher sent to
+/// the client.
 ///
 /// ## Format
 ///
-/// * `u16`: command length
+/// * `u16`: atom length, minimum 8
 /// * 2 bytes padding
-/// * 4 bytes: command identifier
-/// * `(command length - 8)` bytes: payload
+/// * 4 bytes: atom type identifier
+/// * `(length - 8)` bytes: payload
 ///
-/// The command identifier is parsed as `magic` in [Payload].
+/// The atom type identifier is parsed as `magic` in [`Payload`][].
 #[binrw]
 #[derive(Clone, PartialEq, Eq)]
 #[brw(big)]
@@ -150,11 +152,11 @@ pub use self::{
 pub struct Atom {
     // Length for the read path
     #[br(temp, pad_after = 2)]
-    #[br(assert((Self::HEADERS_LENGTH..=Self::MAX_COMMAND_LENGTH).contains(&length)))]
+    #[br(assert((Self::HEADERS_LENGTH..=Self::MAX_ATOM_LENGTH).contains(&length)))]
     #[bw(ignore)]
     length: u16,
 
-    /// Command payload.
+    /// Atom payload.
     // On read, length includes 4 extra bytes (length field and padding).
     #[br(map_stream = |reader| { reader.take_seek(u64::from(length) - 4) }, pad_size_to = length - 4)]
     // On write, we haven't written the `length` field yet, and we'll come back to it.
@@ -164,7 +166,7 @@ pub struct Atom {
     // Length field for the write path
     #[br(ignore)]
     // On write, r.total() includes all headers
-    #[bw(assert(r.total() <= (Self::MAX_COMMAND_LENGTH as u64)))]
+    #[bw(assert(r.total() <= (Self::MAX_ATOM_LENGTH as u64)))]
     #[bw(try_calc(u16::try_from(r.total())))]
     #[bw(seek_before = SeekFrom::Current(-(r.total() as i64)), restore_position)]
     length: u16,
@@ -173,9 +175,6 @@ pub struct Atom {
 impl std::fmt::Debug for Atom {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("Atom")
-            // .field("length", &self.length)
-            // .field("id", &self.id.escape_ascii().to_string())
-            // .field("payload", &hex::encode(&self.payload))
             .field("payload", &self.payload)
             .finish()
     }
@@ -185,7 +184,11 @@ macro_rules! atom_payloads {
     (
         $($magic:expr => $variant:ident,)*
     ) => {
-        /// [Atom][] payload type.
+        /// [`Atom`][] payload variants.
+        ///
+        /// When read or written with `binrw` traits, the first 4 bytes contain the atom's type
+        /// identifier (`magic`), and all following bytes are the payload variant's parameters
+        /// (which may be empty, if the [`Atom`'s][Atom] length is 8).
         #[binrw]
         #[brw(big)]
         #[derive(Clone, PartialEq, Eq)]
@@ -195,9 +198,10 @@ macro_rules! atom_payloads {
                 #[brw(magic = $magic)]
                 $variant($variant),
             )*
+
             /// Unknown payload type.
             ///
-            /// The first parameter is the command type, the second is the payload.
+            /// The first parameter is the atom type, the second is the payload.
             Unknown([u8; 4], #[br(parse_with = until_eof)] Vec<u8>),
         }
 
@@ -220,7 +224,7 @@ macro_rules! atom_payloads {
                     )*
                     Self::Unknown(cmd, payload) => f
                         .debug_tuple("Unknown")
-                        .field(&hex::encode(cmd))
+                        .field(&cmd.escape_ascii().to_string())
                         .field(&hex::encode(payload))
                         .finish(),
                 }
@@ -304,10 +308,10 @@ impl Atom {
     const HEADERS_LENGTH: u16 = 8;
 
     /// Maximum size of an [Atom], including all headers (length + padding + magic).
-    const MAX_COMMAND_LENGTH: u16 = AtemPacket::MAX_PAYLOAD_LENGTH;
+    const MAX_ATOM_LENGTH: u16 = AtemPacket::MAX_PAYLOAD_LENGTH;
 
     /// Maximum command payload size (minus [Atom] headers).
-    const MAX_PAYLOAD_LENGTH: u16 = Self::MAX_COMMAND_LENGTH - Self::HEADERS_LENGTH;
+    const MAX_PAYLOAD_LENGTH: u16 = Self::MAX_ATOM_LENGTH - Self::HEADERS_LENGTH;
 
     pub fn new(payload: impl Into<Payload>) -> Self {
         Self {

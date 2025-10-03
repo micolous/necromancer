@@ -6,13 +6,13 @@ use binrw::{binrw, helpers::until_eof, io::TakeSeekExt, BinRead, BinWrite};
 use modular_bitfield::{bitfield, specifiers::B11, Specifier};
 use std::io::SeekFrom;
 
-/// Packet flags and length value.
+/// Packet flags, part of [`AtemPacketFlagsLength`][].
 ///
 /// ## Format
 ///
 /// This is a big-endian `u16` bitfield. Fields from LSB to MSB:
 ///
-/// * `u11 0x07ff`: length
+/// * `u11 0x07ff`: [length][AtemPacketFlagsLength]
 /// * `bit 0x0800`: ACK (needs ACK)
 /// * `bit 0x1000`: Control
 /// * `bit 0x2000`: Retransmission
@@ -49,11 +49,7 @@ pub struct AtemPacketFlags {
 /// This is a big-endian `u16` bitfield. Fields from LSB to MSB:
 ///
 /// * `u11 0x07ff`: length
-/// * `bit 0x0800`: ACK (needs ACK)
-/// * `bit 0x1000`: Control
-/// * `bit 0x2000`: Retransmission
-/// * `bit 0x4000`: Hello
-/// * `bit 0x8000`: Response (to ACK)
+/// * `u5 0xf800`: flags
 #[bitfield(bits = 16)]
 #[repr(u16)]
 #[derive(Specifier, BinRead, BinWrite, Debug, Default, PartialEq, Eq, Clone, Copy)]
