@@ -181,154 +181,26 @@ impl std::fmt::Debug for Atom {
     }
 }
 
-/// [Atom][] payload type.
-#[binrw]
-#[brw(big)]
-#[derive(Clone, PartialEq, Eq)]
-pub enum Payload {
-    #[brw(magic = b"DAut")]
-    Auto(Auto),
-    #[brw(magic = b"CCmd")]
-    CameraCommand(CameraCommand),
-    #[brw(magic = b"CCdP")]
-    CameraControl(CameraControl),
-    #[brw(magic = b"Capt")]
-    CaptureStill(CaptureStill),
-    #[brw(magic = b"CLMP")]
-    ClearMediaPool(ClearMediaPool),
-    #[brw(magic = b"SRcl")]
-    ClearSettings(ClearSettings),
-    #[brw(magic = b"ColV")]
-    ColourGeneratorParams(ColourGeneratorParams),
-    #[brw(magic = b"DCut")]
-    Cut(Cut),
-    #[brw(magic = b"FCut")]
-    CutToBlack(CutToBlack),
-    #[brw(magic = b"FTSU")]
-    SetupFileUpload(SetupFileUpload),
-    #[brw(magic = b"FtbA")]
-    FadeToBlackAuto(FadeToBlackAuto),
-    #[brw(magic = b"FtbC")]
-    SetFadeToBlackParams(SetFadeToBlackParams),
-    #[brw(magic = b"FtbP")]
-    FadeToBlackParams(FadeToBlackParams),
-    #[brw(magic = b"FtbS")]
-    FadeToBlackStatus(FadeToBlackStatus),
-    #[brw(magic = b"_FAC")]
-    CapabilitiesFairlightAudioMixer(CapabilitiesFairlightAudioMixer),
-    #[brw(magic = b"_FMH")]
-    CapabilitiesFairlightAudioMixerHeadphoneOut(CapabilitiesFairlightAudioMixerHeadphoneOut),
-    #[brw(magic = b"_FEC")]
-    FairlightEqualiserBandRangeCapabilities(FairlightEqualiserBandRangeCapabilities),
-    #[brw(magic = b"AMBP")]
-    FairlightAudioMixerMasterOutEqualiserBandProperties(
-        FairlightAudioMixerMasterOutEqualiserBandProperties,
-    ),
-    #[brw(magic = b"FASP")]
-    FairlightAudioMixerInputSourceProperties(FairlightAudioMixerInputSourceProperties),
-    #[brw(magic = b"FMTl")]
-    FairlightAudioMixerTally(FairlightAudioMixerTally),
-    #[brw(magic = b"FTCD")]
-    FileTransferChunkParams(FileTransferChunkParams),
-    #[brw(magic = b"FTFD")]
-    FinishFileDownload(FinishFileDownload),
-    #[brw(magic = b"VidM")]
-    CoreVideoMode(CoreVideoMode),
-    #[brw(magic = b"InCm")]
-    InitialisationComplete(InitialisationComplete),
-    #[brw(magic = b"InPr")]
-    InputProperties(InputProperties),
-    #[brw(magic = b"LKOB")]
-    LockObtained(LockObtained),
-    #[brw(magic = b"LOCK")]
-    MediaPoolLock(MediaPoolLock),
-    #[brw(magic = b"LKST")]
-    MediaPoolLockStatus(MediaPoolLockStatus),
-    #[brw(magic = b"_mpl")]
-    MediaPlayerCapabilities(MediaPlayerCapabilities),
-    #[brw(magic = b"MPfe")]
-    MediaPlayerFrameDescription(MediaPlayerFrameDescription),
-    #[brw(magic = b"MPCE")]
-    MediaPlayerSource(MediaPlayerSource),
-    #[brw(magic = b"_MeC")]
-    MixEffectBlockCapabilities(MixEffectBlockCapabilities),
-    #[brw(magic = b"MfgT")]
-    MfgTest(MfgTest),
-    #[brw(magic = b"MfgR")]
-    MfgTestResult(MfgTestResult),
-    #[brw(magic = b"PrvI")]
-    PreviewInput(PreviewInput),
-    #[brw(magic = b"_pin")]
-    ProductName(ProductName),
-    #[brw(magic = b"PrgI")]
-    ProgramInput(ProgramInput),
-    #[brw(magic = b"RcTM")]
-    RecordToMedia(RecordToMedia),
-    #[brw(magic = b"RTMS")]
-    RecordToMediaStatus(RecordToMediaStatus),
-    #[brw(magic = b"RMDR")]
-    RecordToMediaDurationRequest(RecordToMediaDurationRequest),
-    #[brw(magic = b"RTMR")]
-    RecordToMediaRecordingTimecode(RecordToMediaRecordingTimecode),
-    #[brw(magic = b"RMSp")]
-    RecordToMediaSwitchDisk(RecordToMediaSwitchDisk),
-    #[brw(magic = b"RSip")]
-    RemoteSourceForceInternetProbe(RemoteSourceForceInternetProbe),
-    #[brw(magic = b"SRrs")]
-    RestoreSettings(RestoreSettings),
-    #[brw(magic = b"SRDR")]
-    RtmpDurationRequest(RtmpDurationRequest),
-    #[brw(magic = b"SRsv")]
-    SaveSettings(SaveSettings),
-    #[brw(magic = b"CClV")]
-    SetColourGeneratorParams(SetColourGeneratorParams),
-    #[brw(magic = b"MPSS")]
-    SetMediaPlayerSource(SetMediaPlayerSource),
-    #[brw(magic = b"CPvI")]
-    SetPreviewInput(SetPreviewInput),
-    #[brw(magic = b"CPgI")]
-    SetProgramInput(SetProgramInput),
-    #[brw(magic = b"CTCC")]
-    SetTimecodeConfig(SetTimecodeConfig),
-    #[brw(magic = b"SToD")]
-    SetTimeOfDay(SetTimeOfDay),
-    #[brw(magic = b"CVdM")]
-    SetVideoMode(SetVideoMode),
-    #[brw(magic = b"FTSD")]
-    SetupFileDownload(SetupFileDownload),
-    #[brw(magic = b"_VMC")]
-    SupportedVideoModes(SupportedVideoModes),
-    #[brw(magic = b"TlSr")]
-    TalliedSources(TalliedSources),
-    #[brw(magic = b"Time")]
-    Time(Time),
-    #[brw(magic = b"TCCc")]
-    TimecodeConfig(TimecodeConfig),
-    #[brw(magic = b"TiRq")]
-    TimecodeRequest(TimecodeRequest),
-    #[brw(magic = b"_top")]
-    Topology(Topology),
-    #[brw(magic = b"FTUA")]
-    TransferAck(TransferAck),
-    #[brw(magic = b"FTDa")]
-    TransferChunk(TransferChunk),
-    #[brw(magic = b"FTDC")]
-    TransferCompleted(TransferCompleted),
-    #[brw(magic = b"FTDE")]
-    FileTransferError(FileTransferError),
-    #[brw(magic = b"TrPs")]
-    TransitionPosition(TransitionPosition),
-    #[brw(magic = b"_ver")]
-    Version(Version),
-    #[brw(magic = b"PZSA")]
-    Visca422AutoAllocateAddresses(Visca422AutoAllocateAddresses),
-    Unknown([u8; 4], #[br(parse_with = until_eof)] Vec<u8>),
-}
-
 macro_rules! atom_payloads {
     (
-        $($variant:ident,)*
+        $($magic:expr => $variant:ident,)*
     ) => {
+        /// [Atom][] payload type.
+        #[binrw]
+        #[brw(big)]
+        #[derive(Clone, PartialEq, Eq)]
+        pub enum Payload {
+            $(
+                #[doc = concat!("`", stringify!($magic), "`: [`", stringify!($variant), "`][]")]
+                #[brw(magic = $magic)]
+                $variant($variant),
+            )*
+            /// Unknown payload type.
+            ///
+            /// The first parameter is the command type, the second is the payload.
+            Unknown([u8; 4], #[br(parse_with = until_eof)] Vec<u8>),
+        }
+
         $(
             impl From<$variant> for Payload {
                 fn from(p: $variant) -> Payload {
@@ -358,73 +230,73 @@ macro_rules! atom_payloads {
 }
 
 atom_payloads!(
-    Auto,
-    CameraCommand,
-    CameraControl,
-    CaptureStill,
-    ClearMediaPool,
-    ClearSettings,
-    ColourGeneratorParams,
-    Cut,
-    CutToBlack,
-    SetupFileUpload,
-    FadeToBlackAuto,
-    SetFadeToBlackParams,
-    FadeToBlackParams,
-    FadeToBlackStatus,
-    CapabilitiesFairlightAudioMixer,
-    CapabilitiesFairlightAudioMixerHeadphoneOut,
-    FairlightAudioMixerMasterOutEqualiserBandProperties,
-    FairlightEqualiserBandRangeCapabilities,
-    FairlightAudioMixerInputSourceProperties,
-    FairlightAudioMixerTally,
-    FileTransferChunkParams,
-    FinishFileDownload,
-    CoreVideoMode,
-    InitialisationComplete,
-    InputProperties,
-    LockObtained,
-    MediaPoolLock,
-    MediaPoolLockStatus,
-    MediaPlayerCapabilities,
-    MediaPlayerFrameDescription,
-    MediaPlayerSource,
-    MixEffectBlockCapabilities,
-    MfgTest,
-    MfgTestResult,
-    PreviewInput,
-    ProductName,
-    ProgramInput,
-    RecordToMedia,
-    RecordToMediaDurationRequest,
-    RecordToMediaRecordingTimecode,
-    RecordToMediaStatus,
-    RecordToMediaSwitchDisk,
-    RemoteSourceForceInternetProbe,
-    RestoreSettings,
-    RtmpDurationRequest,
-    SaveSettings,
-    SetColourGeneratorParams,
-    SetMediaPlayerSource,
-    SetPreviewInput,
-    SetProgramInput,
-    SetTimecodeConfig,
-    SetTimeOfDay,
-    SetupFileDownload,
-    SetVideoMode,
-    SupportedVideoModes,
-    TalliedSources,
-    Time,
-    TimecodeConfig,
-    TimecodeRequest,
-    Topology,
-    TransferAck,
-    TransferChunk,
-    TransferCompleted,
-    FileTransferError,
-    TransitionPosition,
-    Version,
-    Visca422AutoAllocateAddresses,
+    b"_FAC" => CapabilitiesFairlightAudioMixer,
+    b"_FEC" => FairlightEqualiserBandRangeCapabilities,
+    b"_FMH" => CapabilitiesFairlightAudioMixerHeadphoneOut,
+    b"_MeC" => MixEffectBlockCapabilities,
+    b"_mpl" => MediaPlayerCapabilities,
+    b"_pin" => ProductName,
+    b"_top" => Topology,
+    b"_ver" => Version,
+    b"_VMC" => SupportedVideoModes,
+    b"AMBP" => FairlightAudioMixerMasterOutEqualiserBandProperties,
+    b"Capt" => CaptureStill,
+    b"CCdP" => CameraControl,
+    b"CClV" => SetColourGeneratorParams,
+    b"CCmd" => CameraCommand,
+    b"CLMP" => ClearMediaPool,
+    b"ColV" => ColourGeneratorParams,
+    b"CPgI" => SetProgramInput,
+    b"CPvI" => SetPreviewInput,
+    b"CTCC" => SetTimecodeConfig,
+    b"CVdM" => SetVideoMode,
+    b"DAut" => Auto,
+    b"DCut" => Cut,
+    b"FASP" => FairlightAudioMixerInputSourceProperties,
+    b"FCut" => CutToBlack,
+    b"FMTl" => FairlightAudioMixerTally,
+    b"FtbA" => FadeToBlackAuto,
+    b"FtbC" => SetFadeToBlackParams,
+    b"FtbP" => FadeToBlackParams,
+    b"FtbS" => FadeToBlackStatus,
+    b"FTCD" => FileTransferChunkParams,
+    b"FTDa" => TransferChunk,
+    b"FTDC" => TransferCompleted,
+    b"FTDE" => FileTransferError,
+    b"FTFD" => FinishFileDownload,
+    b"FTSD" => SetupFileDownload,
+    b"FTSU" => SetupFileUpload,
+    b"FTUA" => TransferAck,
+    b"InCm" => InitialisationComplete,
+    b"InPr" => InputProperties,
+    b"LKOB" => LockObtained,
+    b"LKST" => MediaPoolLockStatus,
+    b"LOCK" => MediaPoolLock,
+    b"MfgR" => MfgTestResult,
+    b"MfgT" => MfgTest,
+    b"MPCE" => MediaPlayerSource,
+    b"MPfe" => MediaPlayerFrameDescription,
+    b"MPSS" => SetMediaPlayerSource,
+    b"PrgI" => ProgramInput,
+    b"PrvI" => PreviewInput,
+    b"PZSA" => Visca422AutoAllocateAddresses,
+    b"RcTM" => RecordToMedia,
+    b"RMDR" => RecordToMediaDurationRequest,
+    b"RMSp" => RecordToMediaSwitchDisk,
+    b"RSip" => RemoteSourceForceInternetProbe,
+    b"RTMR" => RecordToMediaRecordingTimecode,
+    b"RTMS" => RecordToMediaStatus,
+    b"SRcl" => ClearSettings,
+    b"SRDR" => RtmpDurationRequest,
+    b"SRrs" => RestoreSettings,
+    b"SRsv" => SaveSettings,
+    b"SToD" => SetTimeOfDay,
+    b"TCCc" => TimecodeConfig,
+    b"Time" => Time,
+    b"TiRq" => TimecodeRequest,
+    b"TlSr" => TalliedSources,
+    b"TrPs" => TransitionPosition,
+    b"VidM" => CoreVideoMode,
 );
 
 impl Atom {
