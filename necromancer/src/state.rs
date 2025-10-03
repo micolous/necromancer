@@ -270,7 +270,7 @@ impl AtemState {
                     if me >= self.fade_to_black_status.len() {
                         continue;
                     }
-                    self.fade_to_black_status[me] = ftbs.clone();
+                    self.fade_to_black_status[me] = *ftbs;
                     updated_fields |= StateUpdate::FADE_TO_BLACK_STATUS;
                 }
 
@@ -285,7 +285,7 @@ impl AtemState {
                 }
 
                 Payload::MediaPlayerCapabilities(mpl) => {
-                    self.media_player_capabilities = mpl.clone();
+                    self.media_player_capabilities = *mpl;
                     debug!(?self.media_player_capabilities, "updated");
                     updated_fields |= StateUpdate::MEDIA_PLAYER_CAPABILITIES;
                 }
@@ -318,7 +318,7 @@ impl AtemState {
                         self.colour_generators = colv.id + 1;
                     }
 
-                    self.colour_generator_params[usize::from(colv.id)] = colv.clone();
+                    self.colour_generator_params[usize::from(colv.id)] = *colv;
                     updated_fields |= StateUpdate::COLOUR_GENERATOR_PARAMS;
                 }
 
