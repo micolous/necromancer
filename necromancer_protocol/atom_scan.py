@@ -9,7 +9,7 @@ from os.path import abspath, dirname, join
 from re import compile
 
 _ATOM_NAME = compile(r"BEPAtom(.+)10Initialise")
-_BASE_PATH = dirname(abspath(__name__))
+_BASE_PATH = dirname(abspath(__file__))
 _ATOMS_TXT = join(_BASE_PATH, "atoms.txt")
 _SOURCE_ATOM_PATH = join(_BASE_PATH, "src", "atom")
 _MARKDOWN_CODE_BLOCK = compile(r"//[^\n]+`([^`\n]{7,})`")
